@@ -1,0 +1,114 @@
+
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="page-title-box">
+					<h4 class="page-title">Contracts</h4>
+					
+					<div class="clearfix"></div>
+				</div>
+				{echo Shared\Markup::message($message ?? null)}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Search (Results: {echo $total})</h5>
+						<form method="get">
+							<div class="form-row">
+								<div class="form-group col-sm-8">
+									<input type="text" name="search" value="{echo $search}" class="form-control" placeholder="Search..." required="Input required">
+								</div>
+								<div class="form-group col-sm-3">
+									<!-- <select class="form-control" name="type" value="{echo $type}">
+										<option value="orgname">Company name</option>
+										<option value="leadname">Lead name</option>
+										<option value="leademail">Lead email</option>
+										<option value="domain">Domain</option>
+										<option value="phone">Phone</option>
+										<option value="skype">Skype</option>
+									</select> -->
+								</div>
+								<div class="form-group col-sm-1">
+									<button type="submit" class="btn btn-outline-primary">
+									<i class="fa fa-search"></i> Submit
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-sm-12">
+				<br>
+				<div class="card">
+					<div class="table-responsive">
+						<table class="datatable display nowrap" style="width:100%">
+							<thead>
+								<tr>
+									<th>Contract Name</th>
+									<th>Company</th>
+									<th>Type</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+                                    <th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{foreach $cont in $contracts}
+								<tr>
+                                    
+									<td >{echo $cont->cname}</td>
+									<td>{echo $cont->company}</td>
+									<td>{echo $cont->type}</td>
+                                   
+                                    <td>{echo Framework\TimeZone::printDateTime($cont->startDate)}</td>
+                                    <td>{echo Framework\TimeZone::printDateTime($cont->endDate)}</td>
+                                    <td>
+										<a href="/account/lead/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
+									</td>
+								</tr>
+								{/foreach}
+							</tbody>
+						</table>
+					</div>
+					<center>
+						<div>
+							<ul class="pagination justify-content-center">
+								<li class="page-item {if $page == 1}disabled{/if}">
+									<a class="page-link" href="{echo Shared\Markup::pagination($page - 1)}" tabindex="-1">Previous</a>
+								</li>
+								<li class="page-item {if $page == ceil($total/$limit)}disabled{/if}">
+									<a class="page-link" href="{echo Shared\Markup::pagination($page + 1)}">Next</a>
+								</li>
+							</ul>
+						</div>
+					</center>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{include layouts/opts/datatables.html}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+<script type="text/javascript">
+var options = {
+	"aaSorting": [[0, 'desc']],
+	"scrollX": true
+};
+options.buttons = buttons.buttons
+options.dom = buttons.dom;
+var settings = $.extend( {}, buttons, options );
+var pageTable;
+
+$(document).ready(function() {
+	$("img.lazy").lazyload();
+	pageTable = $('.datatable').DataTable(options);
+});
+</script>

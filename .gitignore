@@ -1,0 +1,38 @@
+# Config Files/Folders
+sftp-config.json
+.idea
+.vscode
+
+# OS Files
+.DS_Store
+
+# Vendor Files
+framework/vendor
+composer.lock
+
+# Testing files
+application/controllers/test.php
+application/views/test
+
+# Payment Info files
+application/configuration/payment.ini
+application/configuration/app.ini
+application/configuration/database.ini
+
+# Log files
+logs/*
+
+# Min files
+public/assets/js/*.min.js
+public/assets/css/*.min.css
+
+public/assets/uploads/csv/*
+public/assets/uploads/files/*
+public/assets/uploads/videos/*
+public/assets/uploads/pdf/*
+
+# Template File Ignore
+public/assets/uploads/templates/e_template_*.html
+
+# Mail Config File
+application/configuration/mail.ini

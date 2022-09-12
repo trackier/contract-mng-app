@@ -1,0 +1,18 @@
+<div class="form-group float-right">
+	<div id="daterange" class="form-control">
+		<i class="fa fa-calendar"></i>
+		<span>{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])} - {echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}</span>
+	</div>
+	<input type="hidden" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+	<input type="hidden" name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$('#indexrange').submit(function(e) {
+		    e.preventDefault();
+		    $('#indexrange button').addClass('disabled');
+		    window.su.performance();
+		    $('#indexrange button').removeClass('disabled');
+		});
+	});
+</script>

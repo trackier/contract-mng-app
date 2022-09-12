@@ -1,0 +1,31 @@
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:trackier/php-db-models.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:CloudStuffTech/zohobook-php-lib.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:CloudStuffTech/php-utils.git"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^1.2.0",
+        "symfony/dom-crawler": "^3.1",
+        "symfony/css-selector": "^3.1",
+        "php-http/curl-client": "^1.7",
+        "firebase/php-jwt": "^5.2",
+        "sentry/sentry": "^3.8",
+        "monolog/monolog": "^2.8",
+        "symfony/http-foundation": "^5.4"
+        
+    },
+    "config" : {
+        "vendor-dir": "framework/vendor"
+    }
+
+}

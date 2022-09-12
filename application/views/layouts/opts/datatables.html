@@ -1,0 +1,45 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+<link href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.26/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.26/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
+<script type="text/javascript">
+    var pagination = {
+        "page": parseInt(window.page),
+        "limit": parseInt(window.limit),
+        "count": parseInt(window.count),
+        "total": parseInt(window.total)
+    };
+    function showPagination() {
+        // calculate total pages
+        var totalPages = Math.ceil(pagination.count / pagination.limit);
+         // calculate start and end item indexes
+        var startIndex = (pagination.page - 1) * pagination.limit;
+        var endIndex = Math.min(startIndex + pagination.limit - 1, pagination.count - 1);
+
+        var paginationText = `Showing ` + (startIndex + 1) + ' to ' + (endIndex + 1) + ' of ' + (pagination.count) + ((pagination.count != pagination.total) ? ' ( filtered from ' + pagination.total + ' total entries )': '');
+        $('.paginationText').text(paginationText);
+
+    }
+    var buttons = {
+        dom: "Bfrtip",
+        "pagingType": "numbers",
+       
+        responsive: !0,
+        drawCallback: function() {
+        	$(document).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+        	});
+        }
+    };
+
+    showPagination();
+</script>

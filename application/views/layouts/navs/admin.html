@@ -1,0 +1,57 @@
+<div class="topbar">
+	<div class="topbar-left">
+		<div class="text-center"><a href="/" class="logo"><i class="fa fa-superpowers"></i> <span></span></a></div>
+	</div>
+	{script $users = explode(",", Framework\Utils::getConfig('app')->app->logs->visibility)}
+    <nav class="navbar-custom">
+    	<ul class="list-inline float-right mb-0">
+    		<li class="list-inline-item dropdown notification-list">
+				<a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+					 <span class="hide-phone">{echo $user->email}</span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+					
+					<a href="/users/logout.html" class="dropdown-item notify-item">
+						<i class="fa fa-logout"></i> <span>Logout</span>
+					</a>
+				</div>
+			</li>
+		</ul>
+
+		<ul class="list-inline menu-left mb-0">
+			<li class="float-left">
+				<button class="button-menu-mobile open-left waves-light waves-effect"><i class="fa fa-bars"></i></button>
+			</li>
+			{if $searchbar ?? null}
+			<li class="hide-phone app-search">
+				<form role="search" class="">
+					{script $value = $value ?? null}
+					<input type="text" placeholder="Search..." class="form-control" name="value" value='{echo is_array($value) ? json_encode($value) : $value}'>
+					<input type="hidden" name="property" value="{echo $property ?? null}">
+					<a href="javascript:void(0);" onclick="$(this).closest('form').submit();"><i class="fa fa-search"></i></a>
+				</form>
+			</li>
+			{/if}
+		</ul>
+
+	</nav>
+</div>
+
+<!-- ========== Left Sidebar Start ========== -->
+<div class="left side-menu">
+	<div class="sidebar-inner slimscrollleft">
+		<!--- Divider -->
+		<div id="sidebar-menu">
+			<ul>
+			
+				<li><a href="/contract/addContract.html" class="waves-effect waves-primary"><i class="fa fa-shield"></i><span> Add Contract</span></a></li>
+				<li><a href="/contract/manage.html" class="waves-effect waves-primary"><i class="fa fa-external-link fa-fw"></i><span> View Contracts</a></li>
+
+			
+			</ul>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
