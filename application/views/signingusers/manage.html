@@ -5,14 +5,14 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="page-title-box">
-					<h4 class="page-title">Contracts</h4>
+					<h4 class="page-title">Signing Users</h4>
 					
 					<div class="clearfix"></div>
 				</div>
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
 		</div>
-	
+		
 		<br>
 		<div class="row">
 			<div class="col-sm-12">
@@ -22,29 +22,28 @@
 						<table class="datatable display nowrap" style="width:100%">
 							<thead>
 								<tr>
-									<th>Contract Name</th>
-									<th>Company</th>
-									<th>Type</th>
-									<th>Start Date</th>
-									<th>End Date</th>
+									<th>Full Name</th>
+									<th>Email</th>
+									<th>Contact</th>
+								
                                     <th>Action</th>
 								</tr>
 							</thead>
 							<tbody>
-								{foreach $cont in $contracts}
+								{foreach $user in $users}
 								<tr>
                                     
-									<td >{echo $cont->cname}</td>
-									<td>{echo $cont->company}</td>
-									<td>{echo $cont->type}</td>
-                                   
-                                    <td>{echo Framework\TimeZone::printDateTime($cont->startDate)}</td>
-                                    <td>{echo Framework\TimeZone::printDateTime($cont->endDate)}</td>
+									<td >{echo $user->fullname}</td>
+									<td>{echo $user->email}</td>
+									<td>{echo $user->contact}</td>
+                                  
                                     <td>
-										<a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
-                                        <a href="/contract/deleteContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+										<a href="/signingusers/add/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
+                                        <a href="/signingusers/deleteUser/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
 									</td>
-                                    
+                                    <td>
+									
+									</td>
 								</tr>
 								{/foreach}
 							</tbody>

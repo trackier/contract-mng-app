@@ -4,7 +4,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="page-title-box">
-					<h4 class="page-title">Add Contract Details</h4>
+					<h4 class="page-title">{if $contractDetails} Edit Contract Details {/if}{else} Add Contract Details{/else}</h4>
 					
 					<div class="clearfix"></div>
 				</div>
@@ -14,21 +14,24 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-body">
-                        <form class="form-horizontal m-t-20" action="addContract" method="post" >
+					<div class="card-body" style = "width: 40%;">
+                        <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                  <div class="col-xs-12">
-                                     <input class="form-control" type="text" required="" name="contract_name" placeholder="Contract Name">
+                                     <label>Contract Name <span class="required"></span></label>
+                                     <input class="form-control" type="text" required="" value="{echo @$contractDetails->cname}"  name="contract_name" placeholder="Contract Name">
                                  </div>
                              </div>
                              <div class="form-group">
                                  <div class="col-xs-12">
-                                     <input class="form-control" type="text" name="company" required="" placeholder="Company">
+                                    <label>Company <span class="required"></span></label>
+                                     <input class="form-control" type="text" name="company" value="{echo @$contractDetails->company}" required="" placeholder="Company">
                                  </div>
                              </div>
                              <div class="form-group">
                                 <div class="col-xs-12">
-                                    <select class="form-control"  name="type" required="">
+                                    <label>Contract Type <span class="required"></span></label>
+                                    <select class="form-control"  name="type" required="" {if @$contractDetails } value="{echo @$contractDetails->type}" {/if}>
                                         
                                         <option value="customer">Customer</option>
                                         <option value="vendor">Vendor</option>
@@ -39,29 +42,57 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <input class="form-control" type="date" name="startDate" required="" placeholder="Start Date">
+                                    <label>Contract Start Date <span class="required"></span></label>
+                                    <input class="form-control" type="date" name="startDate" {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->startDate)}" {/if} required="" placeholder="Start Date">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <input class="form-control" type="date" name="endDate" required="" placeholder="End Date">
+                                    <label>Contract End Date <span class="required"></span></label>
+                                    <input class="form-control" type="date" name="endDate"  {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->endDate)}" {/if} required="" placeholder="End Date">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <textarea class="form-control" type="text" required="" name="notes" placeholder="notes"></textarea>
+                                    <label>Notes <span class="required"></span></label>
+                                    <textarea class="form-control" type="text" required="" name="notes"  placeholder="notes">{echo @$contractDetails->notes}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-12">
-                                    <input class="form-control" type="text" required="" name="users" placeholder="Users">
+                                <label>Signing Users <span class="required"></span></label>
+                                <select class="form-control selectpicker selectVal" name="users[]" data-value='{echo json_encode($contractDetails->users)}' multiple="" data-placeholder="Signing Users">
+                                    {foreach $k in $signingUsers}
+                                    <option value="{echo $k_i}">{echo $k->email}</option>
+                                    {/foreach}
+                                </select>
                                 </div>
                             </div>
-                    
+                            
+                            <p>Select files to upload:
+                                <input type="file" class="upload__input" name="files[]" multiple><br><br>
+                            </p>
+                            
+                            {foreach $doc in  $files }
+                            <table >
+                                <td style="padding-right: 20px;width:300px">
+                                    {echo $doc->filename}
+                                </td>
+                                <td style="padding-right: 20px;">
+                                    <a href="/contract/deleteFile/{$doc->fileId}/{$contractDetails->id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+                                </td>
+                                <td>
+                                    <a href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+                                </td>
+                            </table>
+                            
+                        </br>
+                            {/foreach}
+                         
                              <input type="hidden" name="action" value="addContract">
                              <div class="form-group text-right m-t-20">
                                  <div class="col-xs-12">
-                                     <button class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" type="submit">Add Contract</button>
+                                     <button class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" type="submit">{if $contractDetails} Edit Contract Details {/if}{else} Add Contract Details{/else}</button>
                                  </div>
                              </div>
                      

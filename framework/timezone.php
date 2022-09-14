@@ -204,7 +204,15 @@ class TimeZone extends Base {
 		$newDt = static::zoneConverter($dt, $extra);
 		return $newDt->format('F j\, Y');
 	}
-	
+	/**
+	 * Print the full date in human readable format
+	 * @param  object $dt    Class DateTime
+	 * @param  array  $extra Extra Opts same as zoneConverter
+	 * @return string        Formated date
+	 */
+	public static function printDateFormatted($dt, $extra = []) {
+		return $dt->format('Y-m-d');
+	}
 	public static function printMonth($date) {
 		$d = static::zoneConverter($date);
 		return $d->format('F\, Y');

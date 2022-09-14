@@ -81,7 +81,7 @@ Menu
   position: relative;
   width: 240px;
   z-index: 1;
-  background-color: #343c49;
+  background-color: #6d9ce7;
 }
 
 .topbar .topbar-left-sm {
@@ -108,7 +108,7 @@ Menu
 }
 
 .logo i {
-  color: #039cfd;
+  color: #ffffff;
 }
 
 .logo .icon-c-logo {
@@ -116,7 +116,7 @@ Menu
 }
 
 .navbar-custom {
-  background-color: #343c49;
+  background-color: #6d9ce9;
   border-radius: 0;
   margin-bottom: 0;
   padding: 0 10px 0 0;
@@ -267,7 +267,7 @@ Menu
 }
 
 .side-menu.left {
-  background: #ffffff;
+  background: #d1e9f2;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 70px;
@@ -299,7 +299,7 @@ body.fixed-left .side-menu.left {
   display: inline-block;
   height: 70px;
   width: 60px;
-  background-color: #343c49;
+  background-color: #6d9ce9;
   font-size: 24px;
 }
 
@@ -4460,3 +4460,4 @@ Sweet Alert
       box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1) !important;
   }
 }
+

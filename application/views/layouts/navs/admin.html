@@ -1,6 +1,6 @@
 <div class="topbar">
 	<div class="topbar-left">
-		<div class="text-center"><a href="/" class="logo"><i class="fa fa-superpowers"></i> <span></span></a></div>
+		<div class="text-center"><a href="/" class="logo"><img src="https://trackier.com/images/Trackier_Logo.png" style="width:80px"> <span></span></a></div>
 	</div>
 	{script $users = explode(",", Framework\Utils::getConfig('app')->app->logs->visibility)}
     <nav class="navbar-custom">
@@ -44,8 +44,16 @@
 		<div id="sidebar-menu">
 			<ul>
 			
-				<li><a href="/contract/addContract.html" class="waves-effect waves-primary"><i class="fa fa-shield"></i><span> Add Contract</span></a></li>
-				<li><a href="/contract/manage.html" class="waves-effect waves-primary"><i class="fa fa-external-link fa-fw"></i><span> View Contracts</a></li>
+				<li><a href="/contract/addContract.html" class="waves-effect waves-primary"><i class="fa fa-handshake-o"></i><span> Add Contract</span></a></li>
+				<li><a href="/contract/manage.html" class="waves-effect waves-primary"><i class="fa fa-file-pdf-o"></i><span> View Contracts</a></li>
+				<li class="has_sub">
+					<a href="javascript:void(0);" class="waves-effect waves-primary"><i class="fa fa-users"></i><span> Signing Users </span> <span class="menu-arrow"></span> </a>
+					<ul class="list-unstyled">
+						<li><a href="/signingusers/manage.html" class="waves-effect waves-primary"><i class="fa fa-users"></i><span> Manage Signing Users</a></li>
+							<li><a href="/signingusers/add.html" class="waves-effect waves-primary"><i class="fa fa-user-plus"></i><span> Add Signing Users</a></li>
+					</ul>
+				</li>
+				<li><a href="/users/changepassword.html" class="waves-effect waves-primary"><i class="fa fa-key"></i><span> Change Password</a></li>
 
 			
 			</ul>

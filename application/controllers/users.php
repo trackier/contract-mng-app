@@ -34,10 +34,8 @@ class Users extends Controller
                 {	$this->setUser($user);
 					$session = Registry::get("session");
 					$user = $this->getUser();
-					//$this->setLayout("layouts/admin");
 					$this->redirect('/contract/manage');
-                    // header("Location: /contract/manage.html");
-					// exit(); 
+                   
 				}
 				else {
 					$view->set("password_error", "Email address and/or password are incorrect");
@@ -58,4 +56,20 @@ class Users extends Controller
 		}
 	}
 
+	/**
+	 * @before _secure
+	 */
+	public function changepassword() {
+		$seo = ["title" => "Change Password", "view" => $this->getLayoutView()];
+		$view = $this->getActionView();
+		if ($this->request->post("action") == "changepassword") 
+		{
+			$password = RequestMethods::post("password");
+			$userDetail = User::first(array( "email=?" => $this->user->email));
+			$userDetail->password = $password;
+			$userDetail->save();
+			$view->set('message', 'Password set successfully');
+		}
+	}
+	
 }
