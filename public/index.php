@@ -42,9 +42,6 @@ try {
 	));
 	Framework\Registry::setConfiguration($configuration->initialize());
 
-	// Load the logger
-	$logger = new Framework\Logger();
-	Framework\Registry::setLogger($logger->initialize());
 
 	// 4. load and initialize the Database class – does not connect
 	$database = new Framework\Database();
