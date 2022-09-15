@@ -38,8 +38,8 @@
 									<td>{echo $cont->company}</td>
 									<td>{echo $cont->type}</td>
                                    
-                                    <td>{echo Framework\TimeZone::printDateTime($cont->startDate)}</td>
-                                    <td>{echo Framework\TimeZone::printDateTime($cont->endDate)}</td>
+                                    <td>{echo Framework\TimeZone::printDate($cont->startDate)}</td>
+                                    <td>{echo Framework\TimeZone::printDate($cont->endDate)}</td>
                                     <td>
 										<a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
                                         <a href="/contract/deleteContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
