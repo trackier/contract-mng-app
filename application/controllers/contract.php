@@ -69,6 +69,8 @@ class Contract extends Controller
 							return;  
 						}
 						if( move_uploaded_file($file_tmpname, $filepath)) {
+							var_dump($file_tmpname, $filepath);
+							die();
 							$contractfiles = new ContractFile([
 								'filename' => $_FILES['files']['name'][$key],
 								'status' => 'Active',
@@ -77,7 +79,9 @@ class Contract extends Controller
 							$contractfiles->save();
 							$files[] = $uniqueId ;
 						} 
-						else {      
+						else {
+							
+
 							$view->set('message',"Error uploading file");  
 							return;            
 						}
