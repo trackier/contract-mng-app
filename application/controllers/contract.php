@@ -52,7 +52,8 @@ class Contract extends Controller
 		$view->set("signingUsers", $signingUsers);
 		if ($this->request->post("action") == "addContract") 
 		{	if(isset($_FILES['files'])) {
-				$upload_dir = '/Users/bhumikabisht/Work/trackier/contract-mng-app/application/controllers/uploads'.DIRECTORY_SEPARATOR;
+			
+				$upload_dir = dirname(__DIR__).'/public/uploads'.DIRECTORY_SEPARATOR;
 				$maxsize = 2 * 1024 * 1024;
 				if(!empty(array_filter($_FILES['files']['name']))) {
 					foreach ($_FILES['files']['tmp_name'] as $key => $value) {
@@ -74,7 +75,9 @@ class Contract extends Controller
 								'fileId' => $uniqueId
 							]);
 							$contractfiles->save();
-							$files[] = $uniqueId ;} else {      
+							$files[] = $uniqueId ;
+						} 
+						else {      
 							$view->set('message',"Error uploading file");  
 							return;            
 						}
@@ -117,7 +120,7 @@ class Contract extends Controller
 			$contractDetails->save();
 			$view->set('message', 'Contract Saved successfully');
 			if ($id) {
-				header("Location: /contract/addContract/".$contractId);		
+				header("Location: /contract/addContract/".$id);		
 			}
 		}
 	}
@@ -151,7 +154,7 @@ class Contract extends Controller
 	public function downloadFile($id) {
 		$file = ContractFile::first(['fileId'=>$id], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
 		$extension = pathinfo($file->filename, PATHINFO_EXTENSION);
-		$file_url = '/Users/bhumikabisht/Work/trackier/contract-mng-app/application/controllers/uploads/'.$id.'.'.$extension;  
+		$file_url = dirname(__DIR__).'/public/uploads/'.$id.'.'.$extension;  
 		header('Content-Type: application/octet-stream');  
 		header("Content-Transfer-Encoding: utf-8");   
 		header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");   

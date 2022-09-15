@@ -64,6 +64,12 @@ class Users extends Controller
 		if ($this->request->post("action") == "changepassword") 
 		{
 			$password = RequestMethods::post("password");
+			$password2 = RequestMethods::post("password2");
+			if ($password != $password2) {
+				$view->set('message', 'Passwords do not match!!');
+				return;
+			}
+			
 			$userDetail = User::first(array( "email=?" => $this->user->email));
 			$userDetail->password = sha1($password);
 			$userDetail->save();
