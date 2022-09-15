@@ -15,16 +15,14 @@ class SigningUsers extends Controller
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
-	
-		$query['live'] = $this->request->get('live', 0);
+        $query['live'] = $this->request->get('live', 0);
 		$users = Signinguser::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		$total = Signinguser::count($query) ?? 0;
 		$view->set("users", $users)->set('limit', $limit)
 		->set('page', $page)
 		->set('total', $total)
 		->set('search', $this->request->get('search', ''));
-
-	}
+    }
 
 	/**
 	 * @before _secure
@@ -38,8 +36,7 @@ class SigningUsers extends Controller
             $view->set("suser", $signingusers);
         }
 		
-		
-		if ($this->request->post("action") == "addUser") 
+        if ($this->request->post("action") == "addUser") 
 		{	
 			$fullname = RequestMethods::post("username"); 
 			$contact = RequestMethods::post("contact");
@@ -54,7 +51,6 @@ class SigningUsers extends Controller
                     'fullname' => $fullname,
                     'contact' => $contact,
                     'email' => $email,
-                    
                 ]);
             }
 			$signingusers->save();

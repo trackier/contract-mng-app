@@ -28,21 +28,21 @@ class Users extends Controller
 				$error = true;
 			}
 			if (!$error)
-            {
-				$user = User::first(array( "email=?" =>$email, "password=?" =>$password,));
+            { 	$pass = sha1($password);
+				$user = User::first(array( "email=?" =>$email, "password=?" =>$pass,));
 				if (!empty($user))
                 {	$this->setUser($user);
 					$session = Registry::get("session");
 					$user = $this->getUser();
 					$this->redirect('/contract/manage');
-                   
-				}
+                }
 				else {
-					$view->set("password_error", "Email address and/or password are incorrect");
-				 }
+					$view->set('message', 'Please provide valid credentials');
+				}
 			}
 		}
 	}
+
 	/**
 	 * @protected
 	 */
@@ -50,7 +50,6 @@ class Users extends Controller
 		$session = $this->getSession();
 		$csrf_token = Framework\StringMethods::uniqRandString(44);
 		$session->set('Auth\Request:$token', $csrf_token);
-
 		if ($this->actionView) {
 			$this->actionView->set('__token', $csrf_token);
 		}
@@ -66,7 +65,7 @@ class Users extends Controller
 		{
 			$password = RequestMethods::post("password");
 			$userDetail = User::first(array( "email=?" => $this->user->email));
-			$userDetail->password = $password;
+			$userDetail->password = sha1($password);
 			$userDetail->save();
 			$view->set('message', 'Password set successfully');
 		}
