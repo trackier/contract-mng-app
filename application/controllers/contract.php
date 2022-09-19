@@ -68,8 +68,7 @@ class Contract extends Controller
 							$view->set('message',"EFile size greater than 2 MB");  
 							return;  
 						}
-						if( move_uploaded_file($file_tmpname, $filepath)) {
-							
+						if (move_uploaded_file($file_tmpname, $filepath)) {
 							$contractfiles = new ContractFile([
 								'filename' => $_FILES['files']['name'][$key],
 								'status' => 'Active',

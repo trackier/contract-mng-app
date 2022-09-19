@@ -3,6 +3,8 @@ ob_start();
 define("DEBUG", True);
 define("APP_PATH", dirname(__FILE__));
 define("CDN", "/assets/");
+define("CDN", "/node_modules/");
+
 define("GCDN", "https://static.vnative.co/");
 
     

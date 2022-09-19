@@ -15,7 +15,7 @@ define("CDN", "/assets/");
 define("GCDN", "https://static.vnative.co/");
 
 try {
-	// 1. load the Core class that includes an autoloader
+   // 1. load the Core class that includes an autoloader
 	require_once(APP_PATH. "/framework/core.php");
 	Framework\Core::initialize();
 

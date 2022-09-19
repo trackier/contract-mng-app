@@ -860,117 +860,12 @@ class Utils {
 		return $stringFormat;
 	}
 
-	public static function getPackageId($storeUrl) {
-		$packageId = null;
-		$components = parse_url($storeUrl);
-		if (!isset($components['host'])) {
-			return $packageId;
-		}
-		$path = $components['path'] ?? '';
-		switch ($components['host']) {
-			case self::GOOGLE_PLAY_HOST:
-			case self::MARKET_URL_HOST:
-				parse_str($components['query'] ?? '', $map);
-				$packageId = $map['id'] ?? null;
-				break;
 
-			case self::APP_STORE_HOST:
-			case self::APP_STORE_GENERAL_HOST:
-				preg_match('#(id[a-z0-9]+\??)#', $path, $matches);
-				if (isset($matches[1])) {
-					$packageId = $matches[1];
-				}
-				break;
-		}
-		return $packageId;
-	}
 
-	public static function downloadCreatives($crtvArr, $fileName) {
-		// If Creatives count is zero do nothing
-		if (count($crtvArr) == 0) {
-		    return;
-		}
-		// Creating Zip in temporary folder of the system
-		$zipFile = tempnam(sys_get_temp_dir(), sprintf("%s", uniqid()));
-		$zip = new \ZipArchive();
-		$zip->open($zipFile, \ZipArchive::CREATE);
-		// Guzzle Client to download creatives
-		$client = self::getGuzzleClient(10);
-		foreach ($crtvArr as $crtv) {
-		    $file = tmpfile();
-		    if ($file == false) {
-		        // Skip operation
-		        continue;
-		    }
-		    $tempFile = stream_get_meta_data($file)['uri'];
-		    try {
-		        $url = self::media($crtv, 'display');
-		        $resp = $client->request('GET', self::fixUrl($url), ['sink' => $tempFile]);
-		    } catch (\Exception $e) {
-		        continue;
-		    }
-		    chmod($tempFile, 0664);
-		    chgrp($tempFile, 'www-data');
-		    $download_file = file_get_contents($tempFile);
-		    $zip->addFromString($crtv, $download_file);
-		}
-		$zip->close();
-		header('Content-Type: application/zip');
-		header(sprintf('Content-Disposition: attachment; filename=%s.zip', $fileName));
-		if (!file_exists($zipFile)) {
-			return false;
-		}
-		header(sprintf('Content-Length: %d', filesize($zipFile)));
-		readfile($zipFile);
-		unlink($zipFile);
-	}
 
 	public static function isValidEmail($email) {
 		return (!preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $email)) ? FALSE : TRUE;
 	}
 
-	/**
-	 * [PUBLIC] This function will:
-	 * - Return the data of the CSV to mapped column format
-	 * @param $filePath 				String | File path
-	 * @param $mapping 					Associative Array
-	 * @param $requiredMappingField		Array | Required Mapping fields
-	 */
-	public static function getDataFromCsvInMappedColumnFormat($filePath, $mapping = [], $requiredMappingField = []) {
-		$file = fopen($filePath, 'r');
-		if (!$file) {
-			throw new \Exception('Error - Failed to parse CSV file!!');
-		}
-		// Getting headers from CSV and flipping it to get name and index mapping
-		$headers = fgetcsv($file);
-		$headers = array_flip($headers);
-
-		// Mapping fields to column indexes
-		$headersIndexMap = [];
-		foreach ($mapping as $key => $value) {
-			if (!$value) continue;
-			$headersIndexMap[$value] = $headers[$key];
-		}
-		// Checking if user has not mapped any column then throwing error
-		if (!$headersIndexMap) {
-			throw new \Exception("Error - No CSV to column mapping found!!");
-		}
-		// Checking if all the required fields are provided or not, if not throw error
-		foreach (($requiredMappingField ?? []) as $f) {
-			if (!isset($headersIndexMap[$f])) {
-				throw new \Exception("Error - All required fields are not mapped!!");
-			}
-		}
-		// Result array of associative array
-		$results = [];
-		while(($row = fgetcsv($file)) !== false) {
-			$data = [];
-			foreach ($headersIndexMap as $key => $index) {
-				$data[$key] = $row[$index];
-			}
-			$results[] = $data;
-		}
-		fclose($file);
-		return $results;
-	}
+	
 }
