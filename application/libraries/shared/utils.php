@@ -387,18 +387,12 @@ class Utils {
         } else {
             $opts = $dateQ;
         }
-        if (Registry::get("controller")) {
-        	$org = Registry::get("controller")->org;	
-        } else {
-        	$org = null;
-        }
+        
         $startDt = new \DateTime(); $endDt = new \DateTime();
-
-        if (is_object($org) && is_a($org, 'Organization')) {
-            $tz = new \DateTimeZone($org->getZone());
-            $startDt->setTimezone($tz);
-            $endDt->setTimezone($tz);
-        }
+		$tz = new \DateTimeZone('UTC');
+		$startDt->setTimezone($tz);
+		$endDt->setTimezone($tz);
+       
 
         $start = strtotime("-1 day"); $end = strtotime("+1 day");
         if (isset($opts['start']) && is_string($opts['start'])) {
