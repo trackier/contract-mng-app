@@ -68,8 +68,7 @@ class Contract extends Controller
 							$view->set('message',"EFile size greater than 2 MB");  
 							return;  
 						}
-						if( move_uploaded_file($file_tmpname, $filepath)) {
-							
+						if (move_uploaded_file($file_tmpname, $filepath)) {
 							$contractfiles = new ContractFile([
 								'filename' => $_FILES['files']['name'][$key],
 								'status' => 'Active',
@@ -137,7 +136,20 @@ class Contract extends Controller
 		$query['id'] = $contractId;
 		$contractDetails = Contracttbl::first($query, [], ['maxTimeMS' => 5000 ]);
 		$fileDetails = ContractFile::first(['fileId' => $id], [], ['maxTimeMS' => 5000 ]);
+		
+		foreach ($contractDetails->users as $user) {
+			$userDetails = Signinguser::first(['id' => $user], [], ['maxTimeMS' => 5000 ]);
+			$contents[] = sprintf('<p>	Your file %s for contract Name: %s has been deleted <br></p>',$fileDetails->filename, $contractDetails->cname);
+
+			\Shared\Mail::send([
+				'user' => $userDetails,
+				'subject' => '[ALERT] File Deletion ',
+				'template' => 'filedeletion',
+				'contents' => implode("<br>", $contents)
+			]);
+		}
 		$fileDetails->status = 'Deleted';
+		$fileDetails->dueDelDate = date("Y/m/d");
 		$fileDetails->save();
 		$docs = $contractDetails->docInserted;
 		$newDocs = [];
@@ -149,9 +161,8 @@ class Contract extends Controller
 		$contractDetails->docInserted = $newDocs  ;
 		$contractDetails->save();
 		header("Location: /contract/addContract/".$contractId);
-		
-	
 	}
+	
 	public function downloadFile($id) {
 		$file = ContractFile::first(['fileId'=>$id], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
 		$extension = pathinfo($file->filename, PATHINFO_EXTENSION);

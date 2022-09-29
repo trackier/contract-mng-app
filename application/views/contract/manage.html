@@ -14,73 +14,70 @@
 		</div>
 	
 		<br>
-		<div class="row">
-			<div class="col-sm-12">
-				<br>
-				<div class="card">
-					<div class="table-responsive">
-						<table class="datatable display nowrap" style="width:100%">
-							<thead>
-								<tr>
-									<th>Contract Name</th>
+         <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Contracts</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Contract Name</th>
 									<th>Company</th>
 									<th>Type</th>
 									<th>Start Date</th>
 									<th>End Date</th>
                                     <th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								{foreach $cont in $contracts}
-								<tr>
+                            </tr>
+                        </thead>
+                       <tbody>
+                            {foreach $cont in $contracts}
+                                <tr>
                                     
-									<td >{echo $cont->cname}</td>
-									<td>{echo $cont->company}</td>
-									<td>{echo $cont->type}</td>
-                                   
+                                    <td >{echo $cont->cname}</td>
+                                    <td>{echo $cont->company}</td>
+                                    <td>{echo $cont->type}</td>
+                                
                                     <td>{echo Framework\TimeZone::printDate($cont->startDate)}</td>
                                     <td>{echo Framework\TimeZone::printDate($cont->endDate)}</td>
                                     <td>
-										<a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
-                                        <a href="/contract/deleteContract/{echo $cont->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
-									</td>
+                                        <a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-primary">Edit <i class="fa fa-pencil"></i></a>
+                                        <a data-toggle="modal" data-target="#contractDelModal"  data-id='{echo $cont->_id}' id="contractDel" class="btn btn-xs btn-outline-danger open-contractDelModal">Delete <i class="fa fa-trash"></i></a>
+                                    </td>
                                     
-								</tr>
-								{/foreach}
-							</tbody>
-						</table>
-					</div>
-					<center>
-						<div>
-							<ul class="pagination justify-content-center">
-								<li class="page-item {if $page == 1}disabled{/if}">
-									<a class="page-link" href="{echo Shared\Markup::pagination($page - 1)}" tabindex="-1">Previous</a>
-								</li>
-								<li class="page-item {if $page == ceil($total/$limit)}disabled{/if}">
-									<a class="page-link" href="{echo Shared\Markup::pagination($page + 1)}">Next</a>
-								</li>
-							</ul>
-						</div>
-					</center>
-				</div>
-			</div>
-		</div>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+	
 	</div>
 </div>
-{include layouts/opts/datatables.html}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+<div class="modal fade" id="contractDelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Remove Contract?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">Do you want to remove Contract. </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" id="contractId">Remove</a>
+        </div>
+    </div>
+</div>
+</div>
 <script type="text/javascript">
-var options = {
-	"aaSorting": [[0, 'desc']],
-	"scrollX": true
-};
-options.buttons = buttons.buttons
-options.dom = buttons.dom;
-var settings = $.extend( {}, buttons, options );
-var pageTable;
+$('.open-contractDelModal').on('click', function () {
+    var contractId = $(this).data('id');
+    $("#contractId").attr('href','/contract/deleteContract/'+contractId);
+})
 
-$(document).ready(function() {
-	$("img.lazy").lazyload();
-	pageTable = $('.datatable').DataTable(options);
-});
 </script>
