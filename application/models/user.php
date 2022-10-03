@@ -20,15 +20,6 @@ class User extends Shared\Model
     * @index
     */
     protected $_email;
-    // public function comparePassword($pass) {
-	// 	if ($this->password) {
-	// 		$decryptedHash = Security::aesDecrypt($this->password);
-	// 		$isMatching = hash_equals(sha1($pass), $decryptedHash ? $decryptedHash : '');
-	// 		if ($isMatching) {
-	// 			return true;
-	// 		}
-	// 	}
-	// 	return hash_equals(sha1($pass), $this->password ?? '');
-	// }
+    
 
 }

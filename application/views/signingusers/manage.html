@@ -14,56 +14,42 @@
 		</div>
 		
 		<br>
-		<div class="row">
-			<div class="col-sm-12">
-				<br>
-				<div class="card">
-					<div class="table-responsive">
-						<table class="datatable display nowrap" style="width:100%">
-							<thead>
-								<tr>
-									<th>Full Name</th>
-									<th>Email</th>
-									<th>Contact</th>
-								
-                                    <th>Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								{foreach $user in $users}
-								<tr>
-                                    
-									<td >{echo $user->fullname}</td>
-									<td>{echo $user->email}</td>
-									<td>{echo $user->contact}</td>
-                                  
-                                    <td>
-										<a href="/signingusers/add/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
-                                        <a href="/signingusers/deleteUser/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
-									</td>
-                                    <td>
-									
-									</td>
-								</tr>
-								{/foreach}
-							</tbody>
-						</table>
-					</div>
-					<center>
-						<div>
-							<ul class="pagination justify-content-center">
-								<li class="page-item {if $page == 1}disabled{/if}">
-									<a class="page-link" href="{echo Shared\Markup::pagination($page - 1)}" tabindex="-1">Previous</a>
-								</li>
-								<li class="page-item {if $page == ceil($total/$limit)}disabled{/if}">
-									<a class="page-link" href="{echo Shared\Markup::pagination($page + 1)}">Next</a>
-								</li>
-							</ul>
-						</div>
-					</center>
-				</div>
-			</div>
-		</div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Contact</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                       <tbody>
+                        {foreach $user in $users}
+                        <tr>
+                            
+                            <td >{echo $user->fullname}</td>
+                            <td>{echo $user->email}</td>
+                            <td>{echo $user->contact}</td>
+                             <td>
+                                <a href="/signingusers/add/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
+                                <a href="/signingusers/deleteUser/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+                            </td>
+                            <td>
+                            
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 	</div>
 </div>
 {include layouts/opts/datatables.html}

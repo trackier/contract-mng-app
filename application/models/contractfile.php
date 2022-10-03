@@ -29,6 +29,15 @@ class ContractFile extends Shared\Model
     * @index
     */
     protected $_status;
+
+
+    /**
+    * @column
+    * @readwrite
+   	* @type date
+    */
+    protected $_dueDelDate;
+
    
 
 }

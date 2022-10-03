@@ -209,28 +209,6 @@ class Utils {
 		fclose($fh);
 	}
 
-	public static function getPackageId($storeUrl) {
-		$packageId = null;
-		$components = parse_url($storeUrl);
-		if (!isset($components['host'])) {
-			return $packageId;
-		}
-		switch ($components['host']) {
-			case self::GOOGLE_PLAY_HOST:
-			case self::MARKET_URL_HOST:
-				parse_str($components['query'] ?? '', $map);
-				$packageId = $map['id'] ?? null;
-				break;
-
-			case self::APP_STORE_HOST:
-				preg_match('#(id[a-z0-9]+\??)#', $components['path'], $matches);
-				if (isset($matches[1])) {
-					$packageId = $matches[1];
-				}
-				break;
-		}
-		return $packageId;
-	}
 
 	public static function getExchangeRates() {
 		$appConf = static::getAppConfig();

@@ -36,4 +36,13 @@ public/assets/uploads/templates/e_template_*.html
 
 # Mail Config File
 application/configuration/mail.ini
+<<<<<<< HEAD
 node_modules
+=======
+
+#node modules
+node_modules
+
+#public uploads 
+public/uploads
+>>>>>>> 8a99f99032b6ac34fcf3aad5bc908a325b90ac62

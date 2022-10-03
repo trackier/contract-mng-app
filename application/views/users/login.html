@@ -1,4 +1,4 @@
-<div class="login-card" style="width:30%; margin-inline:35%; margin-top: 5%;">
+<!-- <div class="login-card" style="width:30%; margin-inline:35%; margin-top: 5%;">
     <div class="text-center">
         <span><img src="https://trackier.com/images/Trackier_Logo.png" class="img-fluid rounded"></span>
         <div style="margin-bottom: 20px; color:rgb(55, 55, 55)">Contract Management </div>
@@ -29,4 +29,54 @@
         
         </div>
     </form>
+</div> -->
+
+<div class="row justify-content-center">
+
+    <div class="">
+        {echo Shared\Markup::message($message ?? null)}
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0" style=" display: flex;
+            flex-wrap: wrap;
+            align-content: center;">
+                <!-- Nested Row within Card Body -->
+                <div >
+                   <div >
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Contract Management Application</h1>
+                            </div>
+                            <form class="user" action="login" method="post" >
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" name="email"
+                                        placeholder="Enter Email Address...">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user"
+                                    name="password" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                                        <label class="custom-control-label" for="customCheck">Remember
+                                            Me</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="action" value="login">
+                                <input type="hidden" name="token" value="{echo $__token}">
+                                <button class="btn btn-primary btn-user btn-block" type="submit">Login</button>
+
+                                
+                                <hr>
+                              
+                            </form>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 </div>
