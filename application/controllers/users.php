@@ -8,6 +8,7 @@ use Framework\RequestMethods as RequestMethods;
 class Users extends Controller
 {
 	/**
+	 * [PUBLIC] This function will login user based on email id and password
 	 * @before _session
 	 * @after _csrfToken
 	 */
@@ -43,10 +44,10 @@ class Users extends Controller
 		}
 	}
 
-	/**
+	/**[PROTECTED] This function wil set authorisation token in the session
 	 * @protected
 	 */
-	public function _csrfToken() {
+	protected function _csrfToken() {
 		$session = $this->getSession();
 		$csrf_token = Framework\StringMethods::uniqRandString(44);
 		$session->set('Auth\Request:$token', $csrf_token);
@@ -56,6 +57,7 @@ class Users extends Controller
 	}
 
 	/**
+	 * [PUBLIC] This function will change password of the user 
 	 * @before _secure
 	 */
 	public function changepassword() {

@@ -8,6 +8,7 @@ use Framework\RequestMethods as RequestMethods;
 class SigningUsers extends Controller
 {
 	/**
+	 * [PUBLIC] This function will set signing users related data to the view.
 	 * @before _secure
 	 */
 	public function manage() {	
@@ -25,7 +26,9 @@ class SigningUsers extends Controller
     }
 
 	/**
+	 * [PUBLIC] This function will add/edit signing user details
 	 * @before _secure
+	 * @param $id
 	 */
 	public function add($id = null) {	
 		$seo = ["title" => "Contracts", "view" => $this->getLayoutView()];
@@ -36,8 +39,7 @@ class SigningUsers extends Controller
             $view->set("suser", $signingusers);
         }
 		
-        if ($this->request->post("action") == "addUser") 
-		{	
+        if ($this->request->post("action") == "addUser") {	
 			$fullname = RequestMethods::post("username"); 
 			$contact = RequestMethods::post("contact");
 			$email = RequestMethods::post("email"); 
