@@ -9,6 +9,7 @@ class Contract extends Controller
 	/**
 	 * [PUBLIC] This function will set contracts related data to the view.
 	 * @before _secure
+	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function manage() {	
 		$seo = ["title" => "Manage Contracts", "view" => $this->getLayoutView()];
@@ -26,6 +27,8 @@ class Contract extends Controller
 
 	/**
 	 * [PUBLIC] This function will Add/Edit Contracts .
+	 * @param $id
+	 * @author Bhumika <bhumika@trackier.com>
 	 * @before _secure
 	 */
 	public function addContract($id = null) {	
@@ -51,36 +54,15 @@ class Contract extends Controller
 			if (isset($_FILES['files'])) {
 				$files = $this->fileUpload($_FILES);
 			}
-			$cname = RequestMethods::post("contract_name"); 
-			$company = RequestMethods::post("company");
-			$type = RequestMethods::post("type"); 
-			$startDate = RequestMethods::post("startDate"); 
-			$endDate = RequestMethods::post("endDate"); 
-			$notes = RequestMethods::post("notes"); 
-			$users = RequestMethods::post("users"); 
-
-			if ($id) {
-				$contractDetails->cname =  $cname;
-                $contractDetails->type =  $type;
-                $contractDetails->company =  $company;
-				$contractDetails->startDate =  $startDate;
-                $contractDetails->endDate =  $endDate;
-                $contractDetails->notes =  $notes;
-				$contractDetails->docInserted =  $files;
-				$contractDetails->users =  $users;
-			} else {
-				$contractDetails = new Contracttbl([
-					'cname' => $cname,
-					'type' => $type,
-					'company' => $company,
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-					'notes' => $notes,
-					'docInserted' => $files,
-					'users' => $users
-				]);
+			$data = $this->request->post('data', []);
+			if (!$id) {
+				$contractDetails =  new Contracttbl([]);
 			}
-			$contractDetails->save();
+			foreach ($data as $key=>$v) {
+				$contractDetails->$key = $v;
+			}
+			$contractDetails->docInserted = $files;
+		    $contractDetails->save();
 			$view->set('message', 'Contract Saved successfully');
 			if ($id) {
 				header("Location: /contract/addContract/".$id);		
@@ -91,6 +73,7 @@ class Contract extends Controller
 	/**
 	 * [PRIVATE] This function will upload files to uploads location.
 	 * @param $files
+	 * @author Bhumika <bhumika@trackier.com>
 	 * @return $filesUploaded
 	 */
 	private function fileUpload($files) {
@@ -122,6 +105,7 @@ class Contract extends Controller
 	 * [PUBLIC] This function will delete contract based on Id provided  .
 	 * @param $id
 	 * @before _secure
+	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function deleteContract($id) {
 		$query['id'] = $id;
@@ -134,6 +118,7 @@ class Contract extends Controller
 	 * [PUBLIC] This function will schedule file deletion after 3 days  based on file Id and contract Id provided  .
 	 * @param $id
 	 * @param $contractId
+	 * @author Bhumika <bhumika@trackier.com>
 	 * @before _secure
 	 */
 	public function deleteFile($id, $contractId) {
@@ -169,6 +154,7 @@ class Contract extends Controller
 	/**
 	 * [PUBLIC] This function will download file based on file id provided.
 	 * @param $id
+	 * @author Bhumika <bhumika@trackier.com>
 	 * @before _secure
 	 */
 	public function downloadFile($id) {
@@ -181,5 +167,4 @@ class Contract extends Controller
 		readfile($file_url);  
 		
 	}
-
 }

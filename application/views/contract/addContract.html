@@ -20,13 +20,13 @@
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                         <label>Contract Name <span class="required"></span></label>
-                                        <input class="form-control" type="text" required="" value="{echo @$contractDetails->cname}"  name="contract_name" placeholder="Contract Name">
+                                        <input class="form-control" type="text" required="" value="{echo @$contractDetails->cname}"  name="data[cname]" placeholder="Contract Name">
                                     </div>
                                 </div>
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                        <label>Company <span class="required"></span></label>
-                                        <input class="form-control" type="text" name="company" value="{echo @$contractDetails->company}" required="" placeholder="Company">
+                                        <input class="form-control" type="text" name="data[company]" value="{echo @$contractDetails->company}" required="" placeholder="Company">
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                         <label>Contract Type <span class="required"></span></label>
-                                        <select class="form-control"  name="type" required="" {if @$contractDetails } value="{echo @$contractDetails->type}" {/if}>
+                                        <select class="form-control"  name="data[type]" required="" {if @$contractDetails } value="{echo @$contractDetails->type}" {/if}>
                                             
                                             <option value="customer">Customer</option>
                                             <option value="vendor">Vendor</option>
@@ -46,7 +46,7 @@
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                     <label>Signing Users <span class="required"></span></label>
-                                    <select class="form-control selectpicker selectVal" name="users[]" data-value='{echo json_encode($contractDetails->users)}' multiple="" data-placeholder="Signing Users">
+                                    <select class="form-control selectpicker selectVal" name="data[users][]" data-value='{echo json_encode($contractDetails->users)}' multiple="" data-placeholder="Signing Users">
                                         {foreach $k in $signingUsers}
                                         <option value="{echo $k_i}">{echo $k->email}</option>
                                         {/foreach}
@@ -59,13 +59,13 @@
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                         <label>Contract Start Date <span class="required"></span></label>
-                                        <input class="form-control" type="date" name="startDate" {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->startDate)}" {/if} required="" placeholder="Start Date">
+                                        <input class="form-control" type="date" name="data[startDate]" {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->startDate)}" {/if} required="" placeholder="Start Date">
                                     </div>
                                 </div>
                                 <div class="form-group col-6">
                                     <div class="col-xs-12">
                                         <label>Contract End Date <span class="required"></span></label>
-                                        <input class="form-control" type="date" name="endDate"  {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->endDate)}" {/if} required="" placeholder="End Date">
+                                        <input class="form-control" type="date" name="data[endDate]"  {if @$contractDetails } value="{echo \Framework\TimeZone::printDateFormatted(@$contractDetails->endDate)}" {/if} required="" placeholder="End Date">
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <label>Notes <span class="required"></span></label>
-                                    <textarea class="form-control" type="text" required="" name="notes"  placeholder="notes">{echo @$contractDetails->notes}</textarea>
+                                    <textarea class="form-control" type="text" required="" name="data[notes]"  placeholder="notes">{echo @$contractDetails->notes}</textarea>
                                 </div>
                             </div>
                           
