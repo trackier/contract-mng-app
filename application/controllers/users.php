@@ -44,10 +44,9 @@ class Users extends Controller
 		}
 	}
 
-	/**[PROTECTED] This function wil set authorisation token in the session
-	 * @protected
+	/**[PUBLIC] This function wil set authorisation token in the session
 	 */
-	protected function _csrfToken() {
+	public function _csrfToken() {
 		$session = $this->getSession();
 		$csrf_token = Framework\StringMethods::uniqRandString(44);
 		$session->set('Auth\Request:$token', $csrf_token);
