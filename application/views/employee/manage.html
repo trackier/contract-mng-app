@@ -1,0 +1,89 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="page-title-box row">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h3 mb-0 text-gray-800">Employee Manage</h1>
+							</div>
+							<!-- <ol class="breadcrumb float-right">
+								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+								<li class="breadcrumb-item active">Manage Employees</li>
+							</ol> -->
+						</div>
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+				</div>
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Employee Search </h6>
+					</div>
+					<form class="card-body" method="get">
+						<div class="form-row">
+							<div class="form-group col-sm-8">
+								<input type="text" name="search" class="form-control" placeholder="Search..." value="{echo $search}">
+							</div>
+							<div class="form-group col-sm-2">
+								<select class="form-control" name="type" value="{echo $type}">
+									<option value="">--</option>
+									<option value="name">Name</option>
+									<option value="email">Email</option>
+									<option value="emp_id">Employee Id</option>
+									<option value="phone">Phone</option>
+								</select>
+							</div>
+							<div class="form-group col-sm-2">
+								<button type="submit" class="btn btn-outline-primary">
+								<i class="fa fa-search"></i> Submit
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				{if $employees}
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Employee Manage</h6>
+					</div><br>
+					<div class="text-start px-md-2">
+						<a class="btn btn-outline-primary"  href="/employee/add" padding="10px"><i class="fa fa-plus"></i> Add new </a>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Employee Id</th>
+										<th>Name</th>
+										<th>Email</th>
+										<th>Phone</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach $obj in $employees}
+										<tr data-id='{echo $obj->_id}'>
+											<td>{echo $obj->emp_id}</td>
+											<td>{echo $obj->name}</td>
+											<td>{echo $obj->email}</td>
+											<td>{echo $obj->phone}</td>
+											<td> <a data-href="/employee/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+												<a class="btn btn-outline-primary"  href="/employee/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+										</tr>
+									{/foreach}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				{/if} {else}
+				<div class="card-body">
+					<p class="card-text">No Employees Found</p>
+				</div>
+				{/else}
+			</div>
+		</div>
+	</div>
+</div>

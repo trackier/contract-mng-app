@@ -1,0 +1,120 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="page-title-box row">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h3 mb-0 text-gray-800">Assigned Manage</h1>
+							</div>
+							<!-- <ol class="breadcrumb float-right">
+								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+								<li class="breadcrumb-item active">Manage Assigned</li>
+							</ol> -->
+						</div>
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+				</div>
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Assigned Search </h6>
+					</div>
+						<form class="card-body" method="get">
+							<div class="form-row">
+								<div class="form-group col-sm-4">Employees</div>
+								<div class="form-group col-sm-4">Assets</div>
+							</div>
+							<div class="form-row">
+								<div class="form-group col-sm-4">
+									<select class="form-control" name="query[emp_id]" value="{echo $query['emp_id']}">
+										<option value="">All</option>
+										{foreach $e in $employees}
+										<option value="{echo $e->_id}">{echo $e->name}</option>
+										{/foreach}
+									</select>
+								</div>
+								<div class="form-group col-sm-4">
+									<select class="form-control" name="query[asset_id]" value="{echo $query['asset_id']}">
+										<option value="">All</option>
+										{foreach $a in $assets}
+										<option value="{echo $a->_id}">({echo $a->name}) {echo $a->asset_type}</option>
+										{/foreach}
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<button type="submit" class="btn btn-outline-primary">
+									<i class="fa fa-search"></i> Submit
+									</button>
+								</div>
+							</div>
+						</form>
+				</div>
+				
+				{if $assigneds}
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Assigned Manage </h6>
+					</div><br>
+					<div class="text-start px-md-2">
+					<a class="btn btn-outline-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i> Add new Assigned</a>
+					</div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Asset</th>
+										<th>Employee</th>
+										<th>Assign Date</th>
+										<th>Handover Date</th>
+										<td>Action</td>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach $obj in $assigneds}
+									<tr data-id='{echo $obj->_id}'>
+										<td>
+											{if $obj->asset_id}
+												{script $a = $assets[$obj->asset_id]}
+												{if $a}
+													({echo $a->name}) {echo $a->asset_type}
+												{/if}
+											{/if}
+										</td>
+										<td>
+											{if $obj->emp_id}
+												{script $e = $employees[$obj->emp_id]}
+												{if $e}
+													{echo $e->name}
+												{/if}
+											{/if}
+										</td>
+										<td>
+											{if $obj->assign_date}
+											{echo Framework\TimeZone::printDate($obj->assign_date)}
+											{/if}
+										</td>
+										<td>
+											{if $obj->handover_date}
+												{echo Framework\TimeZone::printDate($obj->handover_date)}
+											{/if}
+										</td>
+										<td> <a data-href="/assigned/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+										<a class="btn btn-outline-primary"  href="/assigned/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+									</tr>
+									{/foreach}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				{/if} {else}
+				<div class="card-body">
+					<p class="card-text">No Assigneds Found</p>
+				</div>
+				{/else}
+			</div>
+		</div>
+	</div>
+</div>

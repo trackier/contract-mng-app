@@ -1,0 +1,63 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="page-title-box row">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h3 mb-0 text-gray-800">Assigned Add</h1>
+							</div>
+							<!-- <ol class="breadcrumb float-right">
+								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+								<li class="breadcrumb-item"><a href="/assigned/manage">Assigned Manage</a></li>
+								<li class="breadcrumb-item active">Assigned Add</li>
+							</ol> -->
+						</div>
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+				</div>
+				<form method="post" action="" enctype="multipart/form-data">
+					<div class="card card-body m-b-20">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Select Asset</label>
+							<div class="col-sm-9 col-md-6">
+								<select name="data[asset_id]" class="form-control selectpicker user-select">
+									{foreach $a in $assets}
+									<option value="{echo $a->_id}">({echo $a->name}) {echo $a->asset_type}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Select employee</label>
+							<div class="col-sm-9 col-md-6">
+								<select name="data[emp_id]" class="form-control selectpicker user-select">
+									{foreach $e in $employees}
+									<option value="{echo $e->_id}">{echo $e->name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Assign Date</label>
+							<div class="col-sm-9 col-md-6">
+								<input class="form-control" name="data[assign_date]" required="" type="date" placeholder="Select assign date">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Handover Date</label>
+							<div class="col-sm-9 col-md-6">
+								<input class="form-control" name="data[handover_date]" type="date" placeholder="Select handover date">
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-rounded btn-primary"><i class="fa fa-check"></i> Save</button>
+							
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
