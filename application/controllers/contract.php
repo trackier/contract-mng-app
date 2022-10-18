@@ -18,11 +18,20 @@ class Contract extends Controller
 		$view = $this-> getActionView();
 		$query['live'] = $this->request->get('live', 0);
 		$contracts = Contracttbl::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$assets = \Models\Asset::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$employees = \Models\Employee::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$assigneds = \Models\Assigned::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
 		$total = Contracttbl::count($query) ?? 0;
 		$view->set("contracts", $contracts)->set('limit', $limit)
-		->set('page', $page)
-		->set('total', $total)
-		->set('search', $this->request->get('search', ''));
+			->set('page', $page)
+			->set('total', $total)
+			->set('search', $this->request->get('search', ''))
+			->set('Assets', $assets ?? [])
+			->set('Employees', $employees ?? [])
+			->set('Assigneds', $assigneds ?? [])
+			->set('vendors', $vendors ?? []);
+	
 	}
 
 	/**
