@@ -1,0 +1,81 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="page-title-box row">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h3 mb-0 text-gray-800">Asset Edit ID :{echo $asset->_id}</h1>
+							</div>
+							<!-- <ol class="breadcrumb float-right">
+								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+								<li class="breadcrumb-item"><a href="/asset/manage">Asset Manage</a></li>
+								<li class="breadcrumb-item active">Asset edit</li>
+							</ol> -->
+						</div>
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+				</div>
+				<form method="post" action="" enctype="multipart/form-data">
+					<div class="card card-body m-b-20">
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Asset Name</label>
+							<div class="col-sm-9 col-md-6">
+								<input type="text" name="data[name]" value="{echo $asset->name}" class="form-control"  placeholder="Enter asset name">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Purchase Date</label>
+							<div class="col-sm-9 col-md-6">
+								<input class="form-control" value="{echo $asset->pur_date->format('Y-m-d')}" name="data[pur_date]" type="date" placeholder="Select date" >
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Asset type</label>
+							<div class="col-sm-9 col-md-6">
+								<select name="data[asset_type]" class="form-control"  value="{echo $asset->asset_type}"placeholder="Choose a asset type">
+									<option value="car">Car</option>
+									<option value="laptop">Laptop</option>
+									<option value="phone">Phone</option>
+									<option value="ipad">Ipad</option>
+									<option value="accessories">Accessories</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Status</label>
+							<div class="col-sm-9 col-md-6">
+								<select name="data[status]" class="form-control" value="{echo $asset->status}" placeholder="Choose a asset status">
+									<option value="assigned">Assigned</option>
+									<option value="available">Available</option>
+									<option value="discarded">Discarded</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Select vendor</label>
+							<div class="col-sm-9 col-md-6">
+								<select name="data[ven_id]"  value="{echo $asset->ven_id}" class="form-control selectpicker user-select" >
+									{foreach $v in $vendors}
+									<option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Description</label>
+							<div class="col-sm-9 col-md-6">
+								<textarea class="form-control summernote" name="data[description]" value="{echo $asset->description}" rows="4">{echo $meta['description']}</textarea>
+								<span class="help-block text-danger">{echo Shared\Markup::errors($errors, "description")}</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-rounded btn-primary"><i class="fa fa-check"></i> Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

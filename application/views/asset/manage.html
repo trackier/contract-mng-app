@@ -1,0 +1,133 @@
+
+		<div class="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="page-title-box row">
+									<div class="d-sm-flex align-items-center justify-content-between mb-4">
+										<h1 class="h3 mb-0 text-gray-800">Assets Manage</h1>
+									</div>
+									<!-- <ol class="breadcrumb float-right">
+										<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+										<li class="breadcrumb-item active">Manage Assets</li>
+									</ol> -->
+								</div>
+								{echo Shared\Markup::message($message ?? null)}
+							</div>
+						</div>
+						<div class="card shadow mb-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">Asset Search </h6>
+							</div>
+							<form class="card-body" method="get">
+								<div class="form-row">
+									<div class="form-group col-sm-2">Asset Name</div>
+									<div class="form-group col-sm-2">Status</div>
+									<div class="form-group col-sm-2">Type</div>
+									<div class="form-group col-sm-2">Vendor</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-sm-2">
+										<input type="text" name="query[name]" class="form-control" value="{echo $query['name']}" placeholder = "Search asset name">
+									</div>
+									<div class="form-group col-sm-2">
+										<select class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+											<option value="">All</option>
+											<option value="assigned">Assigned</option>
+											<option value="available">Available</option>
+											<option value="discarded">Discarded</option>
+										</select>
+									</div>
+									<div class="form-group col-sm-2">
+										<select class="form-control" name="query[asset_type]" value="{echo $query['asset_type']}">
+											<option value="">All</option>
+											<option value="car">Car</option>
+											<option value="laptop">Laptop</option>
+											<option value="phone">Phone</option>
+											<option value="ipad">Ipad</option>
+											<option value="accessories">Accessories</option>
+										</select>
+									</div>
+									<div class="form-group col-sm-2">
+										<select class="form-control" name="query[ven_id]" value="{echo $query['ven_id']}">
+											<option value="">All</option>
+											{foreach $v in $vendors}
+											<option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
+											{/foreach}
+										</select>
+									</div>
+									<div class="col-sm-4">
+										<button type="submit" class="btn btn-outline-primary">
+										<i class="fa fa-search"></i> Submit
+										</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						{if $assets}
+						<div class="card shadow mb-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">Asset Manage </h6>
+							</div><br>
+							<div class="text-start px-md-2">
+							<a class="btn btn-outline-primary"  href="/asset/add" padding="10px"><i class="fa fa-plus"></i> Add new Assets</a>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Type</th>
+												<th>Purchase Date</th>
+												<th>Vendor</th>
+												<th>Status</th>
+												<th>Action</th>
+											</tr>
+										</thead>
+										<tbody>
+									{foreach $obj in $assets}
+									<tr data-id='{echo $obj->_id}'>
+										<td>{echo $obj->name}</td>
+										<td>{echo $obj->asset_type}</td>
+										<td>
+											{if $obj->pur_date}
+												{echo Framework\TimeZone::printDate($obj->pur_date)}
+											{/if}
+										</td>
+										<td>
+											{if $obj->ven_id}
+												{script $v = $vendors[$obj->ven_id]}
+												{if $v}
+													({echo $v->name}) {echo $v->company_name}
+												{/if}
+											{/if}
+										</td>
+										<td>
+											{if $obj->status == available} 
+											<div class="badge badge-success">Available</div> 
+											{/if} {elseif $obj->status == assigned}
+											<div class="badge badge-info">Assigned</div> 
+											{/elseif} {elseif $obj->status == discarded} 
+											<div class="badge badge-danger">Discarded</div>
+											{/elseif}
+										</td>
+										<td> <a data-href="/asset/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+										<a class="btn btn-outline-primary"  href="/asset/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+									</tr>
+									{/foreach}
+									</table>
+								</div>
+							</div>
+							{/if} {else}
+							<div class="card-body">
+								<p class="card-text">No Assets Found</p>
+							</div>
+							{/else}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
