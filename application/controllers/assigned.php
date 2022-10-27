@@ -14,8 +14,8 @@ class Assigned extends Shared\Controller {
 	public function add(){
         $view = $this->getActionView();
         $query = ['user_id' => $this->user->_id];
-        $employees = \Models\Employee::cacheAllv2($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-        $assets = \Models\Asset::cacheAllv2($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $employees = User::selectAll($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assets = \Models\Asset::selectAll($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -45,8 +45,8 @@ class Assigned extends Shared\Controller {
 	 */
 	public function manage() {
 		$view = $this->getActionView();
-
-		$query = ['user_id' => $this->user->_id];
+		$query = [];
+       // $query = ['user_id' => $this->user->_id];
 		$uiQuery = $this->request->get("query", []);
 		if ($uiQuery) {
 			foreach (['asset_id', 'emp_id'] as $key) {
@@ -55,18 +55,22 @@ class Assigned extends Shared\Controller {
 				}
 			}
 		}
-
-        $assigneds = \Models\Assigned::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		if ($this->user->role == 'user') {
+			$query['emp_id'] = $this->user->_id;
+		}
+	
+		$assigneds = \Models\Assigned::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		
         $empIds = ArrayMethods::arrayKeys($assigneds, 'emp_id');
         if ($empIds) {
-            $employees = \Models\Employee::cacheAllv2(['user_id' => $this->user->_id, '_id' => ['$in' => $empIds]], ['_id', 'name'], ['maxTimeMS' => 5000]);
+            $employees = User::cacheAllv2(['_id' => ['$in' => $empIds]], ['_id', 'name'], ['maxTimeMS' => 5000]);
         }
         $assetIds = ArrayMethods::arrayKeys($assigneds, 'asset_id');
         if ($assetIds) {
-            $assets = \Models\Asset::selectAll(['user_id' => $this->user->_id, '_id' => ['$in' => $assetIds]], ['_id', 'name', 'asset_type'], ['maxTimeMS' => 5000]);
+            $assets = \Models\Asset::selectAll(['_id' => ['$in' => $assetIds]], ['_id', 'name', 'asset_type'], ['maxTimeMS' => 5000]);
         }
         $total = $count = \Models\Assigned::count($query);
-
+	
 		$view->set([
 			'assigneds' => $assigneds ?? [],
             'assets' => $assets ?? [],

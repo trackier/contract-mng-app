@@ -17,7 +17,8 @@ class Employee extends Shared\Controller {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
 				$data = array_merge($data, ['user_id' => $this->user->_id]);
-				$employee = new \Models\employee($data);
+				$data['password'] = "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3";
+				$employee = new User($data);
 				$employee->save();
 				\Shared\Utils::flashMsg(['type' => 'success', 'text' => 'Employee Added successfully']);
 				$this->redirect('/employee/manage');
@@ -36,7 +37,7 @@ class Employee extends Shared\Controller {
 	public function manage() {
 		$view = $this->getActionView();
 
-		$query = ['user_id' => $this->user->_id];
+		$query = [];
 		$searchKeyType = strtolower($this->request->get('type'));
 		$searchValue = $this->request->get('search');
 		switch ($searchKeyType) {
@@ -57,8 +58,8 @@ class Employee extends Shared\Controller {
 				break;
 		}
 
-		$employees = \Models\employee::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-		$total = $count = \Models\employee::count($query);
+		$employees = User::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$total = $count = User::count($query);
 
 		$view->set([
 			'employees' => $employees ?? [],
@@ -79,7 +80,7 @@ class Employee extends Shared\Controller {
 			$this->redirect('/employee/manage');
 		}
 
-		$employee = \Models\employee::findById($id);
+		$employee = User::findById($id);
 		if (!$employee) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Employee found!']);
 		}
@@ -103,7 +104,7 @@ class Employee extends Shared\Controller {
 		if (!$id) {
 			$this->_404();
 		}
-		$employee = \Models\employee::findById($id);
+		$employee = User::findById($id);
 		if (!$employee) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Employee found!']);
 		}

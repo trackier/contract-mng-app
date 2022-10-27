@@ -47,7 +47,7 @@ class Asset extends Shared\Controller {
 	public function manage() {
 		$view = $this->getActionView();
 
-		$query = ['user_id' => $this->user->_id];
+		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		if ($uiQuery) {
 			foreach (['status', 'asset_type', 'ven_id', 'name'] as $key) {
@@ -62,7 +62,7 @@ class Asset extends Shared\Controller {
 		}
 
 		$assets = \Models\Asset::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-		$vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$vendors = \Models\vendor::selectAll([], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 
 		$view->set([
 			'assets' => $assets ?? [],

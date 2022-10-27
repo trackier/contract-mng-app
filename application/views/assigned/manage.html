@@ -1,3 +1,5 @@
+{script $show = $user->role == 'admin' ? true : false}
+
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
@@ -68,7 +70,7 @@
 										<th>Employee</th>
 										<th>Assign Date</th>
 										<th>Handover Date</th>
-										<td>Action</td>
+										{if $show}<td>Action</td>{/if}
 									</tr>
 								</thead>
 								<tbody>
@@ -100,8 +102,8 @@
 												{echo Framework\TimeZone::printDate($obj->handover_date)}
 											{/if}
 										</td>
-										<td> <a data-href="/assigned/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
-										<a class="btn btn-outline-primary"  href="/assigned/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+										{if $show}<td> <a data-href="/assigned/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+										<a class="btn btn-outline-primary"  href="/assigned/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>{/if}
 									</tr>
 									{/foreach}
 								</tbody>

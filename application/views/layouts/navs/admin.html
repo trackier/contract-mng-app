@@ -61,6 +61,7 @@
 		<div class="clearfix"></div>
 	</div>
 </div> -->
+{script $show = $user->role == 'admin' ? true : false}
 
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -97,13 +98,14 @@
 		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
 				<h6 class="collapse-header">Manage Contracts:</h6>
-				<a class="collapse-item" href="/contract/addContract.html">Add Contracts</a>
+				{if $show}<a class="collapse-item" href="/contract/addContract.html">Add Contracts</a>{/if}
 				<a class="collapse-item"href="/contract/manage.html">Manage Contracts</a>
 			</div>
 		</div>
 	</li>
 
 	<!-- Nav Item - Utilities Collapse Menu -->
+	{if $show}
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
 			aria-expanded="true" aria-controls="collapseUtilities">
@@ -120,11 +122,27 @@
 			</div>
 		</div>
 	</li>
+	{/if}
 
 	<div class="sidebar-heading">
 		Asset Management
 	</div>
-
+	
+	<li class="nav-item">
+		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssigneds"
+			aria-expanded="true" aria-controls="collapseTwo">
+			<i class="fa fa-book"></i>
+			<span>Assigned</span>
+		</a>
+		<div id="collapseAssigneds" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<h6 class="collapse-header">Manage Assigneds:</h6>
+				{if $show}<a class="collapse-item" href="/assigned/add.html">Add Assigned</a>{/if}
+				<a class="collapse-item"href="/assigned/manage.html">Manage Assigneds</a>
+			</div>
+		</div>
+	</li>
+	{if $show}
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssets"
 			aria-expanded="true" aria-controls="collapseTwo">
@@ -154,22 +172,6 @@
 			</div>
 		</div>
 	</li>
-
-	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssigneds"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-book"></i>
-			<span>Assigned</span>
-		</a>
-		<div id="collapseAssigneds" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Assigneds:</h6>
-				<a class="collapse-item" href="/assigned/add.html">Add Assigned</a>
-				<a class="collapse-item"href="/assigned/manage.html">Manage Assigneds</a>
-			</div>
-		</div>
-	</li>
-
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
 			aria-expanded="true" aria-controls="collapseTwo">
@@ -184,7 +186,7 @@
 			</div>
 		</div>
 	</li>
-
+	{/if}
 	<!-- Divider -->
 	<hr class="sidebar-divider">
 

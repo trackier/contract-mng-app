@@ -38,19 +38,18 @@ class SigningUsers extends Controller
             $signingusers = Signinguser::first($query, [], ['maxTimeMS' => 5000 ]);
             $view->set("suser", $signingusers);
         }
-		
-        if ($this->request->post("action") == "addUser") {	
-			$fullname = RequestMethods::post("username"); 
+		if ($this->request->post("action") == "addUser") {	
+			$name = RequestMethods::post("username"); 
 			$contact = RequestMethods::post("contact");
 			$email = RequestMethods::post("email"); 
             if ($id) {
-                $signingusers->fullname =  $fullname;
+                $signingusers->name =  $name;
                 $signingusers->contact =  $contact;
                 $signingusers->email =  $email;
 
             } else {
                 $signingusers = new Signinguser([
-                    'fullname' => $fullname,
+                    'name' => $name,
                     'contact' => $contact,
                     'email' => $email,
                 ]);
@@ -60,10 +59,15 @@ class SigningUsers extends Controller
 		}
 	}
 
+	/**
+	 * [PUBLIC] This function will delete signing user details
+	 * @before _secure
+	 * @param $id
+	 */
     public function deleteUser($id) {
         $query['id'] = $id;
 		$signingUser = Signinguser::first($query, [], ['maxTimeMS' => 5000 ]);
         $signingUser->delete();
         header("Location: /signingusers/manage.html");
-    }
-}
+  	  }
+	}

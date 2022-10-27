@@ -7,6 +7,26 @@ use Framework\RequestMethods as RequestMethods;
 class Contract extends Controller
 { 	
 	/**
+	 * [PRIVATE] This function will send email to the users.
+	 * @param $users
+	 * @param $content
+	 */
+	private function sendEmail($users, $content, $subject) {	
+		foreach ($users as $user) {
+			$userDetails = Signinguser::first(['id' => $user], [], ['maxTimeMS' => 5000 ]);
+			if (!$userDetails) {
+				$userDetails = User::first(['id' => $user], [], ['maxTimeMS' => 5000 ]);
+			}
+			\Shared\Mail::send([
+				'user' => $userDetails,
+				'subject' => $subject,
+				'template' => 'filedeletion',
+				'contents' => $content
+			]);
+		}
+		return;
+	}
+	/**
 	 * [PUBLIC] This function will set contracts related data to the view.
 	 * @before _secure
 	 * @author Bhumika <bhumika@trackier.com>
@@ -17,11 +37,14 @@ class Contract extends Controller
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
 		$query['live'] = $this->request->get('live', 0);
+		if ($this->user->role == 'user') {
+			$query['users'] = ['$in' => [$this->user->_id]];
+		}
 		$contracts = Contracttbl::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-		$assets = \Models\Asset::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		$vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		$employees = \Models\Employee::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		$assigneds = \Models\Assigned::selectAll(['user_id' => $this->user->_id], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$assets = \Models\Asset::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$vendors = \Models\vendor::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$employees = \Models\Employee::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
+		$assigneds = \Models\Assigned::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
 		$total = Contracttbl::count($query) ?? 0;
 		$view->set("contracts", $contracts)->set('limit', $limit)
 			->set('page', $page)
@@ -58,7 +81,8 @@ class Contract extends Controller
 			}
 		}
 		$signingUsers = Signinguser::selectAll([], [], ['maxTimeMS' => 5000 ]);
-		$view->set("signingUsers", $signingUsers);
+		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$view->set("signingUsers", array_merge($signingUsers,$employee));
 		if ($this->request->post("action") == "addContract") {	
 			if (isset($_FILES['files'])) {
 				$files = $this->fileUpload($_FILES);
@@ -72,11 +96,15 @@ class Contract extends Controller
 			}
 			$contractDetails->docInserted = $files;
 		    $contractDetails->save();
+			$contents = sprintf('<p>Contract Name: %s has been %s <br></p>', $contractDetails->cname, $id ? 'updated' : 'created');
+			$subject = $id ? 'Contract Updation' : 'Contract Creation';
+			$this->sendEmail($contractDetails->users, $contents, $subject);
 			$view->set('message', 'Contract Saved successfully');
 			if ($id) {
 				header("Location: /contract/addContract/".$id);		
 			}
 		}
+		
 	}
 
 	/**
@@ -119,6 +147,9 @@ class Contract extends Controller
 	public function deleteContract($id) {
 		$query['id'] = $id;
 		$contractDetails = Contracttbl::first($query, [], ['maxTimeMS' => 5000 ]);
+		$contents = sprintf('<p>	Your contract with  contract Name: %s has been deleted <br></p>', $contractDetails->cname);
+		$subject = 'Contract Deletion';
+		$this->sendEmail($contractDetails->users, $contents, $subject);
 		$contractDetails->delete();
 		header("Location: /contract/manage");
 	}
@@ -134,17 +165,7 @@ class Contract extends Controller
 		$query['id'] = $contractId;
 		$contractDetails = Contracttbl::first($query, [], ['maxTimeMS' => 5000 ]);
 		$fileDetails = ContractFile::first(['fileId' => $id], [], ['maxTimeMS' => 5000 ]);
-		foreach ($contractDetails->users as $user) {
-			$userDetails = Signinguser::first(['id' => $user], [], ['maxTimeMS' => 5000 ]);
-			$contents[] = sprintf('<p>	Your file %s for contract Name: %s has been deleted <br></p>',$fileDetails->filename, $contractDetails->cname);
-
-			\Shared\Mail::send([
-				'user' => $userDetails,
-				'subject' => '[ALERT] File Deletion ',
-				'template' => 'filedeletion',
-				'contents' => implode("<br>", $contents)
-			]);
-		}
+		
 		$fileDetails->status = 'Deleted';
 		$fileDetails->dueDelDate = date("Y/m/d", strtotime('+3 days'));
 		$fileDetails->save();
@@ -157,6 +178,9 @@ class Contract extends Controller
 		}
 		$contractDetails->docInserted = $newDocs  ;
 		$contractDetails->save();
+		$contents = sprintf('<p>	Your file %s for contract Name: %s has been deleted <br></p>',$fileDetails->filename, $contractDetails->cname);
+		$subject = 'File Deletion';
+		$this->sendEmail($contractDetails->users, $contents, $subject);
 		header("Location: /contract/addContract/".$contractId);
 	}
 	

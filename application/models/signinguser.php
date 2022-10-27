@@ -17,7 +17,7 @@ class Signinguser extends Shared\Model
     * @readwrite
     * @type text
    */
-    protected $_fullname;
+    protected $_name;
    /**
     * @column
     * @readwrite

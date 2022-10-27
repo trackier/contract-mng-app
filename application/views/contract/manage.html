@@ -1,4 +1,5 @@
 
+{script $show = $user->role == 'admin' ? true : false}
 
 <div class="content">
 	<div class="container-fluid">
@@ -28,7 +29,7 @@
 									<th>Type</th>
 									<th>Start Date</th>
 									<th>End Date</th>
-                                    <th>Action</th>
+                                    {if $show}<th>Action</th>{/if}
                             </tr>
                         </thead>
                        <tbody>
@@ -41,10 +42,12 @@
                                 
                                     <td>{echo Framework\TimeZone::printDate($cont->startDate)}</td>
                                     <td>{echo Framework\TimeZone::printDate($cont->endDate)}</td>
+                                    {if $show}
                                     <td>
                                         <a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-primary">Edit <i class="fa fa-pencil"></i></a>
                                         <a data-toggle="modal" data-target="#contractDelModal"  data-id='{echo $cont->_id}' id="contractDel" class="btn btn-xs btn-outline-danger open-contractDelModal">Delete <i class="fa fa-trash"></i></a>
                                     </td>
+                                    {/if}
                                     
                                 </tr>
                             {/foreach}
