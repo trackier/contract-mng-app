@@ -1,0 +1,134 @@
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="page-title-box">
+					<h4 class="page-title">Add Purchase request Details</h4>
+					
+					<div class="clearfix"></div>
+				</div>
+				{echo Shared\Markup::message($message ?? null)}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body" style = "width: 100%;">
+                        <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
+                            <table id="tbl" name="data[details]" >
+                                <thead>
+									<tr>
+										<th>Name</th>
+										<th>Quantity</th>
+										<th>Estimate rate</th>
+										<th>Category</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+                                <tr>
+                                    <td><input class="form-control"  type="text" name="data[name]" /></td>
+                                    <td><input class="form-control"  type="number" name="data[quantity]" /></td> 
+                                    <td><input class="form-control"  type="number" name="data[erate]" /></td>   
+                                    <td><select class="form-control"  name="data[category]" required="">
+                                            
+                                        <option value="stationary">Stationary</option>
+                                        <option value="travel">Travel</option>
+                                        <option value="parassettner">Asset</option>
+                                       
+                                    </select></td>   
+                                    <td><input type="submit" class="button" value="Add another line" onclick="addField(this);" /></td>          
+                                </tr>
+                            </table>
+                        
+                            
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <label>Notes <span class="required"></span></label>
+                                    <textarea class="form-control" type="text" required="" name="data[notes]"  placeholder="notes">{echo @$contractDetails->notes}</textarea>
+                                </div>
+                            </div>
+                          
+                            
+                            <p>Select files to upload:
+                                <input type="file" class="upload__input" name="files[]" multiple><br><br>
+                            </p>
+                            
+                            {foreach $doc in  $files }
+                            <table >
+                                <td style="padding-right: 20px;width:300px">
+                                    {echo $doc->filename}
+                                </td>
+                                <td style="padding-right: 20px;">
+                                    <a   data-toggle="modal" data-target="#fileDelModal"  data-id='{echo $contractDetails->id}' data-fileid='{echo $doc->fileId}' class="open-fileDelModal btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+                                </td>
+                                <td>
+                                    <a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+                                </td>
+                            </table>
+                            
+                        </br>
+                            {/foreach}
+                         
+                             <input type="hidden" name="action" value="addContract">
+                             <div class="form-group text-right m-t-20">
+                                 <div class="col-xs-12">
+                                     <button class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" type="submit">Add Purchase Request</button>
+                                 </div>
+                             </div>
+                             <div>
+                             <hr>
+                            </div>
+                         </form>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+	
+	</div>
+</div>
+
+<div class="modal fade" id="fileDelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Remove file?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">Do you want to remove file? Once removed file will be deleted from system in a week  </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" id="fileId">Remove</a>
+        </div>
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+$('.open-fileDelModal').on('click', function () {
+    console.log('here')
+    var contractId = $(this).data('id');
+    var fileId = $(this).data('fileid');
+    $("#fileId").attr('href','/contract/deleteFile/'+fileId+'/'+contractId);
+})
+function addField(n)
+{
+    var tr = n.parentNode.parentNode.cloneNode(true);
+    document.getElementById('tbl').appendChild(tr);
+}
+// function addField() {
+//             var table = document.getElementById('tbl');
+//             var rowCount = table.rows.length;
+//             var row = table.insertRow(rowCount);
+//             var colCount = table.rows[0].cells.length;
+//             for (var i = 0; i <colCount; i++) {
+//                 varnewcell =row.insertCell(i);
+//                 newcell.innerHTML =table.rows[0].cells[i].innerHTML;
+//                 vartxtval =table.rows[0].cells[i].getElementsByTagName("INPUT")[0].value;
+//             }
+//         }
+</script>

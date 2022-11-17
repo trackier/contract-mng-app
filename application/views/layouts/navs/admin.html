@@ -67,10 +67,8 @@
 
 	<!-- Sidebar - Brand -->
 	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard/view.html">
-		<div class="sidebar-brand-icon rotate-n-15">
-			<i class="fas fa fa-handshake-o"></i>
-		</div>
-		<div class="sidebar-brand-text mx-3">Contract Management</div>
+		
+		<div class="sidebar-brand-text mx-3">TRACKIER</div>
 	</a>
 
 	<!-- Divider -->
@@ -122,7 +120,40 @@
 			</div>
 		</div>
 	</li>
+	<li class="nav-item">
+		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDep"
+			aria-expanded="true" aria-controls="collapseDep">
+			<i class="fas fa fa-users"></i>
+			<span> Department</span>
+		</a>
+		<div id="collapseDep" class="collapse" aria-labelledby="headingUtilities"
+			data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<h6 class="collapse-header">Manage Department:</h6>
+				<a class="collapse-item" href="/department/manage.html">Manage </a>
+				<a class="collapse-item" href="/department/add.html">Add Department</a>
+			
+			</div>
+		</div>
+	</li>
 	{/if}
+	<li class="nav-item">
+		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePR"
+			aria-expanded="true" aria-controls="collapsePR">
+			<i class="fas fa fa-users"></i>
+			<span>Purchase Requests</span>
+		</a>
+		<div id="collapsePR" class="collapse" aria-labelledby="headingUtilities"
+			data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+				<h6 class="collapse-header">Manage Purchase Requests:</h6>
+				<a class="collapse-item" href="/purchasereq/manage.html">Manage </a>
+				<a class="collapse-item" href="/purchasereq/viewall.html">View All </a>
+				<a class="collapse-item" href="/purchasereq/add.html">Add Purchase Request</a>
+			
+			</div>
+		</div>
+	</li>
 
 	<div class="sidebar-heading">
 		Asset Management

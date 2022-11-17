@@ -1,0 +1,103 @@
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="page-title-box">
+					<h4 class="page-title">Purchase Request Details</h4>
+					
+					<div class="clearfix"></div>
+				</div>
+				{echo Shared\Markup::message($message ?? null)}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-body" style = "width: 100%;">
+                        <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
+                           
+                               
+                                <div class="col-xs-12">
+                                    <label>Requester Name <span class="required"></span></label>
+                                    {script $user = User::first(["_id" => $purchaseReqDetails->requester_id], [], ['maxTimeMS' => 5000 ])}
+                                    <span style="font-weight: 800;"> {echo $user->name}</span> 
+                                 </div>
+                               
+                                <br>
+                                <div class="col-xs-12">
+                                    <label>Notes <span class="required"></span></label>
+                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->notes}</span>
+                                </div>
+                                <label>Items </label><br>
+                                <table class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Category </th>
+                                        <th>Estimate Rate</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $item in $purchaseReqDetails->items}
+                                    <tr>
+                                        <td>
+                                            {echo $item['name']}
+                                        </td>
+                                        <td>
+                                            {echo $item['quantity']}
+                                        </td>
+                                        <td>
+                                            {echo $item['category']}
+                                        </td>
+                                        <td>
+                                            Rs {echo $item['erate']}
+                                        </td>
+                                    </tr>
+
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                          
+                            
+                        
+                            
+                         
+                          
+                            
+                           
+                            
+                            {foreach $doc in  $files }
+                            <table >
+                                <td style="padding-right: 20px;width:300px">
+                                    {echo $doc->filename}
+                                </td>
+                               
+                                <td>
+                                    <a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+                                </td>
+                            </table>
+                            
+                        </br>
+                            {/foreach}
+                        </form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+	
+	</div>
+</div>
+
+
+<script type="text/javascript">
+$('.open-fileDelModal').on('click', function () {
+    console.log('here')
+    var contractId = $(this).data('id');
+    var fileId = $(this).data('fileid');
+    $("#fileId").attr('href','/contract/deleteFile/'+fileId+'/'+contractId);
+})
+</script>

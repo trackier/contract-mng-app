@@ -77,5 +77,72 @@ class Users extends Controller
 			$view->set('message', 'Password set successfully');
 		}
 	}
-	
+
+	private function __gooleClient($redirectURI) {
+		$appConf = Framework\Utils::getConfig("app")->app;
+
+		$client = new Google_Client();
+		
+		$client->setClientId($appConf->google->client_id);
+		$client->setClientSecret($appConf->google->client_secret);
+		
+		$client->setRedirectUri($redirectURI);
+
+		$client->addScope("email");
+		return $client;
+	}
+
+	public function loginviagoogle() {
+		$view = $this->getActionView();
+		$appConf = Framework\Utils::getConfig("app");
+		$redirectURI = sprintf('%s/users/verifyLoginCode', 'http://cont.vnative.io');
+		$client = $this->__gooleClient($redirectURI);
+		$authUrl = $client->createAuthUrl();
+		var_dump($authUrl);
+		die();
+		$view->set('link', $authUrl);
+	}
+
+	public function verifyLoginCode() {
+		$session = Registry::get("session");
+		$view = $this->getActionView();
+		$appConf = Framework\Utils::getConfig("app")->app;
+
+		// authenticate code from Google OAuth Flow
+		$redirectURI = sprintf('%s/users/verifyLoginCode', 'http://cont.vnative.io');
+		$client = $this->__gooleClient($redirectURI);
+		if ($this->request->get('code')) {
+		  	$token = $client->fetchAccessTokenWithAuthCode($this->request->get('code'));
+		  	if (!$token || !isset($token['access_token'])) {
+		  		$this->redirect('/auth/login?error=something_went_wrong');
+		  	}
+		  	$client->setAccessToken($token['access_token']);
+		  	$appConf = Framework\Utils::getConfig("app");
+		  
+		   
+		  	// get profile info
+		  	$google_oauth = new Google_Service_Oauth2($client);
+		  	$google_account_info = $google_oauth->userinfo->get();
+		  	$email =  $google_account_info->email;
+			$email = self::SPECIAL_EMAIL_CASES_MAPPING[$email] ?? $email;
+		  	$user = Models\User::first(['email' => $email]);
+
+		  	if ($user) {
+			  	
+				$this->setUser($user);
+				$beforeLogin = $session->get('$beforeLogin');
+				if ($beforeLogin) {
+					$session->erase('$beforeLogin');
+					$beforeLogin = str_replace('&amp;', '&', $beforeLogin);	// fix the URL
+					$this->redirect($beforeLogin);
+				}
+				$this->redirect('/admin/index');
+		  	} else {
+		  		$this->redirect('/auth/login?error=login_failed');
+		  	}
+
+		} else {
+			$this->redirect('/auth/login');
+		}
+	}
 }

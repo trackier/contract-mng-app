@@ -13,6 +13,8 @@ class Employee extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function add(){
+		$view = $this->getActionView();
+		$departments = \Models\Department::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -27,6 +29,9 @@ class Employee extends Shared\Controller {
 		} catch (\Exception $e) {
 			\Shared\Utils::flashMsg(['type' => 'error', 'text' => $e->getMessage()]);
 		}
+		$view->set([
+			'departments' => $departments ?? [],
+		]);
 	}
 
 	/**
@@ -111,7 +116,7 @@ class Employee extends Shared\Controller {
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
-				foreach(['name', 'emp_id', 'email', 'phone'] as $value) {
+				foreach(['name', 'emp_id', 'email', 'phone', 'department'] as $value) {
 					if (isset($data[$value])) {
 						$employee->$value = $data[$value];
 					}
@@ -123,6 +128,9 @@ class Employee extends Shared\Controller {
 		} catch (\Exception $e) {
 			$view->set('message', ['type' => 'error', 'text' => $e->getMessage()]);
 		}
+		$departments = \Models\Department::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+
 		$view->set('employee', $employee);
+		$view->set('departments', $departments);
 	}
 }

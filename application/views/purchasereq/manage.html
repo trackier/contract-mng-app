@@ -1,0 +1,76 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="page-title-box row">
+							<div class="d-sm-flex align-items-center justify-content-between mb-4">
+								<h1 class="h3 mb-0 text-gray-800">Purchase Requests Manage</h1>
+							</div>
+							<!-- <ol class="breadcrumb float-right">
+								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+								<li class="breadcrumb-item active">Manage Employees</li>
+							</ol> -->
+						</div>
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+				</div>
+				
+				{if $purchasereq ||$purchasereq2 }
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Purchase Request Manage</h6>
+					</div><br>
+					
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Requester</th>
+										<th>Note</th>
+									
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach $obj in $purchasereq}
+										<tr data-id='{echo $obj->_id}'>
+                                            {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
+											<td>{echo $user->name}</td>
+											<td>{echo $obj->notes}</td>
+											
+											<td>
+                                                <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
+                                                <a href="/purchasereq/deny1/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
+										</tr>
+									{/foreach}
+                                    {foreach $obj in $purchasereq2}
+										<tr data-id='{echo $obj->_id}'>
+                                            {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
+											<td>{echo $user->name}</td>
+											<td>{echo $obj->notes}</td>
+											
+											<td>
+                                                <a href="/purchasereq/approve2/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Process</a> 
+                                                <a href="/purchasereq/deny2/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
+										</tr>
+									{/foreach}
+								</tbody>
+                                
+							</table>
+						</div>
+					</div>
+				</div>
+				{/if} {else}
+				<div class="card-body">
+					<p class="card-text">No requests found</p>
+				</div>
+				{/else}
+			</div>
+		</div>
+	</div>
+</div>

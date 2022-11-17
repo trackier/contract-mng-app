@@ -34,6 +34,15 @@ class User extends Shared\Model
 	/**
 	 * @column
 	 * @readwrite
+	 * @type mongoid
+	 * @validate required
+	 * @label Department
+	 */
+	protected $_department;
+
+	/**
+	 * @column
+	 * @readwrite
 	 * @type text
 	 * @length 255
 	 * @index
@@ -62,6 +71,8 @@ class User extends Shared\Model
      * @label role
 	 */
 	protected $_role;
+
+
 
     /**
     * @column
