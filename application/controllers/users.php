@@ -95,12 +95,10 @@ class Users extends Controller
 	public function loginviagoogle() {
 		$view = $this->getActionView();
 		$appConf = Framework\Utils::getConfig("app");
-		$redirectURI = sprintf('%s/users/verifyLoginCode', 'http://cont.vnative.io');
+		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->app->environment == 'dev' ? 'http://cont.vnative.io' : 'https://contract.cloudstuff.tech');
 		$client = $this->__gooleClient($redirectURI);
 		$authUrl = $client->createAuthUrl();
-		var_dump($authUrl);
-		die();
-		$view->set('link', $authUrl);
+		header( "Location: $authUrl" );
 	}
 
 	public function verifyLoginCode() {
@@ -109,12 +107,12 @@ class Users extends Controller
 		$appConf = Framework\Utils::getConfig("app")->app;
 
 		// authenticate code from Google OAuth Flow
-		$redirectURI = sprintf('%s/users/verifyLoginCode', 'http://cont.vnative.io');
+		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->environment == 'dev' ? 'http://cont.vnative.io' : 'https://contract.cloudstuff.tech');
 		$client = $this->__gooleClient($redirectURI);
 		if ($this->request->get('code')) {
 		  	$token = $client->fetchAccessTokenWithAuthCode($this->request->get('code'));
 		  	if (!$token || !isset($token['access_token'])) {
-		  		$this->redirect('/auth/login?error=something_went_wrong');
+		  		$this->redirect('/users/login?error=something_went_wrong');
 		  	}
 		  	$client->setAccessToken($token['access_token']);
 		  	$appConf = Framework\Utils::getConfig("app");
@@ -124,8 +122,7 @@ class Users extends Controller
 		  	$google_oauth = new Google_Service_Oauth2($client);
 		  	$google_account_info = $google_oauth->userinfo->get();
 		  	$email =  $google_account_info->email;
-			$email = self::SPECIAL_EMAIL_CASES_MAPPING[$email] ?? $email;
-		  	$user = Models\User::first(['email' => $email]);
+			$user = User::first(['email' => $email]);
 
 		  	if ($user) {
 			  	
@@ -136,13 +133,13 @@ class Users extends Controller
 					$beforeLogin = str_replace('&amp;', '&', $beforeLogin);	// fix the URL
 					$this->redirect($beforeLogin);
 				}
-				$this->redirect('/admin/index');
+				$this->redirect('/users/login');
 		  	} else {
-		  		$this->redirect('/auth/login?error=login_failed');
+		  		$this->redirect('/users/login?error=login_failed');
 		  	}
 
 		} else {
-			$this->redirect('/auth/login');
+			$this->redirect('/users/login');
 		}
 	}
 }

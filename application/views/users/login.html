@@ -35,7 +35,7 @@
                                 <button class="btn btn-primary btn-user btn-block" type="submit">Login</button>
                                 <div class="form-group text-center">
                                     <div class="col-xs-12">
-                                        <a type="button" class="login-with-google-btn mt-3" href="users/loginviagoogle">Sign in with Google</button>
+                                        <a type="button" class="login-with-google-btn mt-3" href="http://cont.vnative.io/users/loginviagoogle">Sign in with Google</button>
                                     </div>
                                 </div>
                                 
@@ -52,3 +52,11 @@
     </div>
 
 </div>
+<script type="text/javascript">
+    function afterLoginViaGoogle(err, resp) {
+        window.location.href = resp.link;
+    }
+    function loginViaGoogle() {
+        request.post({url: 'users/loginviagoogle', data: {}}, afterLoginViaGoogle);
+    }
+</script>

@@ -234,4 +234,12 @@ class Utils {
 			return [];
 		}
 	}
+
+	public static function sentNotification($body, $url) {
+		$client = new GuzzleHttp\Client();
+		$response = $client->request('GET', $url, ['stream' => true]);
+		$headers = $response->getHeaders();
+		$body = $response->getBody();
+	}
+
 }
