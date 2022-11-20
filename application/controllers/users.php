@@ -101,6 +101,43 @@ class Users extends Controller
 		header( "Location: $authUrl" );
 	}
 
+	public function addUser() {
+		$name = $this->request->jsonKey('name');
+		$emp_id = $this->request->jsonKey('emp_id');
+		$email = $this->request->jsonKey('email');
+		$phone = $this->request->jsonKey('phone');
+		$department = $this->request->jsonKey('department');
+		$depId= null;
+		$user = User::first(["email" => $email]);
+		$departmentfetch = \Models\department::first(["name" => $department], ["_id", "name"], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		if (!isset($departmentfetch)) {
+			$data = ["name" => $department] ;
+			$department = new \Models\department($data);
+            $department->save();
+			$depId = $department->_id;
+		} else { 
+			$depId = $departmentfetch->_id;
+		}
+		$dataUser = ["name" => $name, "emp_id" => $emp_id, "email" => $email, "phone" => $phone, "department" => $depId, "role" => "user","password" => "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3" ] ;
+		if (isset($user)) {
+			$user->name = $name;
+			$user->emp_id = $emp_id;
+			$user->phone = $phone;
+			$user->department = $depId;
+			$user->save();
+
+		}else {
+			$user = new User($dataUser);
+			$user->save();
+		}
+		
+		var_dump(["success"=>true, "msg" => "User Updated successfully"]);
+		die();
+		// return ["success"=>true, "msg" => "User Updated successfully"];
+	
+		
+	}
+
 	public function verifyLoginCode() {
 		$session = Registry::get("session");
 		$view = $this->getActionView();

@@ -68,6 +68,13 @@ class Purchasereq extends \Shared\Model
     /**
     * @column
     * @readwrite
+   	* @type text
+    */
+    protected $_denialReason;
+
+    /**
+    * @column
+    * @readwrite
    	* @type array
     */
     protected $_items;

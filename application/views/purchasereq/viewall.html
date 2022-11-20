@@ -43,7 +43,12 @@
 											<td>{echo $obj->notes}</td>
                                             <td>{echo $obj->status}</td>
                                             <td >{if $obj->status=='processed'}{echo Framework\TimeZone::printDate($obj->paymentDate)}{/if} </td>
-                                            <td><a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
+                                            <td><a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-eye"></i>View</a>
+                                                {if  !(($obj->status=='approved'|| $obj->status=='processed')) }
+                                                <a class="btn btn-outline-primary"  href="/purchasereq/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" ></i>Edit</a>
+                                                {/if}
+                                            </td>
+                                            
 
 										</tr>
 									{/foreach}

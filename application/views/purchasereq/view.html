@@ -13,7 +13,7 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="card">
+				<div class="card" style="height: 100%">
 					<div class="card-body" style = "width: 100%;">
                         <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
                            
@@ -28,6 +28,14 @@
                                 <div class="col-xs-12">
                                     <label>Notes <span class="required"></span></label>
                                     <span style="font-weight: 800;"> {echo $purchaseReqDetails->notes}</span>
+                                </div>
+								<div class="col-xs-12">
+                                    <label>Status <span class="required"></span></label>
+                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->status}</span>
+                                </div>
+								<div class="col-xs-12">
+                                    <label>Reason for denial<span class="required"></span></label>
+                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->denialReason}</span>
                                 </div>
                                 <label>Items </label><br>
                                 <table class="table table-bordered" >
@@ -60,27 +68,26 @@
                                     {/foreach}
                                 </tbody>
                             </table>
-                          
-                            
-                        
-                            
-                         
-                          
-                            
-                           
-                            
+                        <table>
+							<div>
+							{foreach $doc in  $files }
+								<tr >
+									<td style="padding-right: 20px;width:300px">
+										{echo $doc->filename}
+									</td>
+								
+									<td>
+										<a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+									</td>
+								</tr>
+							{/foreach}
+							</div>
+                        </table>
                             {foreach $doc in  $files }
-                            <table >
-                                <td style="padding-right: 20px;width:300px">
-                                    {echo $doc->filename}
-                                </td>
-                               
-                                <td>
-                                    <a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
-                                </td>
-                            </table>
                             
-                        </br>
+                                <div>
+                                   <img width="700" src="/contract/downloadFile/{$doc->fileId}">
+                                </div>
                             {/foreach}
                         </form>
 					</div>
@@ -91,6 +98,8 @@
 	
 	</div>
 </div>
+
+
 
 
 <script type="text/javascript">

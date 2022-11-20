@@ -54,6 +54,7 @@ class Purchasereq extends Controller
 		$view->set("purchasereq", $Purchasereq1);
         $view->set("purchasereq2", $Purchasereq2);
         $view->set("users", $users);
+       
 	
 	}
 
@@ -97,19 +98,13 @@ class Purchasereq extends Controller
         
         if ($this->request->isPost()) {	
             $data = $this->request->post('data', []);
-       
-			if (isset($_FILES['files'])) {
+            if (isset($_FILES['files'])) {
 				$files = $this->fileUpload($_FILES);
 			}
 			$data = $this->request->post('data', []);
             $purchasereq = new \Models\purchasereq();
-            $obj['name'] = $data['name'];
-            $obj['quantity'] = $data['quantity'];
-            $obj['erate'] = $data['erate'];
-            $obj['category'] = $data['category'];
-            $items[] = $obj;
             $purchasereq->notes = $data['notes'];
-            $purchasereq->items = $items;
+            $purchasereq->items = $data['items'];
 			$purchasereq->docInserted = $files;
             $purchasereq->approver1_id = $approver1_id->team_lead_id;
             $purchasereq->requester_id = $this->user->_id;
@@ -117,6 +112,52 @@ class Purchasereq extends Controller
             $purchasereq->save();
 		
 			$view->set('message', 'Purchase Request Saved successfully');
+			
+		}
+		
+	}
+
+    /**
+	 * [PUBLIC] This function will Add/Edit Purchasereq .
+	 * @param $id
+	 * @author Bhumika <bhumika@trackier.com>
+	 * @before _secure
+	 */
+    public function edit($id) {	
+		$seo = ["title" => "Edit Purchare request", "view" => $this->getLayoutView()];
+		$view = $this-> getActionView();
+		$query['id'] = $id;
+        $purchasereq = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
+        $view->set("purchasereq", $purchasereq);
+        if ($purchasereq->docInserted) {
+            $filesUploaded = ContractFile::selectAll(['fileId'=>['$in' => $purchasereq->docInserted]], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
+            foreach ($purchasereq->docInserted as $doc) {
+                $files[] = $doc;
+            }
+            $view->set("files", $filesUploaded);
+        }
+		$files = [];
+		
+		$approver1_id = Models\Department::first(["_id" => $this->user->department], ['team_lead_id'], ['maxTimeMS' => 5000 ]);
+		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
+        
+        if ($this->request->isPost()) {	
+            
+            $data = $this->request->post('data', []);
+            if (isset($_FILES['files'])) {
+				$files = $this->fileUpload($_FILES);
+			}
+			$data = $this->request->post('data', []);
+            $purchasereq->notes = $data['notes'];
+            $purchasereq->items = $data['items'];
+			$purchasereq->docInserted = $files;
+            $purchasereq->approver1_id = $approver1_id->team_lead_id;
+            $purchasereq->requester_id = $this->user->_id;
+            $purchasereq->denialReason = "";
+            $purchasereq->status = "pending";
+            $purchasereq->save();
+		
+			$view->set('message', 'Purchase Request Edited successfully');
 			
 		}
 		
@@ -163,14 +204,14 @@ class Purchasereq extends Controller
 	}
 
     public function deny1($id = null) {	
-		
-		$purchaseReqDetails = [];
+		$data = $this->request->post('data', []);
+        $purchaseReqDetails = [];
 		$files = [];
 		if ($id) {
 			$query['id'] = $id;
 			$purchaseReqDetails = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
             $purchaseReqDetails->status = 'rejected by department';
-           
+            $purchaseReqDetails->denialReason = $data['denialReason'];
             $purchaseReqDetails->save();
 			header("Location: /purchasereq/manage");
 		}
@@ -259,27 +300,25 @@ class Purchasereq extends Controller
 	 * @author Bhumika <bhumika@trackier.com>
 	 * @before _secure
 	 */
-	public function deleteFile($id, $contractId) {
-		$query['id'] = $contractId;
-		$contractDetails = Contracttbl::first($query, [], ['maxTimeMS' => 5000 ]);
+	public function deleteFile($id, $purchaseReqId) {
+		$query['id'] = $purchaseReqId;
+		$purchaseReqDetails =  \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
 		$fileDetails = ContractFile::first(['fileId' => $id], [], ['maxTimeMS' => 5000 ]);
 		
 		$fileDetails->status = 'Deleted';
 		$fileDetails->dueDelDate = date("Y/m/d", strtotime('+3 days'));
 		$fileDetails->save();
-		$docs = $contractDetails->docInserted;
+		$docs = $purchaseReqDetails->docInserted;
 		$newDocs = [];
 		foreach ($docs as $doc) {
 			if ($doc!=$id) {
 				$newDocs[] = $doc;
 			}
 		}
-		$contractDetails->docInserted = $newDocs  ;
-		$contractDetails->save();
-		$contents = sprintf('<p>	Your file %s for contract Name: %s has been deleted <br></p>',$fileDetails->filename, $contractDetails->cname);
-		$subject = 'File Deletion';
-		$this->sendEmail($contractDetails->users, $contents, $subject);
-		header("Location: /contract/addContract/".$contractId);
+		$purchaseReqDetails->docInserted = $newDocs  ;
+		$purchaseReqDetails->save();
+		
+		header("Location: /purchasereq/edit/".$purchaseReqId);
 	}
 	
 	/**
@@ -298,4 +337,6 @@ class Purchasereq extends Controller
 		readfile($file_url);  
 		
 	}
+
+   
 }

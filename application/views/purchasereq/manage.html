@@ -43,7 +43,7 @@
 											
 											<td>
                                                 <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
-                                                <a href="/purchasereq/deny1/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+                                                <a data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}'  class="  open-denyrequest btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
 												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
 										</tr>
 									{/foreach}
@@ -55,7 +55,7 @@
 											
 											<td>
                                                 <a href="/purchasereq/approve2/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Process</a> 
-                                                <a href="/purchasereq/deny2/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+                                                <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
 												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
 										</tr>
 									{/foreach}
@@ -74,3 +74,33 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="rejectReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Please mention the request denial reason</h5>
+			<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+		</div>
+        <form class="form-horizontal m-t-20" id="formId" method="post" enctype="multipart/form-data" >
+            <div class="modal-body"><textarea name="data[denialReason]" style="width:100%"></textarea> </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="id"  type="submit" >Remove</button>
+            </div>
+        </form>
+		
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    $('.open-denyrequest').on('click', function () {
+         var objId = $(this).data('id');
+        $("#formId").attr('action', '/purchasereq/deny1/'+objId);
+      //  $("#id").attr('href','/purchasereq/manage');
+    })
+    </script>
