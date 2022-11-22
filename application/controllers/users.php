@@ -44,6 +44,43 @@ class Users extends Controller
 		}
 	}
 
+	/**
+	 * [PUBLIC] This function will login user based on email id and password
+	 * @before _session
+	 * @after _csrfToken
+	 */
+	public function oldlogin() {	
+		$seo = ["title" => "Login", "view" => $this->getLayoutView()];
+		if ($this->request->post("action") == "login") 
+		{
+			$email = RequestMethods::post("email"); $password = RequestMethods::post("password");
+			$view = $this-> getActionView(); $error = false;
+			if (empty($email))
+			{
+				$view->set("email_error", "Email not provided");
+				$error = true; 
+			}
+			if (empty($password))
+            {
+				$view->set("password_error", "Password not provided");
+				$error = true;
+			}
+			if (!$error)
+            { 	$pass = sha1($password);
+				$user = User::first(array( "email=?" =>$email, "password=?" =>$pass,));
+				if (!empty($user))
+                {	$this->setUser($user);
+					$session = Registry::get("session");
+					$user = $this->getUser();
+					$this->redirect('/contract/manage');
+                }
+				else {
+					$view->set('message', 'Please provide valid credentials');
+				}
+			}
+		}
+	}
+
 	/**[PUBLIC] This function wil set authorisation token in the session
 	 */
 	public function _csrfToken() {
@@ -96,6 +133,7 @@ class Users extends Controller
 		$view = $this->getActionView();
 		$appConf = Framework\Utils::getConfig("app");
 		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->app->environment == 'dev' ? 'http://cont.vnative.io' : 'https://contract.cloudstuff.tech');
+		
 		$client = $this->__gooleClient($redirectURI);
 		$authUrl = $client->createAuthUrl();
 		header( "Location: $authUrl" );
