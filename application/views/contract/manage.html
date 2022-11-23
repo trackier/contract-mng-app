@@ -4,14 +4,15 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12">
-				<div class="page-title-box">
-					<h4 class="page-title">Contracts</h4>
-					
-					<div class="clearfix"></div>
-				</div>
+			<div class="col-10">
+				
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
+            {if $show}
+            <div class="col-2">
+                <a  href="/contract/addContract" class="btn btn-xs btn-outline-info">Add Contract <i class="fa fa-eye"></i></a>
+            </div>
+            {/if}
 		</div>
 	
 		<br>

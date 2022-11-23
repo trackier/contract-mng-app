@@ -1,14 +1,17 @@
 
 <div class="content">
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12">
+		<div class="row" style="margin-bottom: 10px;">
+			<div class="col-10">
 				<div class="page-title-box">
-					<h4 class="page-title">Edit Purchase request Details</h4>
+					
 					
 					<div class="clearfix"></div>
 				</div>
 				{echo Shared\Markup::message($message ?? null)}
+			</div>
+			<div class="col-2">
+				<a href="/purchasereq/viewall" class="btn btn-xs btn-outline-info">View All<i class="fa fa-eye"></i></a>
 			</div>
 		</div>
 		<div class="row">
@@ -42,15 +45,14 @@
 									</tr>
                                     {foreach $item in $purchasereq->items}
                                     <tr>{script $rand = rand(0,99)}
-                                        <td><input class="form-control" id="name" type="text" value="{echo $item['name']}" name = "data[items][{echo $rand }][name]"/></td>
-										<td><input class="form-control"  id="quantity" type="number" value="{echo $item['quantity']}" name = "data[items][{echo $rand }][quantity]" /></td> 
-										<td><input class="form-control"   id="erate" type="number" value="{echo $item['erate']}" name = "data[items][{echo $rand }][erate]" /></td>   
-										<td><select class="form-control"  id="category"   required="" name = "data[items][{echo $rand }][category]">
-												
-											<option value="stationary" {if $item['category']=='stationary'}selected{/if}>Stationary</option>
-											<option value="travel"  {if $item['category']=='travel'}selected{/if} >Travel</option>
-											<option value="asset"  {if $item['category']=='asset'}selected{/if}>Asset</option>
-										
+                                        <td><input class="form-control" id="name" type="text"  required=""  value="{echo $item['name']}" name = "data[items][{echo $rand }][name]"/></td>
+										<td><input class="form-control"  id="quantity"  required="" type="number" value="{echo $item['quantity']}" name = "data[items][{echo $rand }][quantity]" /></td> 
+										<td><input class="form-control"   id="erate"  required="" type="number" value="{echo $item['erate']}" name = "data[items][{echo $rand }][erate]" /></td>   
+										<td><select class="form-control"  id="category"   required=""  value="{echo $item['category']}" name = "data[items][{echo $rand }][category]">
+											{foreach $category in $categories}
+											<option value="{echo $category}">{echo $category}</option>
+											{/foreach}
+											
 										</select></td>   
 									
 									</tr>
@@ -59,7 +61,25 @@
 							
 							</table>
 						
-							
+							<div class="form-group row" style="margin-top: 10px;">
+								<div class="form-group col-6">
+									<div class="col-xs-12">
+										<label>Activity <span></span></label>
+										<select class="form-control"  name="data[activity_id]" value="{echo $purchasereq->activity_id}" >
+											{foreach $activity in $activities}
+											<option value="{echo $activity->_id}">{echo $activity->name}</option>
+											{/foreach}
+											
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-6">
+									<div class="col-xs-12">
+										<label>Expected Date <span class="required"></span></label>
+										<input class="form-control" type="date" name="data[expectedDate]"  value="{echo \Framework\TimeZone::printDateFormatted(@$purchasereq->expectedDate)}" required="" placeholder="Expected Date">
+									</div>
+								</div>
+							</div>
 							<div class="form-group">
 								<div class="col-xs-12">
 									<label>Notes <span class="required"></span></label>

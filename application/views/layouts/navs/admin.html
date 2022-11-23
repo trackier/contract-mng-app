@@ -68,7 +68,7 @@
 	<!-- Sidebar - Brand -->
 	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard/view.html">
 		
-		<div class="sidebar-brand-text mx-3">TRACKIER</div>
+		<div class="sidebar-brand-text mx-3">Procurement App</div>
 	</a>
 
 	<!-- Divider -->
@@ -86,52 +86,30 @@
 	</li>
 
 
-	<!-- Nav Item - Pages Collapse Menu -->
+
 	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-handshake-o"></i>
-			<span>Contracts</span>
-		</a>
-		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Contracts:</h6>
-				{if $show}<a class="collapse-item" href="/contract/addContract.html">Add Contracts</a>{/if}
-				<a class="collapse-item"href="/contract/manage.html">Manage Contracts</a>
-			</div>
-		</div>
+			<a class="nav-link" href="/contract/manage.html">
+				<i class="fa fa-handshake-o"></i>
+				<span>Contracts</span></a>
 	</li>
 
-	<!-- Nav Item - Utilities Collapse Menu -->
 	{if $show}
+	
 	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-			aria-expanded="true" aria-controls="collapseUtilities">
-			<i class="fas fa fa-users"></i>
-			<span>Signing Users</span>
-		</a>
-		<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-			data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Signing Users:</h6>
-				<a class="collapse-item" href="/signingusers/manage.html">Manage </a>
-				<a class="collapse-item" href="/signingusers/add.html">Add users</a>
-			
-			</div>
-		</div>
+		<a class="nav-link" href="/signingusers/manage.html">
+			<i class="fas fa-fw fa-users"></i>
+			<span>Signing Users</span></a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDep"
 			aria-expanded="true" aria-controls="collapseDep">
-			<i class="fas fa fa-users"></i>
-			<span> Department</span>
+			<i class="fa-solid fa-people-group"></i>						<span> Teams</span>
 		</a>
 		<div id="collapseDep" class="collapse" aria-labelledby="headingUtilities"
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Department:</h6>
-				<a class="collapse-item" href="/department/manage.html">Manage </a>
-				<a class="collapse-item" href="/department/add.html">Add Department</a>
+				<a class="collapse-item" href="/department/manage.html">Department </a>
+				<a class="collapse-item" href="/employee/manage.html">Employees</a>
 			
 			</div>
 		</div>
@@ -140,13 +118,12 @@
 	<li class="nav-item">
 		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePR"
 			aria-expanded="true" aria-controls="collapsePR">
-			<i class="fas fa fa-users"></i>
+			<i class="fa-solid fa-cart-shopping"></i>
 			<span>Purchase Requests</span>
 		</a>
 		<div id="collapsePR" class="collapse" aria-labelledby="headingUtilities"
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Purchase Requests:</h6>
 				<a class="collapse-item" href="/purchasereq/manage.html">Manage </a>
 				<a class="collapse-item" href="/purchasereq/viewall.html">View All </a>
 				<a class="collapse-item" href="/purchasereq/add.html">Add Purchase Request</a>
@@ -154,80 +131,28 @@
 			</div>
 		</div>
 	</li>
-
-	<div class="sidebar-heading">
-		Asset Management
-	</div>
+	<li class="nav-item">
+		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAsset"
+			aria-expanded="true" aria-controls="collapseAsset">
+			<i class="fa-solid fa-laptop"></i>
+			<span>Asset Management</span>
+		</a>
+		<div id="collapseAsset" class="collapse" aria-labelledby="headingUtilities"
+			data-parent="#accordionSidebar">
+			<div class="bg-white py-2 collapse-inner rounded">
+			
+				<a class="collapse-item" href="/assigned/manage.html">Manage Assigned</a>
+				{if $show}
+				<a class="collapse-item" href="/asset/manage.html">Manage Assets </a>
+				<a class="collapse-item" href="/vendor/manage.html">Manage Vendor</a>
+				{/if}
+			</div>
+		</div>
+	</li>
 	
-	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssigneds"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-book"></i>
-			<span>Assigned</span>
-		</a>
-		<div id="collapseAssigneds" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Assigneds:</h6>
-				{if $show}<a class="collapse-item" href="/assigned/add.html">Add Assigned</a>{/if}
-				<a class="collapse-item"href="/assigned/manage.html">Manage Assigneds</a>
-			</div>
-		</div>
-	</li>
-	{if $show}
-	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAssets"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-address-card"></i>
-			<span>Asset</span>
-		</a>
-		<div id="collapseAssets" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Assets:</h6>
-				<a class="collapse-item" href="/asset/add.html">Add Asset</a>
-				<a class="collapse-item"href="/asset/manage.html">Manage Assets</a>
-			</div>
-		</div>
-	</li>
-
-	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEmployees"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-address-book"></i>
-			<span>Employee</span>
-		</a>
-		<div id="collapseEmployees" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage Employees:</h6>
-				<a class="collapse-item" href="/employee/add.html">Add Employee</a>
-				<a class="collapse-item"href="/employee/manage.html">Manage Employees</a>
-			</div>
-		</div>
-	</li>
-	<li class="nav-item">
-		<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-			aria-expanded="true" aria-controls="collapseTwo">
-			<i class="fa fa-users"></i>
-			<span>vendor</span>
-		</a>
-		<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-			<div class="bg-white py-2 collapse-inner rounded">
-				<h6 class="collapse-header">Manage vendors:</h6>
-				<a class="collapse-item" href="/vendor/add.html">Add vendor</a>
-				<a class="collapse-item"href="/vendor/manage.html">Manage vendors</a>
-			</div>
-		</div>
-	</li>
-	{/if}
+	
 	<!-- Divider -->
-	<hr class="sidebar-divider">
-
 	
-	<li class="nav-item">
-		<a class="nav-link" href="/users/changepassword.html">
-			<i class="fa fa-key"></i>
-			<span>Change Password</span></a>
-	</li>
-
 	<!-- Divider -->
 	<hr class="sidebar-divider d-none d-md-block">
 

@@ -1,8 +1,8 @@
 
 <div class="content">
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12">
+		<div class="row" style = "margin-bottom: 10px;">
+			<div class="col-10">
 				<div class="page-title-box">
 					<h4 class="page-title">{if $contractDetails} Edit Contract Details {/if}{else} Add Contract Details{/else}</h4>
 					
@@ -10,6 +10,9 @@
 				</div>
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
+            <div class="col-2">
+                <a  href="/contract/manage" class="btn btn-xs btn-outline-info">View All <i class="fa fa-eye"></i></a>
+            </div>
 		</div>
 		<div class="row">
 			<div class="col-sm-12">

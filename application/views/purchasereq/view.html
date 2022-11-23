@@ -13,85 +13,133 @@
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="card" style="height: 100%">
-					<div class="card-body" style = "width: 100%;">
-                        <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
-                           
+				<div class="card row" style="height: 100%">
+                    <div class="col-8">
+                        <div class="card-body">
+                            <form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
                                
-                                <div class="col-xs-12">
-                                    <label>Requester Name <span class="required"></span></label>
-                                    {script $user = User::first(["_id" => $purchaseReqDetails->requester_id], [], ['maxTimeMS' => 5000 ])}
-                                    <span style="font-weight: 800;"> {echo $user->name}</span> 
-                                 </div>
-                               
-                                <br>
-                                <div class="col-xs-12">
-                                    <label>Notes <span class="required"></span></label>
-                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->notes}</span>
-                                </div>
-								<div class="col-xs-12">
-                                    <label>Status <span class="required"></span></label>
-                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->status}</span>
-                                </div>
-								<div class="col-xs-12">
-                                    <label>Reason for denial<span class="required"></span></label>
-                                    <span style="font-weight: 800;"> {echo $purchaseReqDetails->denialReason}</span>
-                                </div>
-                                <label>Items </label><br>
-                                <table class="table table-bordered" >
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Quantity</th>
-                                        <th>Category </th>
-                                        <th>Estimate Rate</th>
-                                       
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {foreach $item in $purchaseReqDetails->items}
-                                    <tr>
-                                        <td>
-                                            {echo $item['name']}
-                                        </td>
-                                        <td>
-                                            {echo $item['quantity']}
-                                        </td>
-                                        <td>
-                                            {echo $item['category']}
-                                        </td>
-                                        <td>
-                                            Rs {echo $item['erate']}
-                                        </td>
-                                    </tr>
+                                   <div class="row">
+                                    <div class="col-4">
+                                        
+                                        {script $user = User::first(["_id" => $purchaseReqDetails->requester_id], [], ['maxTimeMS' => 5000 ])}
+                                        <span  class="label"> {echo $user->name}</span> <br>
+                                        <span  class="details"> {echo $user->email}</span> 
+                                        
+                                     </div>
+                                     <div class="vl"></div>
+                                     <div class="col-7" style="align-content: flex-end;">
+                                        
+                                        <span style="font-weight: 500;"> {echo $purchaseReqDetails->pr_id}</span> <br>
+                                        <span style="text-transform: uppercase;" class="btn btn-xs btn-outline-warning"> {echo $purchaseReqDetails->status}</span>
+                                    
+                                     </div>
+                                   </div>
 
-                                    {/foreach}
-                                </tbody>
-                            </table>
-                        <table>
-							<div>
-							{foreach $doc in  $files }
-								<tr >
-									<td style="padding-right: 20px;width:300px">
-										{echo $doc->filename}
-									</td>
-								
-									<td>
-										<a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
-									</td>
-								</tr>
-							{/foreach}
-							</div>
-                        </table>
-                            {foreach $doc in  $files }
+                                   <hr>
+                                   <div class="row">
+                                    <div class="col-8">
+                                        <div class="label">Expected Date </div> 
+                                        <div class="detail">{echo Framework\TimeZone::printDate($purchaseReqDetails->expectedDate)}</div> 
+                                        
+                                     </div>
+                                   
+                                     <div class="col-4" style="align-content: flex-end;">
+                                        <div class="label">Estimated Amount </div> 
+                                        <div class="detail">₹ {echo $purchaseReqDetails->amount}</div> 
+                                    </div>
+                                    
+                                   </div>
+                                   <br>
+                                    <table class="table " >
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th>Category </th>
+                                            <th>Estimate Rate</th>
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {foreach $item in $purchaseReqDetails->items}
+                                        <tr>
+                                            <td>
+                                                {echo $item['name']}
+                                            </td>
+                                            <td>
+                                                {echo $item['quantity']}
+                                            </td>
+                                            <td>
+                                                {echo $item['category']}
+                                            </td>
+                                            <td>
+                                                ₹ {echo $item['erate']}
+                                            </td>
+                                        </tr>
+    
+                                        {/foreach}
+                                    </tbody>
+                                </table>
+                                <hr>
                             
+                                {foreach $doc in  $files }
+                                
+                                    <div>
+                                       <img width="700" src="/contract/downloadFile/{$doc->fileId}">
+                                    </div>
+                                {/foreach}
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card-body ">
+                            <div style="background-color:rgb(238 243 255);padding:10px">
+                                <div  class="label">Current Approver</div>
+                                {if $purchaseReqDetails->approver2_id}
+                                {script $user1 = User::first(["_id" => $purchaseReqDetails->approver2_id], [], ['maxTimeMS' => 5000 ])}
+                                {/if} {else}
+                                {script $user1 = User::first(["_id" => $purchaseReqDetails->approver1_id], [], ['maxTimeMS' => 5000 ])}
+
+                                {/else}
+                                <div class="detail" > {echo $user1->name}</div> 
+                                {if $purchaseReqDetails->approver2_id}
+                                    <div  class="label">Financial Approver</div>
+                                    {script $user2 = User::first(["_id" => $purchaseReqDetails->approver2_id], [], ['maxTimeMS' => 5000 ])}
+                                    <div class="detail" > {echo $user2->name}</div> 
+                               {/if}
+                               <div  class="label">Department Approver</div>
+                               {script $user3 = User::first(["_id" => $purchaseReqDetails->approver1_id], [], ['maxTimeMS' => 5000 ])}
+                               <div class="detail" > {echo $user3->name}</div> 
+                               <div>
+                                <div class="label">Notes</div>
+                                <div class="detail"> {echo $purchaseReqDetails->notes}</div>
+                            </div>
+                            {if $purchaseReqDetails->denialReason}
                                 <div>
-                                   <img width="700" src="/contract/downloadFile/{$doc->fileId}">
+                                    <div class="label">Reason for denial</div>
+                                    <div class="detail"> {echo $purchaseReqDetails->denialReason}</div>
                                 </div>
+                           {/if}
+                           <div class="label">Documents</div>
+                           <table>
+                            <div>
+                            {foreach $doc in  $files }
+                                <tr >
+                                    <a  href="/contract/downloadFile/{$doc->fileId}"  style="padding-right: 20px;width:300px">
+                                        {echo $doc->filename}
+                                    </a>
+                                 </tr>
                             {/foreach}
-                        </form>
-					</div>
-				</div>
+                            </div>
+                        </table>
+                               <div>Activity</div>
+                               <div class="detail"> {echo $activity[$purchaseReqDetails->activity_id]->name}</div>
+                               <div class="detail"> {echo $activity[$purchaseReqDetails->activity_id]->description}</div>
+
+                            </div>
+                        </div>
+                    </div>
+			    </div>
 			</div>
 		</div>
 		<br>
@@ -110,3 +158,20 @@ $('.open-fileDelModal').on('click', function () {
     $("#fileId").attr('href','/contract/deleteFile/'+fileId+'/'+contractId);
 })
 </script>
+<style>
+.vl {
+  border-left: 1px solid rgb(224, 224, 224);
+  height: 70px;
+}
+
+.label {
+    color:#858796;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.detail {
+    color:rgb(104 103 103);
+    font-size:  1rem;
+}
+</style>

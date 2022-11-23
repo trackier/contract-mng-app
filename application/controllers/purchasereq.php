@@ -40,20 +40,25 @@ class Purchasereq extends Controller
 		if ($this->user->role == 'user') {
 			$query['users'] = ['$in' => [$this->user->_id]];
 		}
-		$Purchasereq1 = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id, "status" => "pending"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-        $Purchasereq2 = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id, "status" => "approved"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$showapprover1 = true;
+		$purchasereq = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id, "status" => "pending"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$approved = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id, "status" => "approved"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$all = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 
-		// $assets = \Models\Asset::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		// $vendors = \Models\vendor::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		// $employees = \Models\Employee::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-		// $assigneds = \Models\Assigned::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
-        $users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
-
-        // var_dump($Purchasereq2);
-        // die();
-		$view->set("purchasereq", $Purchasereq1);
-        $view->set("purchasereq2", $Purchasereq2);
-        $view->set("users", $users);
+		if (!(count($all) > 0)) {
+			$showapprover1 = false;
+			$purchasereq = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id, "status" => "approved"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+			$approved = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id, "status" => "processed"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+			$all = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		} 
+		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		// var_dump($all);
+		// die();
+		$view->set("purchasereq", $purchasereq);
+        $view->set("approved", $approved);
+        $view->set("all", $all);
+		$view->set("showapprover1", $showapprover1);
+		$view->set("users", $users);
        
 	
 	}
@@ -76,6 +81,7 @@ class Purchasereq extends Controller
         // var_dump($this->user->_id);
         // die();
 		$view->set("purchasereq", $Purchasereq1);
+		
         $view->set("users", $users);
 	
 	}
@@ -92,23 +98,45 @@ class Purchasereq extends Controller
 		$view = $this-> getActionView();
 		$contractDetails = [];
 		$files = [];
-		
+		$categories = ["Advertising and Marketing","Automobile Expense","Bank Fees and Charges","Computer Repair and Maintenance","Corporate Gifting","Furniture and Equipment","International Travel Expense","IT related Expense","Meals and Entertainment","Office Supplies","Stationary","Telephone Expense"];
 		$approver1_id = Models\Department::first(["_id" => $this->user->department], ['team_lead_id'], ['maxTimeMS' => 5000 ]);
+		$activities = Models\Activity::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$view->set('activities', $activities);
+		$pr_id = 'PR-'. rand(0, 999) . Models\purchasereq::count([]);
 		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
-        
+        $view->set("categories", $categories);
         if ($this->request->isPost()) {	
-            $data = $this->request->post('data', []);
+			$total = 0;
+			$data = $this->request->post('data', []);
+			if (isset($data['items'])) {
+				foreach ($data['items'] as $value) {
+					if (!($value['erate'] && $value['quantity'])) {
+						$view->set('message', 'Check rate and quantity entered in items');
+						return;
+					}
+					$total = $total + $value['erate']* $value['quantity'];
+				} 
+			} else {
+				$view->set('message', 'Check Items Not set');
+				return;
+			}
+		
+			
             if (isset($_FILES['files'])) {
 				$files = $this->fileUpload($_FILES);
 			}
-			$data = $this->request->post('data', []);
             $purchasereq = new \Models\purchasereq();
             $purchasereq->notes = $data['notes'];
             $purchasereq->items = $data['items'];
+			$purchasereq->expectedDate = $data['expectedDate'];
+			$purchasereq->activity_id = $data['activity_id'];
 			$purchasereq->docInserted = $files;
             $purchasereq->approver1_id = $approver1_id->team_lead_id;
             $purchasereq->requester_id = $this->user->_id;
             $purchasereq->status = "pending";
+			$purchasereq->submittedOn = date("Y/m/d");
+			$purchasereq->amount = $total;
+			$purchasereq->pr_id = $pr_id;
             $purchasereq->save();
 		
 			$view->set('message', 'Purchase Request Saved successfully');
@@ -128,7 +156,11 @@ class Purchasereq extends Controller
 		$view = $this-> getActionView();
 		$query['id'] = $id;
         $purchasereq = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
-        $view->set("purchasereq", $purchasereq);
+		$categories = ["Advertising and Marketing","Automobile Expense","Bank Fees and Charges","Computer Repair and Maintenance","Corporate Gifting","Furniture and Equipment","International Travel Expense","IT related Expense","Meals and Entertainment","Office Supplies","Stationary","Telephone Expense"];
+
+        $view->set("purchasereq", $purchasereq)->set("categories", $categories);
+
+		$files = [];
         if ($purchasereq->docInserted) {
             $filesUploaded = ContractFile::selectAll(['fileId'=>['$in' => $purchasereq->docInserted]], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
             foreach ($purchasereq->docInserted as $doc) {
@@ -136,16 +168,18 @@ class Purchasereq extends Controller
             }
             $view->set("files", $filesUploaded);
         }
-		$files = [];
-		
+		$activities = Models\Activity::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$view->set('activities', $activities);
 		$approver1_id = Models\Department::first(["_id" => $this->user->department], ['team_lead_id'], ['maxTimeMS' => 5000 ]);
 		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
-        
-        if ($this->request->isPost()) {	
-            
+		
+         if ($this->request->isPost()) {	
             $data = $this->request->post('data', []);
-            if (isset($_FILES['files'])) {
-				$files = $this->fileUpload($_FILES);
+			if (isset($_FILES['files'])) {
+				$f =  $this->fileUpload($_FILES);
+				if(count($f)> 0) {
+					$files[] = $f[0];
+				}
 			}
 			$data = $this->request->post('data', []);
             $purchasereq->notes = $data['notes'];
@@ -155,6 +189,7 @@ class Purchasereq extends Controller
             $purchasereq->requester_id = $this->user->_id;
             $purchasereq->denialReason = "";
             $purchasereq->status = "pending";
+			$purchasereq->activity_id = $data['activity_id']??null;
             $purchasereq->save();
 		
 			$view->set('message', 'Purchase Request Edited successfully');
@@ -186,6 +221,12 @@ class Purchasereq extends Controller
 				$view->set("files", $filesUploaded);
 			}
 		}
+		$activity = \Models\Activity::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$activityMap = [];
+		foreach ($activity as $value) {
+			$activityMap[$value->_id] = $value;
+		}
+		$view->set("activity", $activity);
 	}
 
     public function approve1($id = null) {	
@@ -278,19 +319,16 @@ class Purchasereq extends Controller
 	}
 
 	/**
-	 * [PUBLIC] This function will delete contract based on Id provided  .
+	 * [PUBLIC] This function will delete purchase request based on Id provided  .
 	 * @param $id
 	 * @before _secure
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
-	public function deleteContract($id) {
+	public function delete($id) {
 		$query['id'] = $id;
-		$contractDetails = Contracttbl::first($query, [], ['maxTimeMS' => 5000 ]);
-		$contents = sprintf('<p>	Your contract with  contract Name: %s has been deleted <br></p>', $contractDetails->cname);
-		$subject = 'Contract Deletion';
-		$this->sendEmail($contractDetails->users, $contents, $subject);
-		$contractDetails->delete();
-		header("Location: /contract/manage");
+		$purchaseReq = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
+		$purchaseReq->delete();
+		header("Location: /purchasereq/viewall");
 	}
 
 	/**

@@ -39,7 +39,7 @@ class vendor extends Shared\Controller {
 	public function manage() {
 		$view = $this->getActionView();
 
-		$query = ['user_id' => $this->user->_id];
+		$query = [];
 		$searchKeyType = strtolower($this->request->get('type'));
 		$searchValue = $this->request->get('search');
 		switch ($searchKeyType) {

@@ -3,20 +3,19 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12">
-				<div class="page-title-box">
-					<h4 class="page-title">Signing Users</h4>
-					
-					<div class="clearfix"></div>
-				</div>
+			<div class="col-10">
+				
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
+            <div class="col-2">
+                <a href="/signingusers/add" class="btn btn-xs btn-outline-info">Add Signing Users<i class="fa fa-plus"></i></a>
+            </div>
 		</div>
 		
 		<br>
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Signing Users</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

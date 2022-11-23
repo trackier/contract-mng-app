@@ -83,6 +83,7 @@ class Contract extends Controller
 		$signingUsers = Signinguser::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("signingUsers", array_merge($signingUsers,$employee));
+		
 		if ($this->request->post("action") == "addContract") {	
 			if (isset($_FILES['files'])) {
 				$files = $this->fileUpload($_FILES);

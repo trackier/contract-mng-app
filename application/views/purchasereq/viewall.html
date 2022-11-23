@@ -1,9 +1,9 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-sm-12" style="margin-bottom: 10px;">
 				<div class="row">
-					<div class="col-sm-12">
+					<div class="col-10">
 						<div class="page-title-box row">
 							<div class="d-sm-flex align-items-center justify-content-between mb-4">
 								<h1 class="h3 mb-0 text-gray-800">Purchase Requests Manage</h1>
@@ -14,6 +14,9 @@
 							</ol> -->
 						</div>
 						{echo Shared\Markup::message($message ?? null)}
+					</div>
+					<div class="col-2">
+						<a href="/purchasereq/add" class="btn btn-xs btn-outline-info">Generate Request<i class="fa fa-plus"></i></a>
 					</div>
 				</div>
 				
@@ -28,24 +31,29 @@
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 								<thead>
 									<tr>
-										<th>Requester</th>
-										<th>Note</th>
-                                        <th>Status</th>
-                                        <th>Payment Date</th>
+										<th>PR Id</th>
+										<th>Expected Date</th>
+										<th>Status</th>
+										<th>Approver</th>
+										<th>Amount</th>
                                         <th></th>
 									</tr>
 								</thead>
 								<tbody>
 									{foreach $obj in $purchasereq}
 										<tr data-id='{echo $obj->_id}'>
-                                            {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
-											<td>{echo $user->name}</td>
-											<td>{echo $obj->notes}</td>
-                                            <td>{echo $obj->status}</td>
-                                            <td >{if $obj->status=='processed'}{echo Framework\TimeZone::printDate($obj->paymentDate)}{/if} </td>
+											{script $user2 = User::first(["_id" => $obj->approver1_id], [], ['maxTimeMS' => 5000 ])}
+											
+											<td>$obj->pr_id</td>
+											<td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
+											<td>{echo $obj->status}</td>
+											<td>{echo $user2->name}</td>
+											<td>₹ $obj->amount</td>
                                             <td><a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-eye"></i>View</a>
                                                 {if  !(($obj->status=='approved'|| $obj->status=='processed')) }
                                                 <a class="btn btn-outline-primary"  href="/purchasereq/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" ></i>Edit</a>
+												<a class="btn btn-outline-primary"  href="/purchasereq/delete/{echo $obj->_id}" padding="10px"><i class="fa fa-trash" ></i>Delete</a>
+
                                                 {/if}
                                             </td>
                                             

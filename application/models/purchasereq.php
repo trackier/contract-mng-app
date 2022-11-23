@@ -32,6 +32,20 @@ class Purchasereq extends \Shared\Model
     protected $_paymentDate;
 
     /**
+    * @column
+    * @readwrite
+   	* @type date
+    */
+    protected $_submittedOn;
+
+    /**
+    * @column
+    * @readwrite
+   	* @type date
+    */
+    protected $_expectedDate;
+
+    /**
 	 * @column
 	 * @readwrite
 	 * @type mongoid
@@ -39,6 +53,14 @@ class Purchasereq extends \Shared\Model
 	 * @validate required
 	 */
 	protected $_approver1_id;
+
+    /**
+	 * @column
+	 * @readwrite
+	 * @type mongoid
+	 * @index
+	 */
+	protected $_activity_id;
 
     /**
 	 * @column
@@ -57,6 +79,24 @@ class Purchasereq extends \Shared\Model
 	 * @validate required
 	 */
 	protected $_requester_id;
+
+    /**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 * @index
+	 * @validate required
+	 */
+	protected $_pr_id;
+
+     /**
+	 * @column
+	 * @readwrite
+	 * @index
+     * @type text
+	 * @validate required
+	 */
+	protected $_amount;
 
     /**
     * @column

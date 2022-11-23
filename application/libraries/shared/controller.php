@@ -59,7 +59,7 @@ namespace Shared {
         public function _session() {
             $user = $this->getUser();
 			if ($user) {
-                $this->redirect('/contract/manage');
+                $this->redirect('/dashboard/view');
             }
         }
 

@@ -1,14 +1,17 @@
 
 <div class="content">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12">
+	<div class="container-fluid" >
+		<div class="row" style="margin-bottom: 10px;">
+			<div class="col-10">
 				<div class="page-title-box">
 					<h4 class="page-title">Add Purchase request Details</h4>
 					
 					<div class="clearfix"></div>
 				</div>
 				{echo Shared\Markup::message($message ?? null)}
+			</div>
+			<div class="col-2">
+				<a href="/purchasereq/viewall" class="btn btn-xs btn-outline-info">View All<i class="fa fa-eye"></i></a>
 			</div>
 		</div>
 		<div class="row">
@@ -29,21 +32,39 @@
 								</thead>
 								<tbody>
 									<tr  id="tbl">
-										<td><input class="form-control" id="name" type="text" /></td>
-										<td><input class="form-control"  id="quantity" type="number"/></td> 
+										<td><input class="form-control" id="name" type="text"   /></td>
+										<td><input class="form-control"  id="quantity" type="number" /></td> 
 										<td><input class="form-control"   id="erate" type="number"/></td>   
 										<td><select class="form-control"  id="category"   required="">
-												
-											<option value="stationary">Stationary</option>
-											<option value="travel">Travel</option>
-											<option value="parassettner">Asset</option>
-										
+											{foreach $category in $categories}
+											<option value="{echo $category}">{echo $category}</option>
+											{/foreach}
 										</select></td>   
 									</tr>
 								</tbody>
 							
 							</table>
 						
+							<div class="form-group row">
+								<div class="form-group col-6">
+									<div class="col-xs-12">
+										<label>Activity <span ></span></label>
+										<select class="form-control"  name="data[activity_id]" >
+											<option selected value="">Select Activity</option>
+											{foreach $activity in $activities}
+											<option value="{echo $activity->_id}">{echo $activity->name}</option>
+											{/foreach}
+											
+										</select>
+									</div>
+								</div>
+								<div class="form-group col-6">
+									<div class="col-xs-12">
+										<label>Expected Date <span class="required"></span></label>
+										<input class="form-control" type="date" name="data[expectedDate]" required="" placeholder="Expected Date">
+									</div>
+								</div>
+							</div>
 							
 							<div class="form-group">
 								<div class="col-xs-12">
@@ -51,7 +72,7 @@
 									<textarea class="form-control" type="text" required="" name="data[notes]"  placeholder="notes">{echo @$contractDetails->notes}</textarea>
 								</div>
 							</div>
-						
+							
 							
 							<p>Select files to upload:
 								<input type="file" class="upload__input" name="files[]" multiple><br><br>

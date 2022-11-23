@@ -4,19 +4,16 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="page-title-box row">
-							<div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800">Assigned Manage</h1>
-							</div>
-							<!-- <ol class="breadcrumb float-right">
-								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-								<li class="breadcrumb-item active">Manage Assigned</li>
-							</ol> -->
-						</div>
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-10">
+						
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
+					{if $show}
+					<div class="col-2">
+						<a class="btn btn-outline-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i>Add Assigned</a></td>
+					</div>
+					{/if}
 				</div>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
@@ -58,9 +55,7 @@
 					<div class="card-header py-3">
 						<h6 class="m-0 font-weight-bold text-primary">Assigned Manage </h6>
 					</div><br>
-					<div class="text-start px-md-2">
-					<a class="btn btn-outline-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i> Add new Assigned</a>
-					</div>
+					
 					<div class="card-body">
 						<div class="table-responsive">
 							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

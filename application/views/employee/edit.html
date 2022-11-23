@@ -2,8 +2,8 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="row">
-					<div class="col-sm-12">
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-10>
 						<div class="page-title-box row">
 							<div class="d-sm-flex align-items-center justify-content-between mb-4">
 								<h1 class="h3 mb-0 text-gray-800">Employees edit</h1>
@@ -15,6 +15,9 @@
 							</ol> -->
 						</div>
 						{echo Shared\Markup::message($message ?? null)}
+					</div>
+					<div class="col-2">
+						<a href="/employee/manage" class="btn btn-xs btn-outline-info">View All<i class="fa fa-eye"></i></a>
 					</div>
 				</div>
 				<form method="post" action="" enctype="multipart/form-data">

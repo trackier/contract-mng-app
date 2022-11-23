@@ -8,6 +8,7 @@ use Framework\RequestMethods as RequestMethods;
 class Dashboard extends Controller
 {
 	/**
+     * [PUBLIC] This function will set the data of daily, monthly contracts in the view
 	 * @before _secure
 	 */
 	public function view() {	
@@ -16,8 +17,7 @@ class Dashboard extends Controller
 		$view = $this-> getActionView();
 	    $query['live'] = $this->request->get('live', 0);
 		$total = Contracttbl::count($query) ?? 0;
-
-		$first_day_this_month = date('Y-m-01'); 
+        $first_day_this_month = date('Y-m-01'); 
         $last_day_this_month  = date('Y-m-t');
         $dq = TimeZone::dateRangeQuery(['start' => $first_day_this_month, 'end' =>  $last_day_this_month ]);
 		$dateQuery = Db::dateQuery($dq['start'], $dq['end']);
@@ -34,8 +34,18 @@ class Dashboard extends Controller
         }
         $total = Contracttbl::count($query) ?? 0;
         $totalMonthly = Contracttbl::count($queryMonthly) ?? 0;
-        $view->set('total', $total);
+        $employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assets = \Models\Asset::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assigned = \Models\Assigned::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $vendors = \Models\Vendor::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+
+        $view->set('employees', $employees);
+        $view->set('assigned', $assigned);
+        $view->set('vendors', $vendors);
+
+        $view->set('assets', $assets);
         $view->set('monthlyTotal', $totalMonthly);
+        $view->set('total', $total);
         $view->set('contractLines', $contractsTodayLines);
 	
     }

@@ -17,59 +17,7 @@
 					</div>
 				</div>
 				
-				{if $purchasereq ||$purchasereq2 }
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">Purchase Request Manage</h6>
-					</div><br>
-					
-					<div class="card-body">
-						<div class="table-responsive">
-							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-								<thead>
-									<tr>
-										<th>Requester</th>
-										<th>Note</th>
-									
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									{foreach $obj in $purchasereq}
-										<tr data-id='{echo $obj->_id}'>
-                                            {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
-											<td>{echo $user->name}</td>
-											<td>{echo $obj->notes}</td>
-											
-											<td>
-                                                <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
-                                                <a data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}'  class="  open-denyrequest btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
-												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
-										</tr>
-									{/foreach}
-                                    {foreach $obj in $purchasereq2}
-										<tr data-id='{echo $obj->_id}'>
-                                            {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
-											<td>{echo $user->name}</td>
-											<td>{echo $obj->notes}</td>
-											
-											<td>
-                                                <a href="/purchasereq/approve2/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Process</a> 
-                                                <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
-												<a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
-										</tr>
-									{/foreach}
-								</tbody>
-                                
-							</table>
-						</div>
-					</div>
-				</div>
-				{/if} {else}
-				<div class="card-body">
-					<p class="card-text">No requests found</p>
-				</div>
-				{/else}
+				
 			</div>
 		</div>
 	</div>
@@ -96,10 +44,183 @@ aria-hidden="true">
 	</div>
 </div>
 </div>
-
+<div class="container-fluid">
+    <ul class="nav nav-tabs " id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="awaiting-tab" data-toggle="tab" href="#awaiting" role="tab" aria-controls="awaiting" aria-selected="false">Awaiting Approval</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="approved-tab" data-toggle="tab" href="#approved" role="tab" aria-controls="approved" aria-selected="false">Approved</a>
+    </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+        {if $all}
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Requester</th>
+                                <th>PR Id</th>
+                                <th>Expected Date</th>
+                                <th>Status</th>
+                                <th>Approver</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $obj in $all}
+                                <tr data-id='{echo $obj->_id}'>
+                                    {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
+                                    {script $user2 = User::first(["_id" => $obj->approver1_id], [], ['maxTimeMS' => 5000 ])}
+                                    <td>{echo $user->name}<br>
+                                        Submitted On: {echo Framework\TimeZone::printDate($obj->submittedOn)}
+                                    </td>
+                                    <td>$obj->pr_id</td>
+                                    <td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
+                                    <td>{echo $obj->status}</td>
+                                    <td>{echo $user2->name}</td>
+                                    <td>₹ $obj->amount</td>
+                                    
+                                    <td>
+                                        <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a></td>
+                                </tr>
+                            {/foreach}
+                        
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+        {/if} {else}
+        <div class="card-body">
+            <p class="card-text">No requests found</p>
+        </div>
+        {/else}
+    </div>
+    <div class="tab-pane fade" id="awaiting" role="tabpanel" aria-labelledby="awaiting-tab">
+        {if $purchasereq }
+        <div class="card shadow mb-4">
+        
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Requester</th>
+                                <th>PR Id</th>
+                                <th>Expected Date</th>
+                                <th>Status</th>
+                                <th>Approver</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $obj in $purchasereq}
+                                <tr data-id='{echo $obj->_id}'>
+                                    {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
+                                    {script $user2 = User::first(["_id" => $obj->approver1_id], [], ['maxTimeMS' => 5000 ])}
+                                    <td>{echo $user->name}<br>
+                                        Submitted On: {echo Framework\TimeZone::printDate($obj->submittedOn)}
+                                    </td>
+                                    <td>$obj->pr_id</td>
+                                    <td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
+                                    <td>{echo $obj->status}</td>
+                                    <td>{echo $user2->name}</td>
+                                    <td>₹ $obj->amount</td>
+                                    {if $showapprover1}
+                                        <td>
+                                            <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
+                                            <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+                                            <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
+                                        </td>
+                                    {/if}{else}
+                                    <td>
+                                        <a href="/purchasereq/approve2/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Process</a> 
+                                        <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete"><i class="fa fa"></i> Deny</a>
+                                        <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
+                                    </td>
+                                    {/else}
+                                    
+                                </tr>
+                            {/foreach}
+                        
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+        {/if} {else}
+        <div class="card-body">
+            <p class="card-text">No requests found</p>
+        </div>
+        {/else}
+    </div>
+    <div class="tab-pane fade" id="approved" role="tabpanel" aria-labelledby="approved-tab">
+        <div class="card shadow mb-4">
+            {if $approved } 
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered display"  width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Requester</th>
+                                <th>PR Id</th>
+                                <th>Payment Date</th>
+                                <th>Status</th>
+                                <th>Approver</th>
+                                <th>Amount</th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $obj in $approved}
+                                <tr data-id='{echo $obj->_id}'>
+                                    {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
+                                    {script $user2 = User::first(["_id" => $obj->approver1_id], [], ['maxTimeMS' => 5000 ])}
+                                    <td>{echo $user->name}</td>
+                                    <td>$obj->pr_id</td>
+                                    <td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
+                                    <td>{echo $obj->status}</td>
+                                    <td>{echo $user2->name}</td>
+                                    <td>₹ $obj->amount</td>
+                                    
+                                </tr>
+                            {/foreach}
+                        
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+            {/if} {else}
+            <div class="card-body">
+                <p class="card-text">No requests found</p>
+            </div>
+            {/else}
+        </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+
+$(document).ready(function () {
+    $('table.display').DataTable();
+});
     $('.open-denyrequest').on('click', function () {
          var objId = $(this).data('id');
+         
         $("#formId").attr('action', '/purchasereq/deny1/'+objId);
       //  $("#id").attr('href','/purchasereq/manage');
     })

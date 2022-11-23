@@ -1,0 +1,70 @@
+<div class="content">
+	<div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-10">
+						
+						{echo Shared\Markup::message($message ?? null)}
+					</div>
+					<div class="col-2">
+						<div class="text-start px-md-2">
+							<a class="btn btn-outline-primary"  href="/activity/add" padding="10px"><i class="fa fa-plus"></i> Add new </a>
+						</div>
+					</div>
+				</div>
+				
+				
+				{if $activity}
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Activity Manage</h6>
+					</div><br>
+					
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>Activity Id</th>
+										<th>Name</th>
+										<th>Start Date</th>
+										<th>End Date</th>
+										<th>Team Members</th>
+										<th>Created At</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach $obj in $activity}
+										<tr data-id='{echo $obj->_id}'>
+											<td>{echo $obj->act_id}</td>
+											<td>{echo $obj->name}</td>
+											<td>{echo  \Framework\TimeZone::printDate($obj->startDate)}</td>
+											<td>{echo \Framework\TimeZone::printDate($obj->endDate)}</td>
+											<td>
+												{foreach $k in $obj->teamMembers}
+												 {echo $users[$k]},
+												{/foreach}
+											</td>
+											<td>{echo \Framework\TimeZone::printDate($obj->created)}</td>
+											
+											
+											<td> <a href="/activity/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+												<a class="btn btn-outline-primary"  href="/activity/add/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+										</tr>
+									{/foreach}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				{/if} {else}
+				<div class="card-body">
+					<p class="card-text">No Employees Found</p>
+				</div>
+				{/else}
+			</div>
+		</div>
+	</div>
+</div>

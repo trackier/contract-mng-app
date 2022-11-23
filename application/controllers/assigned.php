@@ -14,7 +14,7 @@ class Assigned extends Shared\Controller {
 	public function add(){
         $view = $this->getActionView();
         $query = ['user_id' => $this->user->_id];
-        $employees = User::selectAll($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
         $assets = \Models\Asset::selectAll($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
 			if ($this->request->isPost()) {

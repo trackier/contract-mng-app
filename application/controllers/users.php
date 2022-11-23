@@ -35,7 +35,7 @@ class Users extends Controller
                 {	$this->setUser($user);
 					$session = Registry::get("session");
 					$user = $this->getUser();
-					$this->redirect('/contract/manage');
+					$this->redirect('/dashboard/view');
                 }
 				else {
 					$view->set('message', 'Please provide valid credentials');
@@ -72,7 +72,7 @@ class Users extends Controller
                 {	$this->setUser($user);
 					$session = Registry::get("session");
 					$user = $this->getUser();
-					$this->redirect('/contract/manage');
+					$this->redirect('/dashboard/view');
                 }
 				else {
 					$view->set('message', 'Please provide valid credentials');
