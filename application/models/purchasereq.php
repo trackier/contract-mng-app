@@ -83,6 +83,15 @@ class Purchasereq extends \Shared\Model
     /**
 	 * @column
 	 * @readwrite
+	 * @type mongoid
+	 * @index
+	 * @validate required
+	 */
+	protected $_department;
+
+    /**
+	 * @column
+	 * @readwrite
 	 * @type text
 	 * @index
 	 * @validate required

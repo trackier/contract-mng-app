@@ -32,7 +32,7 @@ class Contract extends Controller
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function manage() {	
-		$seo = ["title" => "Manage Contracts", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Manage Contracts"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
@@ -64,7 +64,7 @@ class Contract extends Controller
 	 * @before _secure
 	 */
 	public function addContract($id = null) {	
-		$seo = ["title" => "Contracts", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Contracts Details"]); 
 		$view = $this-> getActionView();
 		$contractDetails = [];
 		$files = [];

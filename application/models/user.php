@@ -81,4 +81,22 @@ class User extends Shared\Model
     * @length 100
     */
     protected $_password;
+
+	public static function isDepartmentHead($id = null, $depId) {
+		$depInfo = \Models\Department::first(["_id" => $depId], [],[]);
+		$isDepHead = false;
+		if ($depInfo->team_lead_id == $id) {
+			$isDepHead = true;
+		}
+		return $isDepHead;
+	}
+
+	public static function isFinanceHead($id = null) {
+		$depInfo = \Models\Department::first(["name" => "Finance"], [],[]);
+		$isDepHead = false;
+		if ($depInfo->team_lead_id == $id) {
+			$isDepHead = true;
+		}
+		return $isDepHead;
+	}
 }

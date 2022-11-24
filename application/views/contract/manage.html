@@ -8,11 +8,7 @@
 				
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
-            {if $show}
-            <div class="col-2">
-                <a  href="/contract/addContract" class="btn btn-xs btn-outline-info">Add Contract <i class="fa fa-eye"></i></a>
-            </div>
-            {/if}
+           
 		</div>
 	
 		<br>
@@ -20,6 +16,11 @@
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Contracts</h6>
             </div>
+            {if $show}
+            <div class="text-start px-md-2" style="margin:10px">
+                <a class="btn btn-primary"  href="/contract/add" padding="10px"><i class="fa fa-plus"></i> Add new Contract </a>
+            </div>
+            {/if}
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

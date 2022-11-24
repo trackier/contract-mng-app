@@ -39,6 +39,7 @@ namespace Shared {
             }
             $this->layoutView->set("seo", $seo);
         }
+      
 
         /**
          * @protected

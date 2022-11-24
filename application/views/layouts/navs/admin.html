@@ -124,7 +124,10 @@
 		<div id="collapsePR" class="collapse" aria-labelledby="headingUtilities"
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
-				<a class="collapse-item" href="/purchasereq/manage.html">Manage </a>
+				{script $isDepHead = User::isDepartmentHead($user->_id, $user->department)}
+				{if $isDepHead}<a class="collapse-item" href="/purchasereq/manage.html">Manage </a>{/if}
+				{script $isFinHead = User::isFinanceHead($user->_id)}
+				{if $isFinHead}<a class="collapse-item" href="/purchasereq/manageFinance.html">Manage Finance</a>{/if}
 				<a class="collapse-item" href="/purchasereq/viewall.html">View All </a>
 				<a class="collapse-item" href="/purchasereq/add.html">Add Purchase Request</a>
 				<a class="collapse-item" href="/activity/manage.html">Activity</a>

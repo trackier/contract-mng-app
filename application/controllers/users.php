@@ -13,7 +13,7 @@ class Users extends Controller
 	 * @after _csrfToken
 	 */
 	public function login() {	
-		$seo = ["title" => "Login", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Login"]); 
 		if ($this->request->post("action") == "login") 
 		{
 			$email = RequestMethods::post("email"); $password = RequestMethods::post("password");
@@ -50,6 +50,7 @@ class Users extends Controller
 	 * @after _csrfToken
 	 */
 	public function oldlogin() {	
+		$this->seo(["title" => "Login"]); 
 		$seo = ["title" => "Login", "view" => $this->getLayoutView()];
 		if ($this->request->post("action") == "login") 
 		{
@@ -97,7 +98,7 @@ class Users extends Controller
 	 * @before _secure
 	 */
 	public function changepassword() {
-		$seo = ["title" => "Change Password", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Change Password"]); 
 		$view = $this->getActionView();
 		if ($this->request->post("action") == "changepassword") 
 		{

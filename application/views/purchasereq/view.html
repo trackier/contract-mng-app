@@ -3,11 +3,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="page-title-box">
-					<h4 class="page-title">Purchase Request Details</h4>
-					
-					<div class="clearfix"></div>
-				</div>
+				
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
 		</div>
@@ -113,6 +109,11 @@
                                <div>
                                 <div class="label">Notes</div>
                                 <div class="detail"> {echo $purchaseReqDetails->notes}</div>
+                                {if $purchaseReqDetails->approver2_id}
+                                    <div  class="label">Financial Approver</div>
+                                    {script $user2 = User::first(["_id" => $purchaseReqDetails->approver2_id], [], ['maxTimeMS' => 5000 ])}
+                                    <div class="detail" > {echo $user2->name}</div> 
+                               {/if}
                             </div>
                             {if $purchaseReqDetails->denialReason}
                                 <div>

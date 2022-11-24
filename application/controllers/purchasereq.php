@@ -32,7 +32,7 @@ class Purchasereq extends Controller
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function manage() {	
-		$seo = ["title" => "Manage Purchasereq", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Manage Purchase Request"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
@@ -40,26 +40,53 @@ class Purchasereq extends Controller
 		if ($this->user->role == 'user') {
 			$query['users'] = ['$in' => [$this->user->_id]];
 		}
-		$showapprover1 = true;
-		$purchasereq = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id, "status" => "pending"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-		$approved = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id, "status" => "approved"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-		$all = \Models\Purchasereq::selectAll(['approver1_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
+		$query['status'] = $uiQuery['status'] ?? [];
+	
+		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
+			$query['status'] = ['$in' => ['pending', 'approved', 'rejected by department']];
+		}
+		$query['department'] = $this->user->department;
 
-		if (!(count($all) > 0)) {
-			$showapprover1 = false;
-			$purchasereq = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id, "status" => "approved"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-			$approved = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id, "status" => "processed"], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-			$all = \Models\Purchasereq::selectAll(['approver2_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
-		} 
+		$isDepHead = User::isDepartmentHead($this->user->_id, $this->user->department);
+		if ($isDepHead) {
+			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		}
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
-		// var_dump($all);
-		// die();
+		$view->set("query", $uiQuery ?? []);
 		$view->set("purchasereq", $purchasereq);
-        $view->set("approved", $approved);
-        $view->set("all", $all);
-		$view->set("showapprover1", $showapprover1);
-		$view->set("users", $users);
-       
+  		$view->set("users", $users);
+    }
+
+	/**
+	 * [PUBLIC] This function will set Purchasereq related data to the view.
+	 * @before _secure
+	 * @author Bhumika <bhumika@trackier.com>
+	 */
+	public function manageFinance() {	
+		$this->seo(["title" => "Manage Finance Purchase Request"]); 
+		$page = $this->request->get('page', 1);
+		$limit = $this->request->get('limit', 50);
+		$view = $this-> getActionView();
+		$query['live'] = $this->request->get('live', 0);
+		if ($this->user->role == 'user') {
+			$query['users'] = ['$in' => [$this->user->_id]];
+		}
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
+		$query['status'] = $uiQuery['status'] ?? [];
+		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
+			$query['status'] = ['$in' => ['approved', 'rejected', 'processed']];
+		}
+		$isFinHead = User::isFinanceHead($this->user->_id);
+		if ($isFinHead) {
+			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		}
+		
+		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$view->set("purchasereq", $purchasereq??[]);
+		$view->set("query", $uiQuery ?? []);
 	
 	}
 
@@ -69,19 +96,25 @@ class Purchasereq extends Controller
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function viewall() {	
-		$seo = ["title" => "Manage Purchasereq", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "All Purchase Requests"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
 		$query['live'] = $this->request->get('live', 0);
-		
-		$Purchasereq1 = \Models\Purchasereq::selectAll(['requester_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
+		$query['status'] = $uiQuery['status'] ?? [];
+		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
+			$query['status'] = ['$in' => ['approved', 'rejected', 'processed', 'rejected by department', 'pending']];
+		}
+		$query['requester_id'] = $this->user->_id;
+		$Purchasereq1 = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
         $users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 
         // var_dump($this->user->_id);
         // die();
 		$view->set("purchasereq", $Purchasereq1);
-		
+		$view->set("query", $uiQuery);
         $view->set("users", $users);
 	
 	}
@@ -94,8 +127,8 @@ class Purchasereq extends Controller
 	 * @before _secure
 	 */
 	public function add() {	
-		$seo = ["title" => "Purchasereq", "view" => $this->getLayoutView()];
-		$view = $this-> getActionView();
+		$this->seo(["title" => "Add Purchase Request Details"]); 
+		$view = $this->getActionView();
 		$contractDetails = [];
 		$files = [];
 		$categories = ["Advertising and Marketing","Automobile Expense","Bank Fees and Charges","Computer Repair and Maintenance","Corporate Gifting","Furniture and Equipment","International Travel Expense","IT related Expense","Meals and Entertainment","Office Supplies","Stationary","Telephone Expense"];
@@ -137,6 +170,7 @@ class Purchasereq extends Controller
 			$purchasereq->submittedOn = date("Y/m/d");
 			$purchasereq->amount = $total;
 			$purchasereq->pr_id = $pr_id;
+			$purchasereq->department = $this->user->department;
             $purchasereq->save();
 		
 			$view->set('message', 'Purchase Request Saved successfully');
@@ -152,7 +186,7 @@ class Purchasereq extends Controller
 	 * @before _secure
 	 */
     public function edit($id) {	
-		$seo = ["title" => "Edit Purchare request", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Edit Purchase Request"]); 
 		$view = $this-> getActionView();
 		$query['id'] = $id;
         $purchasereq = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
@@ -170,7 +204,6 @@ class Purchasereq extends Controller
         }
 		$activities = Models\Activity::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set('activities', $activities);
-		$approver1_id = Models\Department::first(["_id" => $this->user->department], ['team_lead_id'], ['maxTimeMS' => 5000 ]);
 		$employee = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		
          if ($this->request->isPost()) {	
@@ -185,7 +218,6 @@ class Purchasereq extends Controller
             $purchasereq->notes = $data['notes'];
             $purchasereq->items = $data['items'];
 			$purchasereq->docInserted = $files;
-            $purchasereq->approver1_id = $approver1_id->team_lead_id;
             $purchasereq->requester_id = $this->user->_id;
             $purchasereq->denialReason = "";
             $purchasereq->status = "pending";
@@ -205,7 +237,7 @@ class Purchasereq extends Controller
 	 * @before _secure
 	 */
 	public function view($id = null) {	
-		$seo = ["title" => "Purchasereq", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Purchase Request Details"]); 
 		$view = $this-> getActionView();
 		$purchaseReqDetails = [];
 		$files = [];
@@ -238,7 +270,7 @@ class Purchasereq extends Controller
 			$purchaseReqDetails = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
             $purchaseReqDetails->status = 'approved';
             $department = \Models\department::first(["name" => "Finance"], ["team_lead_id"], ['maxTimeMS' => 5000 ]);
-            $purchaseReqDetails->approver2_id = $department->team_lead_id;
+            $purchaseReqDetails->approver1_id = $this->user->id;
             $purchaseReqDetails->save();
 			header("Location: /purchasereq/manage");
 		}
@@ -251,6 +283,7 @@ class Purchasereq extends Controller
 		if ($id) {
 			$query['id'] = $id;
 			$purchaseReqDetails = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
+			$purchaseReqDetails->approver1_id = $this->user->id;
             $purchaseReqDetails->status = 'rejected by department';
             $purchaseReqDetails->denialReason = $data['denialReason'];
             $purchaseReqDetails->save();
@@ -266,23 +299,26 @@ class Purchasereq extends Controller
 			$query['id'] = $id;
 			$purchaseReqDetails = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
             $purchaseReqDetails->status = 'processed';
+			$purchaseReqDetails->approver2_id = $this->user->id;
             $purchaseReqDetails->paymentDate = date("Y/m/d");
             $purchaseReqDetails->save();
-			header("Location: /purchasereq/manage");
+			header("Location: /purchasereq/manageFinance");
 		}
 	}
 
     public function deny2($id = null) {	
 		
 		$purchaseReqDetails = [];
+		$data = $this->request->post('data', []);
 		$files = [];
 		if ($id) {
 			$query['id'] = $id;
 			$purchaseReqDetails = \Models\purchasereq::first($query, [], ['maxTimeMS' => 5000 ]);
+			$purchaseReqDetails->approver2_id = $this->user->id;
             $purchaseReqDetails->status = 'rejected';
-          
+            $purchaseReqDetails->denialReason = $data['denialReason'];
             $purchaseReqDetails->save();
-			header("Location: /purchasereq/manage");
+			header("Location: /purchasereq/manageFinance");
 		}
 	}
 

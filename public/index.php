@@ -27,14 +27,14 @@ try {
 	]);
 
 	// plugins
-	// $path = APP_PATH . "/application/plugins";
-	// $iterator = new DirectoryIterator($path);
+	$path = APP_PATH . "/application/plugins";
+	$iterator = new DirectoryIterator($path);
 
-	// foreach ($iterator as $item) {
-	// 	if (!$item->isDot() && $item->isDir()) {
-	// 		include($path . "/" . $item->getFilename() . "/initialize.php");
-	// 	}
-	// }
+	foreach ($iterator as $item) {
+		if (!$item->isDot() && $item->isDir()) {
+			include($path . "/" . $item->getFilename() . "/initialize.php");
+		}
+	}
 
 	// 3. load and initialize the Configuration class 
 	$configuration = new Framework\Configuration(array(

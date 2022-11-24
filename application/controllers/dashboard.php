@@ -12,7 +12,7 @@ class Dashboard extends Controller
 	 * @before _secure
 	 */
 	public function view() {	
-        $seo = ["title" => "Dashboard", "view" => $this->getLayoutView()];
+        $this->seo(["title" => "Dashboard"]); 
 		$contractsTodayLines = [];
 		$view = $this-> getActionView();
 	    $query['live'] = $this->request->get('live', 0);

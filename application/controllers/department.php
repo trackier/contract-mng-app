@@ -17,6 +17,7 @@ class  Department extends Shared\Controller {
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function add(){
+		$this->seo(["title" => "Add Department Details"]); 
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -39,6 +40,7 @@ class  Department extends Shared\Controller {
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function manage() {
+		$this->seo(["title" => "Manage Department"]); 
 		$view = $this->getActionView();
 
 		$query = [];
@@ -90,6 +92,7 @@ class  Department extends Shared\Controller {
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function edit($id = null) {
+		$this->seo(["title" => "Update Department Details"]); 
         $users = User::selectAll(["department" => $id], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 
 		$view = $this->getActionView();

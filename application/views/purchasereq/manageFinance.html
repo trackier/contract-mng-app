@@ -13,19 +13,17 @@
 			</div>
 		</div>
 
-        <form class="card-body" method="get">
-            <div class="form-row">
-                <div class="form-group col-2"> Select Status</div>
-                <div class="form-group col-2">
-                    <select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
-                        <option value="">All</option>
-                        <option value="pending">Awaiting Approval</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected by department">Rejected</option>
-                    </select>
-                </div>
+        <form class="card-body row" method="get">
+            <div class="form-group col-2"> Select Status</div>
+            <div class="form-group col-sm-2">
+                <select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+                    <option value="">All</option>
+                    <option value="approved">Awaiting Approval</option>
+                    <option value="processed">Processed</option>
+                    <option value="rejected">Rejected</option>
+                </select>
             </div>
-            
+           
         </form>
 
         <div>
@@ -59,19 +57,19 @@
                                         <td>{echo $obj->status}</td>
                                         <td>{echo $user2->name}</td>
                                         <td>₹ $obj->amount</td>
-                                        {if ($query['status'] == 'pending')}
+                                        {if ($query['status'] == 'approved')}
                                             <td>
                                                 <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
                                                 <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete open-denyrequest"><i class="fa fa"></i> Deny</a>
                                                 <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
                                             </td>
                                         {/if}
-                                        {if ($query['status'] == 'approved' || $query['status'] == 'rejected by department' || $query['status'] == '')}
+                                        {if ($query['status'] == 'processed' || $query['status'] == ''|| $query['status'] == 'rejected')}
                                         <td>
                                             <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
                                         </td>
                                         {/if}
-                                        
+                                       
                                         
                                     </tr>
                                 {/foreach}
@@ -110,7 +108,6 @@ aria-hidden="true">
                 <button class="btn btn-primary" id="id">Remove</button>
             </div>
         </form>
-		
 	</div>
 </div>
 
@@ -125,7 +122,7 @@ $(document).ready(function () {
         console.log($(this).data('id'))
          var objId = $(this).data('id');
          
-        $("#formId").attr('action', '/purchasereq/deny1/'+objId);
+        $("#formId").attr('action', '/purchasereq/deny2/'+objId);
       //  $("#id").attr('href','/purchasereq/manage');
     })
     </script>

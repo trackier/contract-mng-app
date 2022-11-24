@@ -12,7 +12,7 @@ class SigningUsers extends Controller
 	 * @before _secure
 	 */
 	public function manage() {	
-		$seo = ["title" => "Manage Signing Users", "view" => $this->getLayoutView()];
+		$this->seo(["title" => "Manage Signing Users"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
@@ -31,7 +31,7 @@ class SigningUsers extends Controller
 	 * @param $id
 	 */
 	public function add($id = null) {	
-		$seo = ["title" => "Contracts", "view" => $this->getLayoutView()];
+		$this->seo(["title" => " Signing User details"]); 
 		$view = $this-> getActionView();
         if ($id) {
             $query['id'] = $id;

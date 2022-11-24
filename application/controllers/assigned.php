@@ -12,6 +12,7 @@ class Assigned extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function add(){
+		$this->seo(["title" => "Add Assigned Details"]); 
         $view = $this->getActionView();
         $query = ['user_id' => $this->user->_id];
         $employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
@@ -44,6 +45,7 @@ class Assigned extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function manage() {
+		$this->seo(["title" => "Manage Assigned"]); 
 		$view = $this->getActionView();
 		$query = [];
        // $query = ['user_id' => $this->user->_id];
@@ -107,6 +109,7 @@ class Assigned extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function edit($id = null) {
+		$this->seo(["title" => "Edit Assigned Details"]); 
 		$view = $this->getActionView();
 		if (!$id) {
 			$this->_404();

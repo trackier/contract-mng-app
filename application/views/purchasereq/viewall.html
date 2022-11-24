@@ -2,29 +2,29 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12" style="margin-bottom: 10px;">
-				<div class="row">
-					<div class="col-10">
-						<div class="page-title-box row">
-							<div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800">Purchase Requests Manage</h1>
-							</div>
-							<!-- <ol class="breadcrumb float-right">
-								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-								<li class="breadcrumb-item active">Manage Employees</li>
-							</ol> -->
-						</div>
-						{echo Shared\Markup::message($message ?? null)}
-					</div>
-					<div class="col-2">
-						<a href="/purchasereq/add" class="btn btn-xs btn-outline-info">Generate Request<i class="fa fa-plus"></i></a>
-					</div>
-				</div>
 				
+				<form class="card-body" method="get">
+					<div class="form-row">
+						<div class="form-group col-2"> Select Status</div>
+						<div class="form-group col-2">
+							<select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+								<option value="">All</option>
+								<option value="pending">Awaiting Approval</option>
+								<option value="approved">Approved</option>
+								<option value="rejected by department">Rejected by department</option>
+								<option value="rejected">Rejected</option>
+							</select>
+						</div>
+					</div>
+					
+				</form>
 				{if $purchasereq}
 				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">Purchase Request Manage</h6>
-					</div><br>
+					
+					<div class="text-start px-md-2" style="margin:10px">
+						<a class="btn btn-primary"  href="/purchasereq/add" padding="10px"><i class="fa fa-plus"></i> Add new Purchase Request </a>
+					</div>
+					
 					
 					<div class="card-body">
 						<div class="table-responsive">

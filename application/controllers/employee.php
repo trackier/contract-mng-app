@@ -13,6 +13,7 @@ class Employee extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function add(){
+		$this->seo(["title" => "Add Employee Details"]); 
 		$view = $this->getActionView();
 		$departments = \Models\Department::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
@@ -40,6 +41,7 @@ class Employee extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function manage() {
+		$this->seo(["title" => "Manage Employees"]); 
 		$view = $this->getActionView();
 
 		$query = [];
@@ -102,6 +104,7 @@ class Employee extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function edit($id = null) {
+		$this->seo(["title" => "Update Employee Details"]); 
 		$view = $this->getActionView();
 		if (!$id) {
 			$this->_404();

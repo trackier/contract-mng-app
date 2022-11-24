@@ -16,6 +16,7 @@ class Asset extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function add(){
+		$this->seo(["title" => "Add Asset Details"]); 
 		$view = $this->getActionView();
         $vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
@@ -45,6 +46,7 @@ class Asset extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function manage() {
+		$this->seo(["title" => "Manage Assets"]); 
 		$view = $this->getActionView();
 
 		$query = [];
@@ -99,6 +101,7 @@ class Asset extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function edit($id = null) {
+		$this->seo(["title" => "Update Asset Details"]); 
 		$view = $this->getActionView();
 		if (!$id) {
 			$this->_404();

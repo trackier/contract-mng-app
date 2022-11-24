@@ -17,6 +17,7 @@ class Vendr extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function add(){
+		$this->seo(["title" => "Add Vendor details"]); 
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -37,6 +38,7 @@ class Vendr extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function manage() {
+		$this->seo(["title" => "Manage Vendors"]); 
 		$view = $this->getActionView();
 
 		$query = [];
@@ -117,6 +119,7 @@ class Vendr extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function edit($id = null) {
+		$this->seo(["title" => "Update Vendor Details"]); 
 		$view = $this->getActionView();
 		if (!$id) {
 			$this->_404();
