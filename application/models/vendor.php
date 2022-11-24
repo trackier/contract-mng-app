@@ -4,7 +4,7 @@ namespace Models;
 use Shared\Services\Db;
 use Framework\{Security};
 
-class vendor extends \Shared\Model {
+class Vendor extends \Shared\Model {
 
 	/**
 	 * @readwrite

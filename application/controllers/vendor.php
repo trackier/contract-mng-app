@@ -8,7 +8,7 @@
 use Framework\{Registry, TimeZone, ArrayMethods};
 use Shared\Services\Db;
 
-class vendor extends Shared\Controller {
+class Vendor extends Shared\Controller {
 
 	/**
 	 * @before _secure
