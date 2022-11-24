@@ -6,18 +6,18 @@
 					<div class="col-10">
 						<div class="page-title-box row">
 							<div class="d-sm-flex align-items-center justify-content-between mb-4">
-								<h1 class="h3 mb-0 text-gray-800">Vendor Add</h1>
+								<h1 class="h3 mb-0 text-gray-800">Vendor edit</h1>
 							</div>
 							<!-- <ol class="breadcrumb float-right">
 								<li class="breadcrumb-item"><a href="/">Dashboard</a></li>
 								<li class="breadcrumb-item"><a href="/vendor/manage">Vendor Manage</a></li>
-								<li class="breadcrumb-item active">Vendor Add</li>
+								<li class="breadcrumb-item active">Vendor edit</li>
 							</ol> -->
 						</div>
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
 					<div class="col-2">
-						<a href="/vendor/manage" class="btn btn-xs btn-outline-info">View All<i class="fa fa-eye"></i></a>
+						<a href="/vendr/manage" class="btn btn-xs btn-outline-info">View All<i class="fa fa-eye"></i></a>
 					</div>
 				</div>
 				<form method="post" action="" enctype="multipart/form-data">
@@ -25,28 +25,28 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Name</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[name]" class="form-control" required="" placeholder="Enter name">
+								<input type="text" name="data[name]" value="$vendor->name" class="form-control"  placeholder="Enter name">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Company Name</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[company_name]" class="form-control" required="" placeholder="Enter Company name">
+								<input type="text" name="data[company_name]" value="$vendor->company_name" class="form-control"  placeholder="Enter Company name">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Email</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="email" class="form-control" required="" name="data[email]" placeholder="Enter Email name">
+								<input type="email" class="form-control"  name="data[email]" value="$vendor->email" placeholder="Enter Email name">
 							</div>
 						</div>
 			
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Phone</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="tel" class="form-control" name="data[phone]" required="" placeholder="Enter Phone Number">
+								<input type="tel" class="form-control" name="data[phone]" value="$vendor->phone"  placeholder="Enter Phone Number">
 								<span class="help-block text-danger">{echo Shared\Markup::errors($errors, "phone")}</span>
 							</div>
 						</div>
@@ -54,21 +54,21 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Address</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[address]" class="form-control" required="" placeholder="Enter address">
+								<input type="text" name="data[address]" class="form-control" value="$vendor->address" placeholder="Enter address">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">state</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[state]" class="form-control" required="" placeholder="Enter state">
+								<input type="text" name="data[state]" class="form-control" value="$vendor->state" placeholder="Enter state">
 							</div>
 						</div>
 
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Country</label>
 							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[country]" class="form-control" required="" placeholder="Enter country">
+								<input type="text" name="data[country]" class="form-control" value="$vendor->country"  placeholder="Enter country">
 							</div>
 						</div>
 

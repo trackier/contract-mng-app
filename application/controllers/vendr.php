@@ -8,7 +8,7 @@
 use Framework\{Registry, TimeZone, ArrayMethods};
 use Shared\Services\Db;
 
-class Vendor extends Shared\Controller {
+class Vendr extends Shared\Controller {
 
 	/**
 	 * @before _secure
@@ -24,7 +24,7 @@ class Vendor extends Shared\Controller {
 				$vendor = new \Models\vendor($data);
 				$vendor->save();
 				\Shared\Utils::flashMsg(['type' => 'success', 'text' => 'vendor Added successfully']);
-				$this->redirect('/vendor/manage');
+				$this->redirect('/vendr/manage');
 			}
 		} catch (\Exception $e) {
 			\Shared\Utils::flashMsg(['type' => 'error', 'text' => $e->getMessage()]);
@@ -92,11 +92,9 @@ class Vendor extends Shared\Controller {
 	 * @author Himanshu Rao <himanshurao@trackier.com>
 	 */
 	public function delete($id = null) {
+		
 		$view = $this->getActionView();
-		if (!$id || !$this->request->isDelete()) {
-			\Shared\Utils::flashMsg(['type' => 'error', 'text' => 'Invalid Request']);
-			$this->redirect('/vendor/manage');
-		}
+		
 
 		$vendor = \Models\vendor::findById($id);
 		if (!$vendor) {
@@ -106,6 +104,7 @@ class Vendor extends Shared\Controller {
 		try {
 			$vendor->delete();
 			$msg = 'vendor deleted successfully!';
+			$this->redirect('/vendr/manage');
 		} catch (\Exception $e) {
 			$msg = ['type' => 'error', 'text' => 'Something went wrong. Please Try Again'];
 		}

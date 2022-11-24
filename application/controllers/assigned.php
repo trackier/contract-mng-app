@@ -86,11 +86,6 @@ class Assigned extends Shared\Controller {
 	 */
 	public function delete($id = null) {
 		$view = $this->getActionView();
-		if (!$id || !$this->request->isDelete()) {
-			\Shared\Utils::flashMsg(['type' => 'error', 'text' => 'Invalid Request']);
-			$this->redirect('/assigned/manage');
-		}
-
 		$asset = \Models\Assigned::findById($id);
 		if (!$asset) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Assigned found!']);
@@ -99,6 +94,7 @@ class Assigned extends Shared\Controller {
 		try {
 			$asset->delete();
 			$msg = 'Assigned deleted successfully!';
+			$this->redirect('/assigned/manage');
 		} catch (\Exception $e) {
 			$msg = ['type' => 'error', 'text' => 'Something went wrong. Please Try Again'];
 		}

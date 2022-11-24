@@ -78,11 +78,6 @@ class Asset extends Shared\Controller {
 	 */
 	public function delete($id = null) {
 		$view = $this->getActionView();
-		if (!$id || !$this->request->isDelete()) {
-			\Shared\Utils::flashMsg(['type' => 'error', 'text' => 'Invalid Request']);
-			$this->redirect('/asset/manage');
-		}
-
 		$asset = \Models\Asset::findById($id);
 		if (!$asset) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No asset found!']);
@@ -91,6 +86,7 @@ class Asset extends Shared\Controller {
 		try {
 			$asset->delete();
 			$msg = 'Asset deleted successfully!';
+			$this->redirect('/asset/manage');
 		} catch (\Exception $e) {
 			$msg = ['type' => 'error', 'text' => 'Something went wrong. Please Try Again'];
 		}

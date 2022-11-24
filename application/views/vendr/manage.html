@@ -14,7 +14,7 @@
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
 					<div class="col-2">
-						<a href="/vendor/add" class="btn btn-xs btn-outline-info">Add Vendor<i class="fa fa-plus"></i></a>
+						<a href="/vendr/add" class="btn btn-xs btn-outline-info">Add Vendor<i class="fa fa-plus"></i></a>
 					</div>
 				</div>
 				<div class="card shadow mb-4">
@@ -78,8 +78,8 @@
 										<td>{echo $obj->address}</td>
 										<td>{echo $obj->state}</td>
 										<td>{echo $obj->country}</td>
-										<td> <a data-href="/vendor/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
-										<a class="btn btn-outline-primary"  href="/vendor/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+										<td> <a href="/vendr/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+										<a class="btn btn-outline-primary"  href="/vendr/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
 									</tr>
 									{/foreach}
 								</tbody>
