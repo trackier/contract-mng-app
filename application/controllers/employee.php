@@ -80,11 +80,7 @@ class Employee extends Shared\Controller {
 	 */
 	public function delete($id = null) {
 		$view = $this->getActionView();
-		if (!$id || !$this->request->isDelete()) {
-			\Shared\Utils::flashMsg(['type' => 'error', 'text' => 'Invalid Request']);
-			$this->redirect('/employee/manage');
-		}
-
+	
 		$employee = User::findById($id);
 		if (!$employee) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Employee found!']);
@@ -93,6 +89,7 @@ class Employee extends Shared\Controller {
 		try {
 			$employee->delete();
 			$msg = 'Employee deleted successfully!';
+			$this->redirect('/employee/manage');
 		} catch (\Exception $e) {
 			$msg = ['type' => 'error', 'text' => 'Something went wrong. Please Try Again'];
 		}
