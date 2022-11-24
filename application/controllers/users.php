@@ -132,7 +132,7 @@ class Users extends Controller
 	public function loginviagoogle() {
 		$view = $this->getActionView();
 		$appConf = Framework\Utils::getConfig("app");
-		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->app->environment == 'dev' ? 'http://cont.vnative.io' : 'https://contract.cloudstuff.tech');
+		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->app->environment == 'dev' ? 'http://cont.vnative.io' : 'https://procurement.cloudstuff.tech');
 		
 		$client = $this->__gooleClient($redirectURI);
 		$authUrl = $client->createAuthUrl();
@@ -182,7 +182,7 @@ class Users extends Controller
 		$appConf = Framework\Utils::getConfig("app")->app;
 
 		// authenticate code from Google OAuth Flow
-		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->environment == 'dev' ? 'http://cont.vnative.io' : 'https://contract.cloudstuff.tech');
+		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->environment == 'dev' ? 'http://cont.vnative.io' : 'https://procurement.cloudstuff.tech');
 		$client = $this->__gooleClient($redirectURI);
 		if ($this->request->get('code')) {
 		  	$token = $client->fetchAccessTokenWithAuthCode($this->request->get('code'));
