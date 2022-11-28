@@ -15,31 +15,34 @@
 				<div class="card">
 					<div class="card-body" style = "width: 100%;">
 						<form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
-							<input type="submit" class="button add-row" value="Add another line" />
-							<table id="table"  name="data[details]" >
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Quantity</th>
-										<th>Estimate rate</th>
-										<th>Category</th>
-									
-									</tr>
-								</thead>
-								<tbody>
-									<tr  id="tbl">
-										<td><input class="form-control" id="name" type="text"   /></td>
-										<td><input class="form-control"  id="quantity" type="number" /></td> 
-										<td><input class="form-control"   id="erate" type="number"/></td>   
-										<td><select class="form-control"  id="category"   required="">
-											{foreach $category in $categories}
-											<option value="{echo $category}">{echo $category}</option>
-											{/foreach}
-										</select></td>   
-									</tr>
-								</tbody>
+							<input  class="btn btn-info add-row" style="width: 250px" value="Add Purchase Request Items" />
+							<div  style="background-color: #f1f3f4;padding:20px;margin:20px">
+								<table  name="data[details]" id="table">
+									<thead >
+										<tr>
+											<th>Name</th>
+											<th>Quantity</th>
+											<th>Estimate rate</th>
+											<th>Category</th>
+										
+										</tr>
+									</thead>
+									<tbody>
+										<tr  id="tbl">
+											<td><input class="form-control" id="name" type="text"   /></td>
+											<td><input class="form-control"  id="quantity" type="number" /></td> 
+											<td><input class="form-control"   id="erate" type="number"/></td>   
+											<td><select class="form-control"  id="category"   required="">
+												{foreach $category in $categories}
+												<option value="{echo $category}">{echo $category}</option>
+												{/foreach}
+											</select></td>   
+										</tr>
+									</tbody>
+								
+								</table>
+							</div>
 							
-							</table>
 						
 							<div class="form-group row">
 								<div class="form-group col-6">
@@ -89,11 +92,10 @@
 							
 						</br>
 							{/foreach}
-						
 							<input type="hidden" name="action" value="addContract">
 							<div class="form-group text-right m-t-20">
 								<div class="col-xs-12">
-									<button class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" type="submit">Add Purchase Request</button>
+									<button class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" type="submit">Submit</button>
 								</div>
 							</div>
 							<div>
@@ -140,9 +142,12 @@ $('.open-fileDelModal').on('click', function () {
 
 $('.add-row').on('click', function(e){
 	
-	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length;
+	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length + 1;
 		var ele = $("#tbl").clone();
+		ele.css('display', 'a');
 		ele.css('visibility', 'visible'); 
+		var ele2 = $("#table");
+		ele2.css('visibility', 'visible'); 
 		ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
 		ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
 		ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
@@ -150,6 +155,21 @@ $('.add-row').on('click', function(e){
 		$("#table").append(ele);
 
 });
+$(document).ready(()=>{
+	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length;
+	var ele = $("#tbl");
+	
+	ele.css('visibility', 'visible'); 
+	var ele2 = $("#table");
+	ele2.css('visibility', 'visible'); 
+	ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
+	ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
+	ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
+	ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
+	
+	$("#table").append(ele);
+		
+})
 
 </script>
 <style>
@@ -163,7 +183,12 @@ $('.add-row').on('click', function(e){
 }
 #tbl{
 	visibility: hidden;
+	/* display: none; */
 }
+#table{
+	visibility: hidden;
+}
+
 
 /* #loading {
 position: absolute;

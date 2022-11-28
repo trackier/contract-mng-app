@@ -131,6 +131,10 @@
 				<a class="collapse-item" href="/purchasereq/viewall.html">View All </a>
 				<a class="collapse-item" href="/purchasereq/add.html">Add Purchase Request</a>
 				<a class="collapse-item" href="/activity/manage.html">Activity</a>
+				{if $show}
+				<!-- <a class="collapse-item" href="/purchasereq/dashboard.html">Dashboard</a>
+				<a class="collapse-item" href="/purchasereq/report.html">Report</a> -->
+				{/if}
 			
 			</div>
 		</div>
@@ -145,10 +149,10 @@
 			data-parent="#accordionSidebar">
 			<div class="bg-white py-2 collapse-inner rounded">
 			
-				<a class="collapse-item" href="/assigned/manage.html">Manage Assigned</a>
+				<a class="collapse-item" href="/assigned/manage.html">Assignee</a>
 				{if $show}
-				<a class="collapse-item" href="/asset/manage.html">Manage Assets </a>
-				<a class="collapse-item" href="/vendr/manage.html">Manage Vendor</a>
+				<a class="collapse-item" href="/asset/manage.html">Manage</a>
+				<a class="collapse-item" href="/vendr/manage.html">Vendor</a>
 				{/if}
 			</div>
 		</div>

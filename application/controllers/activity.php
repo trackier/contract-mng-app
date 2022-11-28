@@ -13,6 +13,7 @@ class Activity extends Controller
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
 	public function manage() {	
+		
 		$this->seo(["title" => "Manage Activities"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
@@ -38,6 +39,7 @@ class Activity extends Controller
 	 * @before _secure
 	 */
 	public function add($id = null) {	
+		
 		$this->seo(["title" => "Add Activity"]); 
 		$view = $this-> getActionView();
 		$contractDetails = [];

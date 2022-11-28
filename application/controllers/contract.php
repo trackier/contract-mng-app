@@ -195,10 +195,11 @@ class Contract extends Controller
 		$file = ContractFile::first(['fileId'=>$id], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
 		$extension = pathinfo($file->filename, PATHINFO_EXTENSION);
 		$file_url = APP_PATH.'/public/uploads/'.$id.'.'.$extension;  
+		
 		header('Content-Type: application/octet-stream');  
 		header("Content-Transfer-Encoding: utf-8");   
-		header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");   
+		header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\""); 
 		readfile($file_url);  
-		
+		die();
 	}
 }

@@ -119,7 +119,43 @@ class Purchasereq extends Controller
 	
 	}
 
+ 	/**
+	 * [PUBLIC] This function will set Purchasereq related data to the view.
+	 * @before _secure
+	 * @author Bhumika <bhumika@trackier.com>
+	 */
+	public function report() {	
+		$this->seo(["title" => "Report"]); 
+		$page = $this->request->get('page', 1);
+		$limit = $this->request->get('limit', 50);
+		$view = $this-> getActionView();
+		$query['live'] = $this->request->get('live', 0);
+		if ($this->user->role == 'user') {
+			$query['users'] = ['$in' => [$this->user->_id]];
+		}
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
+		$query['status'] = $uiQuery['status'] ?? [];
+		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
+			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
+		}
+		if ($this->user->role == 'admin') {
+			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		}
+		
+		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
+		$view->set("purchasereq", $purchasereq??[]);
+		$view->set("query", $uiQuery ?? []);
+	}
 
+	/**
+	 * [PUBLIC] This function will set Purchasereq related data to the view.
+	 * @before _secure
+	 * @author Bhumika <bhumika@trackier.com>
+	 */
+	public function dashboard() {	
+		$this->seo(["title" => "Dashboard"]); 
+	}
 	/**
 	 * [PUBLIC] This function will Add/Edit Purchasereq .
 	 * @param $id
@@ -133,6 +169,8 @@ class Purchasereq extends Controller
 		$files = [];
 		$categories = ["Advertising and Marketing","Automobile Expense","Bank Fees and Charges","Computer Repair and Maintenance","Corporate Gifting","Furniture and Equipment","International Travel Expense","IT related Expense","Meals and Entertainment","Office Supplies","Stationary","Telephone Expense"];
 		$approver1_id = Models\Department::first(["_id" => $this->user->department], ['team_lead_id'], ['maxTimeMS' => 5000 ]);
+		// var_dump($approver1_id);
+		// die();
 		$activities = Models\Activity::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set('activities', $activities);
 		$pr_id = 'PR-'. rand(0, 999) . Models\purchasereq::count([]);
@@ -405,9 +443,11 @@ class Purchasereq extends Controller
 		$file = ContractFile::first(['fileId'=>$id], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
 		$extension = pathinfo($file->filename, PATHINFO_EXTENSION);
 		$file_url = APP_PATH.'/public/uploads/'.$id.'.'.$extension;  
+		die();
 		header('Content-Type: application/octet-stream');  
 		header("Content-Transfer-Encoding: utf-8");   
 		header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");   
+		
 		readfile($file_url);  
 		
 	}

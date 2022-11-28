@@ -115,7 +115,7 @@ class Assigned extends Shared\Controller {
 			$this->_404();
 		}
         $query = ['user_id' => $this->user->_id];
-        $employees = \Models\Employee::cacheAllv2($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $employees = \Models\Employee::cacheAllv2([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
         $assets = \Models\Asset::cacheAllv2($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		$assigned = \Models\Assigned::findById($id);
 		if (!$assigned) {

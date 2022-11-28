@@ -12,9 +12,7 @@
 		
 		<br>
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Signing Users</h6>
-            </div>
+            
             
             <div class="text-start px-md-2" style="margin:10px">
                 <a class="btn btn-primary"  href="/signingusers/add" padding="10px"><i class="fa fa-plus"></i> Add Signing Users </a>
@@ -39,12 +37,10 @@
                             <td>{echo $user->email}</td>
                             <td>{echo $user->contact}</td>
                              <td>
-                                <a href="/signingusers/add/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Edit <i class="fa fa-pencil"></i></a>
-                                <a href="/signingusers/deleteUser/{echo $user->_id}" class="btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+                                <a href="/signingusers/add/{echo $user->_id}" class="btn btn-xs btn-outline-info">Edit <i class="fa fa-pencil"></i></a>
+                                <a href="/signingusers/deleteUser/{echo $user->_id}" class="btn btn-xs btn-outline-danger">Delete <i class="fa fa-trash"></i></a>
                             </td>
-                            <td>
                             
-                            </td>
                         </tr>
                         {/foreach}
                         </tbody>
