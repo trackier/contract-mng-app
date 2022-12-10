@@ -62,4 +62,13 @@ class Employee extends \Shared\Model {
 	 */
 	protected $_phone = null;
 
+	/**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 *
+	 * @label role
+	 */
+	protected $_role;
+
 }
