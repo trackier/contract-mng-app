@@ -64,6 +64,8 @@ class Activity extends Controller
 			$activity->startDate = $data['startDate'];
 			$activity->endDate = $data['endDate'];
 			$activity->name = $data['name'];
+			$activity->state = $data['state'];
+			$activity->country = $data['country'];
 			$activity->save();
 			$view->set('message', 'Activity Saved successfully');
 		}

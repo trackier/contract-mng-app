@@ -16,7 +16,7 @@
             
             {if $show}
             <div class="text-start px-md-2" style="margin:10px">
-                <a class="btn btn-primary"  href="/contract/add" padding="10px"><i class="fa fa-plus"></i> Add new Contract </a>
+                <a class="btn btn-primary"  href="/contract/addContract" padding="10px"><i class="fa fa-plus"></i> Add new Contract </a>
             </div>
             {/if}
             <div class="card-body">
@@ -44,7 +44,7 @@
                                     <td>{echo Framework\TimeZone::printDate($cont->endDate)}</td>
                                     {if $show}
                                     <td>
-                                        <a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-primary">Edit <i class="fa fa-pencil"></i></a>
+                                        <a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-primary">Edit <i class="fa fa-pencil" style="margin-inline:5px"></i></a>
                                         <a data-toggle="modal" data-target="#contractDelModal"  data-id='{echo $cont->_id}' id="contractDel" class="btn btn-xs btn-outline-danger open-contractDelModal">Delete <i class="fa fa-trash"></i></a>
                                     </td>
                                     {/if}

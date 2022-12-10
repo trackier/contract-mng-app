@@ -126,17 +126,22 @@
                             <div>
                             {foreach $doc in  $files }
                                 <tr >
-                                    <a  href="/contract/downloadFile/{$doc->fileId}"  style="padding-right: 20px;width:300px">
-                                        {echo $doc->filename}
+                                    <a  href="/contract/downloadFile/{$doc->fileId}"  style="padding-right: 20px;width:300px"><i class="fa fa-download"></i>
+                                        {echo $doc->filename} 
                                     </a>
                                  </tr>
                             {/foreach}
                             </div>
                         </table>
-                               <div>Activity</div>
+                               <div class="label">Activity</div>
                                <div class="detail"> {echo $activity[$purchaseReqDetails->activity_id]->name}</div>
                                <div class="detail"> {echo $activity[$purchaseReqDetails->activity_id]->description}</div>
-
+                               <div class="label">Activity Users</div>
+                               {foreach $userId in $activity[$purchaseReqDetails->activity_id]->teamMembers}
+                                         {script $user = User::first(["_id" => $userId], [], ['maxTimeMS' => 5000 ])}
+                                        <span  class="detail"> {echo $user->name}</span> <br>
+                               {/foreach}
+                              
                             </div>
                         </div>
                     </div>

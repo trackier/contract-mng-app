@@ -12,6 +12,80 @@
 				
 			</div>
 		</div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Search </h6>
+            </div>
+            <form class="card-body" method="get">
+                <div class="form-row">
+                    <div class="form-group col-sm-2">PR Id</div>
+                    <div class="form-group col-sm-2">Status</div>
+                    <div class="form-group col-sm-2">Type</div>
+                    <div class="form-group col-sm-2">Vendor</div>
+                    <div class="form-group col-sm-2">Approver</div>
+                    <div class="form-group col-sm-2">Requester</div>
+                    <div class="form-group col-sm-2">Department</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-2">
+                        <input type="text" name="query[name]" class="form-control" value="{echo $query['name']}" placeholder = "Search asset name">
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+                            <option value="">All</option>
+                            <option value="pending">Awaiting Approval</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="rejected by department">Rejected by department</option>
+                            <option value="processed">Processed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" name="query[requester]" value="{echo $query['status'] ?? ''}">
+                            <option value="">All</option>
+                            <option value="pending">Awaiting Approval</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="rejected by department">Rejected by department</option>
+                            <option value="processed">Processed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" name="query[approver]" value="{echo $query['status'] ?? ''}">
+                            <option value="">All</option>
+                            <option value="pending">Awaiting Approval</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="rejected by department">Rejected by department</option>
+                            <option value="processed">Processed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" name="query[asset_type]" value="{echo $query['asset_type']}">
+                            <option value="">All</option>
+                            <option value="car">Car</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="phone">Phone</option>
+                            <option value="ipad">Ipad</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-2">
+                        <select class="form-control" name="query[ven_id]" value="{echo $query['ven_id']}">
+                            <option value="">All</option>
+                            {foreach $v in $vendors}
+                            <option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-outline-primary">
+                        <i class="fa fa-search"></i> Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
         <form class="card-body" method="get">
             <div class="form-row">
@@ -65,12 +139,12 @@
                                             <td>
                                                 <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
                                                 <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete open-denyrequest"><i class="fa fa"></i> Deny</a>
-                                                <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
+                                                <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
                                             </td>
                                         {/if}
                                         {if ($query['status'] == 'approved' || $query['status'] == 'rejected by department' || $query['status'] == '')}
                                         <td>
-                                            <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>View</a>
+                                            <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
                                         </td>
                                         {/if}
                                         

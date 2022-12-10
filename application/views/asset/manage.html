@@ -14,8 +14,6 @@
 						</div>
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
-					
-					
 				</div>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
@@ -113,8 +111,10 @@
 									<div class="badge badge-danger">Discarded</div>
 									{/elseif}
 								</td>
-								<td> <a href="/asset/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
-								<a class="btn btn-outline-primary"  href="/asset/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+								<td> 
+									<a class="btn btn-outline-primary"  href="/asset/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>Edit</a>
+									<a href="/asset/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+								</td>
 							</tr>
 							{/foreach}
 							</table>

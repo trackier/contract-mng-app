@@ -9,11 +9,12 @@
 					</div>
 					
 				</div>
-				<div class="text-start px-md-2" style="margin:10px">
-					<a class="btn btn-primary"  href="/department/add" padding="10px"><i class="fa fa-plus"></i> Add new Departmrnt </a>
-				</div>
+				
 				{if $departments}
-				<div class="card shadow mb-4">
+				<div class="card shadow mb-4" >
+					<div class="text-start px-md-2" style="margin:10px">
+						<a class="btn btn-outline-primary"  href="/employee/add" padding="10px"><i class="fa fa-plus"></i> Add New Department </a>
+					</div>
 					
 					<div class="card-body">
 						<div class="table-responsive">
@@ -33,8 +34,10 @@
 										<td>{echo $obj->description}</td>
 										
 										
-										<td> <a href="/department/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
-										<a class="btn btn-outline-primary"  href="/department/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>
+										<td> 
+										<a class="btn btn-outline-primary"  href="/department/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>Edit</a>
+									<a href="/department/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+								</td>
 									</tr>
 									{/foreach}
 								</tbody>

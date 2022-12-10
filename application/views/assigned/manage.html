@@ -9,11 +9,7 @@
 						
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
-					{if $show}
-					<div class="col-2">
-						<a class="btn btn-outline-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i>Add Assigned</a></td>
-					</div>
-					{/if}
+					
 				</div>
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
@@ -56,7 +52,7 @@
 						<h6 class="m-0 font-weight-bold text-primary">Assigned Manage </h6>
 					</div><br>
 					<div class="text-start px-md-2" style="margin:10px">
-						<a class="btn btn-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i> Add new Assigned </a>
+						<a class="btn btn-primary"  href="/assigned/add" padding="10px"><i class="fa fa-plus"></i> Add Assigned </a>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
@@ -99,8 +95,9 @@
 												{echo Framework\TimeZone::printDate($obj->handover_date)}
 											{/if}
 										</td>
-										{if $show}<td> <a href="/assigned/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
-										<a class="btn btn-outline-primary"  href="/assigned/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o"></i>Edit</a></td>{/if}
+										{if $show}<td><a class="btn btn-outline-primary"   style="margin-right: 10px" href="/assigned/edit/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>Edit
+										 <a href="/assigned/delete/{echo $obj->_id}" class="btn btn-xs btn-outline-danger delete"><i class="fa fa-trash"></i> Delete</a>
+										</td>{/if}
 									</tr>
 									{/foreach}
 								</tbody>

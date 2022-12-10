@@ -77,7 +77,7 @@ class Purchasereq extends Controller
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
-			$query['status'] = ['$in' => ['approved', 'rejected', 'processed']];
+			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'processed']];
 		}
 		$isFinHead = User::isFinanceHead($this->user->_id);
 		if ($isFinHead) {
@@ -443,7 +443,7 @@ class Purchasereq extends Controller
 		$file = ContractFile::first(['fileId'=>$id], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
 		$extension = pathinfo($file->filename, PATHINFO_EXTENSION);
 		$file_url = APP_PATH.'/public/uploads/'.$id.'.'.$extension;  
-		die();
+		
 		header('Content-Type: application/octet-stream');  
 		header("Content-Transfer-Encoding: utf-8");   
 		header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");   

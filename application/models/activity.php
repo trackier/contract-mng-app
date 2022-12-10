@@ -34,6 +34,26 @@ class Activity extends \Shared\Model
     */
     protected $_description;
 
+    /**
+    * @column
+    * @readwrite
+    * @type text
+    * @validate required
+    * @length 100
+    * @index
+    */
+    protected $_country;
+
+    /**
+    * @column
+    * @readwrite
+    * @type text
+    * @validate required
+    * @length 100
+    * @index
+    */
+    protected $_state;
+
 
     /**
     * @column
