@@ -1,14 +1,19 @@
 <?php
+var_dump($e);
+die();
 http_response_code(502);
+
 if (DEBUG && $e) {
 	$controller = Framework\Registry::get("controller");
+	var_dump($controller);
+    die();
 	// Framework\Core::logError(print_r($e->getTrace(), true));
 	if ($controller) {
 		$controller->noview();	// don't render controller response
 	}
 
 	$logger = Framework\Registry::getLogger();
-    var_dump($e);
+
 	if ($logger) {
 		$logger->handleException($e);
 	}

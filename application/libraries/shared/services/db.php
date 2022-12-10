@@ -35,11 +35,10 @@ class Db {
 			$configuration = Registry::get("configuration");
             try {
 				$dbconf = $configuration->parse("configuration/database")->database->mongodb;
-				$dbURL = sprintf("mongodb://%s:%s@%s/%s?replicaSet=%s", $dbconf->username, $dbconf->password, $dbconf->url, $dbconf->dbname, $dbconf->replica);
+				$dbURL = sprintf("mongodb://%s:%s@%s/%s?replicaSet=%s&authSource=admin", $dbconf->username, $dbconf->password, $dbconf->url, $dbconf->dbname, $dbconf->replica);
                 $mongo = new \MongoDB\Client($dbURL, ['appname' => 'PHP-Mongo:' . gethostname(), 'retryWrites' => true]);
                 $mongoDB = $mongo->selectDatabase($dbconf->dbname);
-          
-			} catch (\Exception $e) {
+             } catch (\Exception $e) {
 				throw new \Framework\Database\Exception("DB Error");   
 			}
             Registry::set(static::REGISTRY, $mongoDB);
