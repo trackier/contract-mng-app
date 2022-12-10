@@ -23,7 +23,7 @@ class  Department extends Shared\Controller {
 				$data = $this->request->post('data', []);
 				$data = array_merge($data, ['user_id' => $this->user->_id]);
                
-				$department = new \Models\department($data);
+				$department = new \Models\Department($data);
                 
 				$department->save();
 				\Shared\Utils::flashMsg(['type' => 'success', 'text' => 'Department Added successfully']);
@@ -48,8 +48,8 @@ class  Department extends Shared\Controller {
 		$searchValue = $this->request->get('search');
 		
 
-        $departments = \Models\department::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-		$count = \Models\department::count($query);
+        $departments = \Models\Department::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$count = \Models\Department::count($query);
         $view->set([
 			'departments' => $departments ?? [],
 			'search' => $this->request->get('search', ''),
@@ -69,7 +69,7 @@ class  Department extends Shared\Controller {
 			$this->redirect('/department/manage');
 		}
 
-		$department = \Models\department::findById($id);
+		$department = \Models\Department::findById($id);
 		if (!$department) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No department found!']);
 		}
@@ -99,7 +99,7 @@ class  Department extends Shared\Controller {
 		if (!$id) {
 			$this->_404();
 		}
-		$department = \Models\department::findById($id);
+		$department = \Models\Department::findById($id);
 		if (!$department) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No department found!']);
 		}

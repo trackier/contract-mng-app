@@ -132,6 +132,8 @@ class Users extends Controller
 
 	public function loginviagoogle() {
 		$view = $this->getActionView();
+		// $logger 
+		// throw new Exception("here in exe");
 		$appConf = Framework\Utils::getConfig("app");
 		$redirectURI = sprintf('%s/users/verifyLoginCode', $appConf->app->environment == 'dev' ? 'http://cont.vnative.io' : 'https://procurement.cloudstuff.tech');
 		
@@ -193,16 +195,14 @@ class Users extends Controller
 		  	$client->setAccessToken($token['access_token']);
 		  	$appConf = Framework\Utils::getConfig("app");
 		  
-		   
 		  	// get profile info
 		  	$google_oauth = new Google_Service_Oauth2($client);
+
 		  	$google_account_info = $google_oauth->userinfo->get();
 		  	$email =  $google_account_info->email;
-			$user = User::first(['email' => $email]);
-
+		  	$user = User::first(['email' => $email]);
 		  	if ($user) {
-			  	
-				$this->setUser($user);
+		  		$this->setUser($user);
 				$beforeLogin = $session->get('$beforeLogin');
 				if ($beforeLogin) {
 					$session->erase('$beforeLogin');
