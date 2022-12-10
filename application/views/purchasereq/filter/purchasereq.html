@@ -3,6 +3,9 @@
         <h4 style="font-size: 22px;"><i class="fa fa-filter mr-2"></i> Search</h4>
         <hr>
         <div class="form row">
+            <input type="hidden" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+            <input type="hidden" name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+      
             <div class="col-6">
                 <div>PR Id</div>
                 <div class="form-group">

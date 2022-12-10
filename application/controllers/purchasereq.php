@@ -182,9 +182,9 @@ class Purchasereq extends Controller
 		$activities = ArrayMethods::arrayMaps($activities, '_id');
 		
 		if (isset($groupBy)) {
-			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy);
 			// var_dump($purchasereq);
 			// die();
+			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy);
 		}
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
