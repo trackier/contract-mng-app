@@ -131,7 +131,9 @@ class Purchasereq extends Controller
 		$this->seo(["title" => "Report"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
+		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
 		$view = $this-> getActionView();
+		
 		$query['live'] = $this->request->get('live', 0);
 		if ($this->user->role == 'user') {
 			$query['users'] = ['$in' => [$this->user->_id]];
@@ -144,7 +146,6 @@ class Purchasereq extends Controller
 			if (isset($uiQuery['groupBy'])) {
 				$groupBy = array_keys($uiQuery['groupBy']);
 			}
-			
 			foreach (['requester_id', 'approver1_id', 'department', 'activity_id', 'pr_id'] as $key) {
 				if (isset($uiQuery[$key]) && $uiQuery[$key]) {
 					if ($key == 'name') {
@@ -158,6 +159,7 @@ class Purchasereq extends Controller
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
 		}
+		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
 		
 		if ($this->user->role == 'admin') {
 			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
@@ -186,6 +188,8 @@ class Purchasereq extends Controller
 		}
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
+		$view->set("start", $this->request->get('start'));
+		$view->set("end", $this->request->get('end'));
 		$view->set("requesters", $requesters??[]);
 		$view->set("departments", $departments??[]);
 		$view->set("activities", $activities??[]);

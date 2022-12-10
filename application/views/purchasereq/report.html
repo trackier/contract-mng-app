@@ -14,9 +14,23 @@
 		</div>
 
         <div>
+            
             {if $purchasereq && !$ifgroupBy}
+           
             <button   data-toggle="modal" data-target="#exampleModal" class=" bg-white filter-btn p-3 btn-demo"><i class="fa fa-filter"></i></button>
             <div class="card shadow mb-4">
+                <form method="get" class="datesubmit">
+                    <div style="width:100%">
+                        <div id="reportrange" class="form-group float-right daterangeinput" style="margin: 5px;">
+                            <div id="daterange" data-max-days="180" class="form-control">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                            <input type="hidden" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+                            <input type="hidden"  name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+                        </div>
+                    </div>
+                </form>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
@@ -120,6 +134,18 @@
             <div class="card-body">
 
                 <p class="card-text">No requests found</p>
+                <form method="get" class="datesubmit">
+                    <div style="width:100%">
+                        <div id="reportrange" class="form-group daterangeinput" style="margin: 5px;width:30%">
+                            <div id="daterange" data-max-days="180" class="form-control">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                            <input type="hidden" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+                            <input type="hidden"  name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+                        </div>
+                    </div>
+                </form>
                 <button   data-toggle="modal" data-target="#exampleModal" class="btn btn-demo">Modify Search</button>
 
             </div>
@@ -167,10 +193,38 @@ aria-hidden="true">
 
 
 </div>
+
 <script type="text/javascript">
 
 $(document).ready(function () {
     $('table.display').DataTable();
+    var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
+    var end = '$end' ? moment('$end') : moment();
+   
+    function cb(start, end) {
+        $('#start').attr('value', start.format('YYYY-MM-DD'));
+		$('#end').attr('value', end.format('YYYY-MM-DD'));
+        $('#reportrange span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+    }
+
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+        $(".datesubmit").submit();
+	});
+
+    cb(start, end);
+    
 });
     $('.open-denyrequest').on('click', function () {
         console.log($(this).data('id'))
