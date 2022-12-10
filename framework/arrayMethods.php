@@ -270,6 +270,19 @@ namespace Framework {
 			}
 			return $ans;
 		}
+		public static function arrayMaps($arr = [], $key = null) {
+			$ans = [];
+			foreach ($arr as $k => $value) {
+				if ($key) {
+					if ($value) {
+						$ans[$value->$key] = $value;
+					}
+				} else {
+					$ans[] = $k;
+				}
+			}
+			return $ans;
+		}
 
 		public static function assocArrayKeys($arr = [], $key = null) {
 			$ans = [];

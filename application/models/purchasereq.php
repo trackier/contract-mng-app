@@ -134,7 +134,30 @@ class Purchasereq extends \Shared\Model
    	* @type array
     */
     protected $_docInserted;
-
-   
-    
+	public static function groupBy($array, $groupBy) {
+		$carry = [];
+		//var_dump('group', $groupBy);
+		foreach ($groupBy as $group) {
+		//	var_dump('group', $group);
+			$groupbyVal = $group;
+			foreach($array as $key => $item) {
+				if(!isset($carry[$item->$groupbyVal])){ 
+					$carry[$item->$groupbyVal] = [$group=>$item->$groupbyVal,'amount'=>$item->amount, 'count' => 1]; 
+					foreach($groupBy as $group2) {
+						if (($item->$group2)) {
+							$carry[$item->$groupbyVal][$group2] = $item->$group2; 
+						}
+					}
+				} else { 
+					$carry[$item->$groupbyVal]['amount'] += $item->amount; 
+					$carry[$item->$groupbyVal]['count'] += 1; 
+				} 
+			}
+			break;
+			//var_dump('==', $carry);
+		}
+		//die();
+		return $carry; 
+	}
+	
 }

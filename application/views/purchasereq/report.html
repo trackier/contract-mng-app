@@ -12,100 +12,10 @@
 				
 			</div>
 		</div>
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Search </h6>
-            </div>
-            <form class="card-body" method="get">
-                <div class="form-row">
-                    <div class="form-group col-sm-2">PR Id</div>
-                    <div class="form-group col-sm-2">Status</div>
-                    <div class="form-group col-sm-2">Type</div>
-                    <div class="form-group col-sm-2">Vendor</div>
-                    <div class="form-group col-sm-2">Approver</div>
-                    <div class="form-group col-sm-2">Requester</div>
-                    <div class="form-group col-sm-2">Department</div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-sm-2">
-                        <input type="text" name="query[name]" class="form-control" value="{echo $query['name']}" placeholder = "Search asset name">
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
-                            <option value="">All</option>
-                            <option value="pending">Awaiting Approval</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="rejected by department">Rejected by department</option>
-                            <option value="processed">Processed</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" name="query[requester]" value="{echo $query['status'] ?? ''}">
-                            <option value="">All</option>
-                            <option value="pending">Awaiting Approval</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="rejected by department">Rejected by department</option>
-                            <option value="processed">Processed</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" name="query[approver]" value="{echo $query['status'] ?? ''}">
-                            <option value="">All</option>
-                            <option value="pending">Awaiting Approval</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="rejected by department">Rejected by department</option>
-                            <option value="processed">Processed</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" name="query[asset_type]" value="{echo $query['asset_type']}">
-                            <option value="">All</option>
-                            <option value="car">Car</option>
-                            <option value="laptop">Laptop</option>
-                            <option value="phone">Phone</option>
-                            <option value="ipad">Ipad</option>
-                            <option value="accessories">Accessories</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-sm-2">
-                        <select class="form-control" name="query[ven_id]" value="{echo $query['ven_id']}">
-                            <option value="">All</option>
-                            {foreach $v in $vendors}
-                            <option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <button type="submit" class="btn btn-outline-primary">
-                        <i class="fa fa-search"></i> Submit
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <form class="card-body" method="get">
-            <div class="form-row">
-                <div class="form-group col-2"> Select Status</div>
-                <div class="form-group col-2">
-                    <select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
-                        <option value="">All</option>
-                        <option value="pending">Awaiting Approval</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="rejected by department">Rejected by department</option>
-                        <option value="processed">Processed</option>
-                    </select>
-                </div>
-            </div>
-            
-        </form>
 
         <div>
-            {if $purchasereq }
+            {if $purchasereq && !$ifgroupBy}
+            <button   data-toggle="modal" data-target="#exampleModal" class=" bg-white filter-btn p-3 btn-demo"><i class="fa fa-filter"></i></button>
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -142,7 +52,7 @@
                                                 <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
                                             </td>
                                         {/if}
-                                        {if ($query['status'] == 'approved' || $query['status'] == 'rejected by department' || $query['status'] == '')}
+                                        {if ($query['status'] == 'approved' || $query['status'] == 'rejected by department' || $query['status'] == '' || $query['status'] == 'rejected')}
                                         <td>
                                             <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
                                         </td>
@@ -158,17 +68,82 @@
                     </div>
                 </div>
             </div>
-            {/if} {else}
+            {/if}
+            {elseif $purchasereq && $ifgroupBy}
+            <button   data-toggle="modal" data-target="#exampleModal" class=" bg-white filter-btn p-3 btn-demo"><i class="fa fa-filter"></i></button>
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    {foreach $group in $groupBy}
+                                    <th>{echo $group}</th> 
+                                    {/foreach}
+                                   
+                                    <th>Amount</th>
+                                    <th>Count</th>
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {foreach $obj in $purchasereq}
+                                    <tr data-id='{echo $obj->_id}'>
+                                        {foreach $group in $groupBy}
+                                            {if $group == 'department'}
+                                            <th>{echo $departments[$obj[$group]]->name}</th>
+                                            {/if} 
+                                            {elseif $group == 'activity_id'}
+                                            <th>{echo $activities[$obj[$group]]->name}</th>
+                                            {/elseif}
+                                            {elseif $group == 'requester_id'}
+                                            <th>{echo $requesters[$obj[$group]]->name}</th>
+                                            {/elseif}
+                                            {else}
+                                            <th>{echo $obj[$group]}</th>
+                                            {/else}
+                                             
+                                        {/foreach}
+                                         <td>₹ $obj[amount]</td>
+                                         <td>$obj[count]</td>
+                                    </tr>
+                                {/foreach}
+                            
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {/elseif}
+            {else}
             <div class="card-body">
+
                 <p class="card-text">No requests found</p>
+                <button   data-toggle="modal" data-target="#exampleModal" class="btn btn-demo">Modify Search</button>
+
             </div>
             {/else}
         </div>
 	</div>
 </div>
 
-{include purchasereq/filter/purchasereq.html}
+<div class="container demo">
+    <div class="modal left fade" id="exampleModal" tabindex="" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    {include purchasereq/filter/purchasereq.html}
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- container -->
 <div class="modal fade" id="rejectReason" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog" role="document">
@@ -204,4 +179,85 @@ $(document).ready(function () {
         $("#formId").attr('action', '/purchasereq/deny1/'+objId);
       //  $("#id").attr('href','/purchasereq/manage');
     })
-    </script>
+</script>
+
+<style>
+    .modal.left .modal-dialog {
+	position:fixed;
+	right: 0;
+	margin: auto;
+    height: 100%;
+	-webkit-transform: translate3d(0%, 0, 0);
+	-ms-transform: translate3d(0%, 0, 0);
+	-o-transform: translate3d(0%, 0, 0);
+	transform: translate3d(0%, 0, 0);
+}
+
+.modal.left .modal-content {
+	height: 100%;
+	overflow-y: auto;
+}
+
+.modal.right .modal-body {
+	padding: 15px 15px 80px;
+}
+
+.modal.right.fade .modal-dialog {
+	left: -320px;
+	-webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+	-moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+	-o-transition: opacity 0.3s linear, left 0.3s ease-out;
+	transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+.modal.right.fade.show .modal-dialog {
+	right: 0;
+}
+
+/* ----- MODAL STYLE ----- */
+.modal-content {
+	border-radius: 0;
+	border: none;
+}
+
+.modal-header {
+	border-bottom-color: #eeeeee;
+	background-color: #fafafa;
+}
+
+/* ----- v CAN BE DELETED v ----- */
+body {
+	background-color: #78909c;
+}
+
+.demo {
+	padding-top: 60px;
+	padding-bottom: 110px;
+}
+
+.btn-demo {
+	margin: 15px;
+	padding: 10px 15px;
+	border-radius: 0;
+	font-size: 16px;
+	background-color: #ffffff;
+}
+
+.btn-demo:focus {
+	outline: 0;
+}
+.filter-btn {
+    z-index: 1;
+    position: fixed;
+    top: 25%;
+    right: 0;
+    width: 55px;
+    height: 55px;
+    font-size: 20px;
+    padding: 0 !important;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border: none;
+    box-shadow: 0 0px 13px 0 rgb(21 27 38 / 15%) !important;
+}
+</style>

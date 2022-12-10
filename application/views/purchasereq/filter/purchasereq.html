@@ -1,1 +1,91 @@
-<div>Filter</div>
+<div>
+    <form class="card-body" method="get">
+        <h4 style="font-size: 22px;"><i class="fa fa-filter mr-2"></i> Search</h4>
+        <hr>
+        <div class="form row">
+            <div class="col-6">
+                <div>PR Id</div>
+                <div class="form-group">
+                    <input type="text" name="query[pr_id]" class="form-control" value="{echo $query['pr_id']}" placeholder = "Search PR Id">
+                </div>
+            </div>
+            <div class="col-6">
+                <div>Status</div>
+                <div class="form-group">
+                    <select class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+                        <option value="">All</option>
+                        <option value="pending">Awaiting Approval</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="rejected by department">Rejected by department</option>
+                        <option value="processed">Processed</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>Activity</div>
+                <div class="form-group">
+                   
+                    <select class="form-control" name="query[activity_id]" value="{echo $query['activity_id'] ?? ''}">
+                        <option value="">None</option>
+                        {foreach $activity in $activities }
+                            <option value="{echo $activity->_id}">{echo $activities[$activity->_id]->name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>Approver</div>
+                <div class="form-group">
+                    <select class="form-control" name="query[approver1_id]" value="{echo $query['approver1_id'] ?? ''}">
+                        <option value="">None</option>
+                        {foreach $approver in $approvers }
+                            <option value="{echo $approver->_id}">{echo $approvers[$approver->_id]->name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>Requester</div>
+                <div class="form-group">
+                    <select class="form-control" name="query[requester_id]" value="{echo $query['requester_id'] ?? ''}">
+                        <option value="">None</option>
+                        {foreach $requester in $requesters }
+                            <option value="{echo $requester->_id}">{echo $requesters[$requester->_id]->name}</option>
+                        {/foreach}
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>Department</div>
+                <div class="form-group">
+                    
+                    <select class="form-control" name="query[department]" value="{echo $query['department'] ?? ''}">
+                        <option value="">None</option>
+                    {foreach $department in $departments }
+                        <option value="{echo $department->_id}">{echo $departments[$department->_id]->name}</option>
+                    {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div>Group By</div>
+        <hr>
+        <input type="checkbox" name="query[groupBy][department]" style="margin-right:10px" {if $query[groupBy][department] == 'on'} checked="" {/if} >Department<br>
+        <input type="checkbox" name="query[groupBy][status]" style="margin-right:10px" {if $query[groupBy][status] == 'on'} checked="" {/if} >Status<br>
+        <input type="checkbox" name="query[groupBy][requester_id]" style="margin-right:10px" {if $query[groupBy][requester_id] == 'on'} checked="" {/if} >Requester<br>
+        <input type="checkbox" name="query[groupBy][activity_id]" style="margin-right:10px" {if $query[groupBy][activity_id] == 'on'} checked="" {/if} >Activity<br>
+
+
+        <div class="form-row" style="margin-top:10px">
+             <div class="col-sm-4">
+                <button type="submit" class="btn btn-outline-primary">
+                <i class="fa fa-search"></i> Submit
+                </button>
+            </div>
+        </div>
+
+       
+    </form>
+</div>

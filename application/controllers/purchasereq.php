@@ -1,7 +1,7 @@
 <?php
 
 use Shared\Controller as Controller;
-use Framework\Registry as Registry;
+use Framework\{Registry, TimeZone, ArrayMethods};
 use Shared\Services\Db;
 use Framework\RequestMethods as RequestMethods;
 class Purchasereq extends Controller
@@ -43,6 +43,9 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
+		$query = [];
+		
+
 	
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected by department']];
@@ -136,16 +139,60 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
+		$groupBy;
+		if ($uiQuery) {
+			if (isset($uiQuery['groupBy'])) {
+				$groupBy = array_keys($uiQuery['groupBy']);
+			}
+			
+			foreach (['requester_id', 'approver1_id', 'department', 'activity_id', 'pr_id'] as $key) {
+				if (isset($uiQuery[$key]) && $uiQuery[$key]) {
+					if ($key == 'name') {
+						$query[$key] = Db::convertType($uiQuery[$key], 'regex');
+					} else {
+						$query[$key] = $uiQuery[$key];
+					}
+				}
+			}
+		}
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
 		}
+		
 		if ($this->user->role == 'admin') {
 			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		}
 		
+		$requesterIds = ArrayMethods::arrayKeys($purchasereq, 'requester_id');
+		$requesters = User::selectAll(['_id' => ['$in' => $requesterIds]], [], ['maxTimeMS' => 5000 ]);
+		$requesters = ArrayMethods::arrayMaps($requesters, '_id');
+
+		$approverIds = ArrayMethods::arrayKeys($purchasereq, 'approver1_id');
+		$approvers = User::selectAll(['_id' => ['$in' => $approverIds]], [], ['maxTimeMS' => 5000 ]);
+		$approvers = ArrayMethods::arrayMaps($approvers, '_id');
+
+		$departmentIds = ArrayMethods::arrayKeys($purchasereq, 'department');
+		$departments = \Models\Department::selectAll(['_id' => ['$in' => $departmentIds]], [], ['maxTimeMS' => 5000 ]);
+		$departments = ArrayMethods::arrayMaps($departments, '_id');
+
+		$activityIds = ArrayMethods::arrayKeys($purchasereq, 'activity_id');
+		$activities = \Models\Activity::selectAll(['_id' => ['$in' => $activityIds]], [], ['maxTimeMS' => 5000 ]);
+		$activities = ArrayMethods::arrayMaps($activities, '_id');
+		
+		if (isset($groupBy)) {
+			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy);
+			// var_dump($purchasereq);
+			// die();
+		}
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
+		$view->set("requesters", $requesters??[]);
+		$view->set("departments", $departments??[]);
+		$view->set("activities", $activities??[]);
+		$view->set("approvers", $approvers??[]);
 		$view->set("query", $uiQuery ?? []);
+		$view->set("groupBy", $groupBy??[]);
+		$view->set("ifgroupBy", isset($groupBy));
 	}
 
 	/**
