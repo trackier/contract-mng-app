@@ -161,7 +161,7 @@ class Asset extends Shared\Controller {
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
-				foreach(['name', 'asset_type', 'status', 'ven_id', 'description', 'pur_date'] as $value) {
+				foreach(['name', 'asset_type', 'status', 'ven_id', 'description', 'pur_date', 'serialnum'] as $value) {
 					if (isset($data[$value])) {
 						$asset->$value = $data[$value];
 					}
@@ -172,7 +172,7 @@ class Asset extends Shared\Controller {
 						$files[] = $f[0];
 					}
 				}
-				$asset->docInserted = $files;
+				$asset->docInserted = $files ?? [];
 				$asset->save();
 				$view->set('message', ['type' => 'success', 'text' => 'Asset Edited successfully']);
 				
