@@ -218,4 +218,22 @@ class Users extends Controller
 			$this->redirect('/users/login');
 		}
 	}
+
+	/**
+	 * [PUBLIC] This function will show profile
+	 * @before _secure
+	 */
+	public function profile() {
+		$department = \Models\Department::first(['_id' => $this->user->department]);
+		//$department_id = $user->de
+		if (!$department) {
+			$this->_404();
+		}
+		$this->seo(["title" => "Profile"]); 
+		$view = $this->getActionView();
+		$view->set('department', $department);
+		// var_dump($department ?? []);
+		// die();
+
+	}
 }
