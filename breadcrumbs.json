@@ -50,6 +50,67 @@
 			"nav_links": [
 				{ "link": "/asset/manage.html", "html": "Show all assets", "permission": {"allowedUserTypes": ["admin"]} }
 			]
+		},
+        "contract.addContract": {
+			"nav_links": [
+				{ "link": "/contract/manage.html", "html": "Show all contracts", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "contract.manage": {
+			"nav_links": [
+				{ "link": "/contract/addContract.html", "html": "Add  Contract details", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "signingusers.manage": {
+			"nav_links": [
+				{ "link": "/signingusers/add.html", "html": "Add Signing users", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "signingusers.add": {
+			"nav_links": [
+				{ "link": "/signingusers/manage.html", "html": "Show All Signing Users", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "department.manage": {
+			"nav_links": [
+				{ "link": "/department/add.html", "html": "Add Department", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "department.add": {
+			"nav_links": [
+				{ "link": "/department/manage.html", "html": "Show All Departments", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "employee.add": {
+			"nav_links": [
+				{ "link": "/employee/manage.html", "html": "Show All Employees", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "employee.manage": {
+			"nav_links": [
+				{ "link": "/employee/add.html", "html": "Add Employee", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "activity.manage": {
+			"nav_links": [
+				{ "link": "/activity/add.html", "html": "Add Activity", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "activity.add": {
+			"nav_links": [
+				{ "link": "/activity/manage.html", "html": "Show all activities", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "vendr.add": {
+			"nav_links": [
+				{ "link": "/vendr/manage.html", "html": "Show all vendors", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "vendr.manage": {
+			"nav_links": [
+				{ "link": "/vendr/add.html", "html": "Add vendor details", "permission": {"allowedUserTypes": ["admin"]} }
+			]
 		}
+
     }
 }
