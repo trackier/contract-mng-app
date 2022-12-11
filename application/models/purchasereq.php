@@ -102,7 +102,7 @@ class Purchasereq extends \Shared\Model
 	 * @column
 	 * @readwrite
 	 * @index
-     * @type text
+     * @type array
 	 * @validate required
 	 */
 	protected $_amount;
@@ -140,20 +140,59 @@ class Purchasereq extends \Shared\Model
 			$groupbyVal = $group;
 			foreach($array as $key => $item) {
 				if(!isset($carry[$item->$groupbyVal])){ 
-					$carry[$item->$groupbyVal] = [$group=>$item->$groupbyVal, 'amount'=>$item->amount, 'count' => 1]; 
+					$carry[$item->$groupbyVal] = [$group=>$item->$groupbyVal, 'amount'=>[$item->_amount], 'count' => 1]; 
+					
 					foreach($groupBy as $group2) {
 						if (($item->$group2)) {
 							$carry[$item->$groupbyVal][$group2] = $item->$group2; 
 						}
 					}
 				} else { 
-					$carry[$item->$groupbyVal]['amount'] += $item->amount; 
+					$carry[$item->$groupbyVal]['amount'][] = $item->_amount; 
 					$carry[$item->$groupbyVal]['count'] += 1; 
 				} 
 			}
 			break;
 		}
 		return $carry; 
+	}
+
+	public static function getAmount($amountArr) {
+		$amountArr = $amountArr->_amount;
+		$amount;
+		$amountStr = '';
+		foreach ($amountArr as $key => $amt) {
+			if (!isset($amount[$key])) {
+				$amount[$key] =  $amt;
+			} else {
+				$amount[$key] = $amount[$key] +  $amt;
+			}
+		}
+		foreach ($amount as $key => $amt) {
+			$amountStr = $amountStr . $key .' '.  $amt . ' | ';
+		}
+		return $amountStr; 
+	}
+
+	public static function getAmountAll($amountArray) {
+		
+		$amountArray = $amountArray["amount"];
+		$amount = [];
+		$amountStr = '';
+		foreach ($amountArray as $amountArr) {
+			
+			foreach ($amountArr as $key => $amt) {
+				if (!isset($amount[$key])) {
+					$amount[$key] =  $amt;
+				} else {
+					$amount[$key] = $amount[$key] +  $amt;
+				}
+			}
+		}
+		foreach ($amount as $key => $amt) {
+			$amountStr = $amountStr . $key .' '.  $amt . ' | ';
+		}
+		return $amountStr; 
 	}
 	
 }

@@ -22,6 +22,7 @@
 										<tr>
 											<th style="font-weight: 400;">Name</th>
 											<th style="font-weight: 400;">Quantity</th>
+											<th style="font-weight: 400;">Currency</th>
 											<th style="font-weight: 400;">Estimate rate</th>
 											<th style="font-weight: 400;">Category</th>
 										
@@ -31,7 +32,13 @@
 										<tr  id="tbl">
 											<td><input class="form-control" id="name" type="text"   /></td>
 											<td><input class="form-control"  id="quantity" type="number" /></td> 
-											<td><input class="form-control"   id="erate" type="number"/></td>   
+											<td>
+												<select  class="form-control"  id="currency">
+													{include layouts/opts/currency.html}
+												</select>
+											</td>  
+											<td><input class="form-control"   id="erate" type="number"/></td> 
+											
 											<td><select class="form-control"  id="category"   required="">
 												{foreach $category in $categories}
 												<option value="{echo $category}">{echo $category}</option>
@@ -152,6 +159,7 @@ $('.add-row').on('click', function(e){
 		ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
 		ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
 		ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
+		ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
 		$("#table").append(ele);
 
 });
@@ -166,6 +174,8 @@ $(document).ready(()=>{
 	ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
 	ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
 	ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
+	ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
+
 	
 	$("#table").append(ele);
 		

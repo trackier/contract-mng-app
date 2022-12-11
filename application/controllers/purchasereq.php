@@ -142,6 +142,7 @@ class Purchasereq extends Controller
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
 		$groupBy;
+		
 		if ($uiQuery) {
 			if (isset($uiQuery['groupBy'])) {
 				$groupBy = array_keys($uiQuery['groupBy']);
@@ -186,6 +187,8 @@ class Purchasereq extends Controller
 			// die();
 			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy);
 		}
+		// var_dump($purchasereq);
+		// die();
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
 		$view->set("start", $this->request->get('start'));
@@ -231,12 +234,17 @@ class Purchasereq extends Controller
 			$total = 0;
 			$data = $this->request->post('data', []);
 			if (isset($data['items'])) {
+				$total = [];
 				foreach ($data['items'] as $value) {
 					if (!($value['erate'] && $value['quantity'])) {
 						$view->set('message', 'Check rate and quantity entered in items');
 						return;
 					}
-					$total = $total + $value['erate']* $value['quantity'];
+					if (!isset($total[$value['currency']])) {
+						$total[$value['currency']] = $value['erate'] * $value['quantity'];
+					} else {
+						$total[$value['currency']] = $total[$value['currency']] + $value['erate'] * $value['quantity'];
+					}
 				} 
 			} else {
 				$view->set('message', 'Check Items Not set');
@@ -263,6 +271,7 @@ class Purchasereq extends Controller
             $purchasereq->save();
 		
 			$view->set('message', 'Purchase Request Saved successfully');
+			$this->redirect('/purchasereq/view/'. $purchasereq->_id);
 			
 		}
 		
@@ -306,15 +315,27 @@ class Purchasereq extends Controller
 			$data = $this->request->post('data', []);
             $purchasereq->notes = $data['notes'];
             $purchasereq->items = $data['items'];
+			$total = [];
+			foreach ($data['items'] as $value) {
+				if (!($value['erate'] && $value['quantity'])) {
+					$view->set('message', 'Check rate and quantity entered in items');
+					return;
+				}
+				if (!isset($total[$value['currency']])) {
+					$total[$value['currency']] = $value['erate'] * $value['quantity'];
+				} else {
+					$total[$value['currency']] = $total[$value['currency']] + $value['erate'] * $value['quantity'];
+				}
+			} 
+			$purchasereq->amount = $total;
 			$purchasereq->docInserted = $files;
             $purchasereq->requester_id = $this->user->_id;
             $purchasereq->denialReason = "";
             $purchasereq->status = "pending";
 			$purchasereq->activity_id = $data['activity_id']??null;
             $purchasereq->save();
-		
 			$view->set('message', 'Purchase Request Edited successfully');
-			
+			$this->redirect('/purchasereq/view/'. $purchasereq->_id);
 		}
 		
 	}

@@ -41,7 +41,9 @@
                                    
                                      <div class="col-4" style="align-content: flex-end;">
                                         <div class="label">Estimated Amount </div> 
-                                        <div class="detail">₹ {echo $purchaseReqDetails->amount}</div> 
+                                        {script $total =  \Models\purchasereq::getAmount($purchaseReqDetails);}
+                                       
+                                        <div class="detail">{$total}</div> 
                                     </div>
                                     
                                    </div>
@@ -69,7 +71,7 @@
                                                 {echo $item['category']}
                                             </td>
                                             <td>
-                                                ₹ {echo $item['erate']}
+                                                {echo $item['currency']} {echo $item['erate']}
                                             </td>
                                         </tr>
     

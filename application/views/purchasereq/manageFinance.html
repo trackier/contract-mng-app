@@ -54,7 +54,9 @@
                                         <td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
                                         <td>{echo $obj->status}</td>
                                         <td>{echo $user2->name}</td>
-                                        <td>₹ $obj->amount</td>
+                                        <td> {script $total =  \Models\purchasereq::getAmount($obj);}
+                                            <div class="detail">{$total}</div>
+                                        </td>
                                         {if ($query['status'] == 'approved' || $query['status'] == 'pending')}
                                             <td>
                                                 <a href="/purchasereq/approve2/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 

@@ -36,7 +36,7 @@ public/assets/uploads/templates/e_template_*.html
 
 # Mail Config File
 application/configuration/mail.ini
-framework
+
 #node modules
 node_modules
 

@@ -1,0 +1,4 @@
+{script $currency = new Framework\Currency()}
+{foreach $map in $currency->getDefaultMap()}
+	<option value="{echo strtoupper($map_i)}">{echo $currency->getSymbolMap()[$map_i]} {echo strtoupper($map_i)}</option>
+{/foreach}

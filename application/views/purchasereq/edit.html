@@ -25,6 +25,7 @@
 									<tr>
 										<th>Name</th>
 										<th>Quantity</th>
+										<th>Currency</th>
 										<th>Estimate rate</th>
 										<th>Category</th>
 									</tr>
@@ -33,6 +34,11 @@
 									<tr  id="tbl">
 										<td><input class="form-control" id="name" type="text" /></td>
 										<td><input class="form-control"  id="quantity" type="number"/></td> 
+										<td>
+											<select  class="form-control"  id="currency">
+												{include layouts/opts/currency.html}
+											</select>
+										</td>  
 										<td><input class="form-control"   id="erate" type="number"/></td>   
 										<td><select class="form-control"  id="category"   required="">
 												
@@ -47,7 +53,13 @@
                                     <tr>{script $rand = rand(0,99)}
                                         <td><input class="form-control" id="name" type="text"  required=""  value="{echo $item['name']}" name = "data[items][{echo $rand }][name]"/></td>
 										<td><input class="form-control"  id="quantity"  required="" type="number" value="{echo $item['quantity']}" name = "data[items][{echo $rand }][quantity]" /></td> 
+										<td>
+											<select  class="form-control"  id="currency"   value="{echo $item['currency']}" name = "data[items][{echo $rand }][currency]">
+												{include layouts/opts/currency.html}
+											</select>
+										</td>  
 										<td><input class="form-control"   id="erate"  required="" type="number" value="{echo $item['erate']}" name = "data[items][{echo $rand }][erate]" /></td>   
+										
 										<td><select class="form-control"  id="category"   required=""  value="{echo $item['category']}" name = "data[items][{echo $rand }][category]">
 											{foreach $category in $categories}
 											<option value="{echo $category}">{echo $category}</option>
@@ -165,6 +177,7 @@ $('.add-row').on('click', function(e){
 		ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
 		ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
 		ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
+		ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
 		$("#table").append(ele);
 
 });
