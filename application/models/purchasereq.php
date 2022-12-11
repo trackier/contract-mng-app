@@ -134,7 +134,7 @@ class Purchasereq extends \Shared\Model
    	* @type array
     */
     protected $_docInserted;
-	public static function groupBy($array, $groupBy) {
+	public static function groupBy($array, $groupBy, $fields = []) {
 		$carry = [];
 		foreach ($groupBy as $group) {
 			$groupbyVal = $group;
@@ -142,11 +142,20 @@ class Purchasereq extends \Shared\Model
 				if(!isset($carry[$item->$groupbyVal])){ 
 					$carry[$item->$groupbyVal] = [$group=>$item->$groupbyVal, 'amount'=>[$item->_amount], 'count' => 1]; 
 					
+					
 					foreach($groupBy as $group2) {
 						if (($item->$group2)) {
 							$carry[$item->$groupbyVal][$group2] = $item->$group2; 
 						}
 					}
+					foreach($fields as $field) {
+						if (!isset($carry[$item->$groupbyVal][$field]) && ($field!='count') && ($field!='amount')) {
+							
+							$carry[$item->$groupbyVal][$field] = $item->$field; 
+							//var_dump($carry[$item->$groupbyVal][$field]);
+						}
+					}
+					
 				} else { 
 					$carry[$item->$groupbyVal]['amount'][] = $item->_amount; 
 					$carry[$item->$groupbyVal]['count'] += 1; 
@@ -157,7 +166,7 @@ class Purchasereq extends \Shared\Model
 		return $carry; 
 	}
 
-	public static function getAmount($amountArr) {
+	public static function getAmountSingle($amountArr) {
 		$amountArr = $amountArr->_amount;
 		$amount;
 		$amountStr = '';

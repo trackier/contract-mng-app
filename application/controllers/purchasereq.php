@@ -142,21 +142,28 @@ class Purchasereq extends Controller
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
 		$groupBy;
+		$fieldsArr;
 		
 		if ($uiQuery) {
 			if (isset($uiQuery['groupBy'])) {
 				$groupBy = array_keys($uiQuery['groupBy']);
 			}
+			if (isset($uiQuery['field'])) {
+				$fieldsArr = array_keys($uiQuery['field']);
+
+			}
 			foreach (['requester_id', 'approver1_id', 'department', 'activity_id', 'pr_id'] as $key) {
 				if (isset($uiQuery[$key]) && $uiQuery[$key]) {
-					if ($key == 'name') {
+					if ($key == 'pr_id') {
 						$query[$key] = Db::convertType($uiQuery[$key], 'regex');
 					} else {
 						$query[$key] = $uiQuery[$key];
 					}
 				}
 			}
+			
 		}
+		
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
 		}
@@ -185,7 +192,7 @@ class Purchasereq extends Controller
 		if (isset($groupBy)) {
 			// var_dump($purchasereq);
 			// die();
-			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy);
+			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy, isset($fieldsArr) ? $fieldsArr : [] );
 		}
 		// var_dump($purchasereq);
 		// die();
@@ -199,6 +206,7 @@ class Purchasereq extends Controller
 		$view->set("approvers", $approvers??[]);
 		$view->set("query", $uiQuery ?? []);
 		$view->set("groupBy", $groupBy??[]);
+		$view->set("fields", $fieldsArr??[]);
 		$view->set("ifgroupBy", isset($groupBy));
 	}
 

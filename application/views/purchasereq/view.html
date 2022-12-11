@@ -41,7 +41,7 @@
                                    
                                      <div class="col-4" style="align-content: flex-end;">
                                         <div class="label">Estimated Amount </div> 
-                                        {script $total =  \Models\purchasereq::getAmount($purchaseReqDetails);}
+                                        {script $total =  \Models\purchasereq::getAmountSingle($purchaseReqDetails);}
                                        
                                         <div class="detail">{$total}</div> 
                                     </div>

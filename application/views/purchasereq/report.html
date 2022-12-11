@@ -36,44 +36,52 @@
                         <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Requester</th>
-                                    <th>PR Id</th>
-                                    <th>Expected Date</th>
-                                    <th>Status</th>
-                                    <th>Approver</th>
-                                    <th>Amount</th>
-                                    <th>Action</th>
-                                
+                                    {foreach $field in $fields}
+                                        {if ($field == 'approver1_id')}
+                                            <th>Approver</th> 
+                                        {/if}
+                                        {else}
+                                            <th>{echo $field}</th> 
+                                        {/else}
+                                    {/foreach}
                                 </tr>
                             </thead>
                             <tbody>
                                 {foreach $obj in $purchasereq}
                                     <tr data-id='{echo $obj->_id}'>
-                                        {script $user = User::first(["_id" => $obj->requester_id], [], ['maxTimeMS' => 5000 ])}
-                                        {script $user2 = User::first(["_id" => $obj->approver1_id], [], ['maxTimeMS' => 5000 ])}
-                                        <td>{echo $user->name}<br>
-                                            Submitted On: {echo Framework\TimeZone::printDate($obj->submittedOn)}
-                                        </td>
-                                        <td>$obj->pr_id</td>
-                                        <td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
-                                        <td>{echo $obj->status}</td>
-                                        <td>{echo $user2->name}</td>
-                                        <td> {script $total =  \Models\purchasereq::getAmount($obj);}
-                                            <div class="detail">{$total}</div>
-                                        </td>
-                                        {if ($query['status'] == 'pending')}
-                                            <td>
-                                                <a href="/purchasereq/approve1/{echo $obj->_id}" class="btn btn-xs btn-outline-success delete"><i class="fa fa-tick"></i> Approve</a> 
-                                                <a  data-toggle="modal" data-target="#rejectReason"  data-id='{echo $obj->id}' class="btn btn-xs btn-outline-danger delete open-denyrequest"><i class="fa fa"></i> Deny</a>
-                                                <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
+                                        {foreach $group in $fields}
+                                            {if $group == 'department'}
+                                            <th>{echo $departments[$obj->$group]->name}</th>
+                                            {/if} 
+                                            {elseif $group == 'activity_id'}
+                                            <th>{echo $activities[$obj->$group]->name}</th>
+                                            {/elseif}
+                                            {elseif $group == 'requester_id'}
+                                            <th>{echo $requesters[$obj->$group]->name}</th>
+                                            {/elseif}
+                                            {elseif $group == 'approver1_id'}
+                                            <th>{echo $approvers[$obj->$group]->name}</th>
+                                            {/elseif}
+                                            
+                                            {elseif  $group == 'created'}
+                                            <td>{echo Framework\TimeZone::printDate($obj->$group)}</td>
+                                            {/elseif}
+                                            {elseif  $group == 'count'}
+                                            <td>1</td>
+                                            {/elseif}
+                                            {elseif $group == 'amount'}
+                                            <td> {script $total =  \Models\purchasereq::getAmountSingle($obj);}
+                                                <div class="detail">{$total}</div>
                                             </td>
-                                        {/if}
-                                        {if ($query['status'] == 'approved' || $query['status'] == 'rejected by department' || $query['status'] == '' || $query['status'] == 'rejected')}
-                                        <td>
-                                            <a class="btn btn-outline-primary"  href="/purchasereq/view/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px"></i>View</a>
-                                        </td>
-                                        {/if}
-                                        
+                                            {/elseif}
+                                            {else}
+                                            <th>{echo $obj->$group}</th>
+                                            {/else}
+                                           
+                                    {/foreach}
+
+
+                                      
                                         
                                     </tr>
                                 {/foreach}
@@ -106,19 +114,16 @@
                         <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    {foreach $group in $groupBy}
-                                    <th>{echo $group}</th> 
+                                    
+                                    {foreach $field in $fields}
+                                    <th>{echo $field}</th> 
                                     {/foreach}
-                                   
-                                    <th>Amount</th>
-                                    <th>Count</th>
-                                
                                 </tr>
                             </thead>
                             <tbody>
                                 {foreach $obj in $purchasereq}
                                     <tr data-id='{echo $obj->_id}'>
-                                        {foreach $group in $groupBy}
+                                        {foreach $group in $fields}
                                             {if $group == 'department'}
                                             <th>{echo $departments[$obj[$group]]->name}</th>
                                             {/if} 
@@ -128,15 +133,28 @@
                                             {elseif $group == 'requester_id'}
                                             <th>{echo $requesters[$obj[$group]]->name}</th>
                                             {/elseif}
+                                            {elseif $group == 'approver1_id'}
+                                            <th>{echo $approvers[$obj[$group]]->name}</th>
+                                            {/elseif}
+                                            
+                                            {elseif  $group == 'created'}
+                                            <td>{echo Framework\TimeZone::printDate($obj[$group])}</td>
+                                            {/elseif}
+                                            {elseif  $group == 'count'}
+                                            <td>$obj[count]</td>
+                                            {/elseif}
+                                            {elseif $group == 'amount'}
+                                            <td> {script $total =  \Models\purchasereq::getAmountAll($obj);}
+                                                <div class="detail">{$total}</div>
+                                            </td>
+                                            {/elseif}
                                             {else}
                                             <th>{echo $obj[$group]}</th>
                                             {/else}
                                              
                                         {/foreach}
-                                        <td> {script $total =  \Models\purchasereq::getAmountAll($obj);}
-                                            <div class="detail">{$total}</div>
-                                        </td>
-                                         <td>$obj[count]</td>
+                                       
+                                        
                                     </tr>
                                 {/foreach}
                             
