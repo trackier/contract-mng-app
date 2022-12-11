@@ -1,0 +1,55 @@
+{
+	"pages": {
+		"purchasereq.report": {
+			"nav_links": [
+				{ "link": "/purchasereq/add.html", "html": "Add Purchase Request", "permission": {"resource": "automation", "level": "VIEW", "allowedUserTypes": ["admin", "user"]} }
+			]
+		},
+       
+        "purchasereq.view": {
+			"nav_links": [
+				{ "link": "/purchasereq/add.html", "html": "Add Purchase Request", "permission": {"allowedUserTypes": ["admin", "user"]} }
+			]
+		},
+        "purchasereq.viewall": {
+			"nav_links": [
+				{ "link": "/purchasereq/add.html", "html": "Add Purchase Request", "permission": {"allowedUserTypes": ["admin", "user"]} }
+			]
+		},
+        "purchasereq.add": {
+			"nav_links": [
+				{ "link": "/purchasereq/viewall.html", "html": "Show My Purchase Requests", "permission": {"allowedUserTypes": ["admin", "user"]} }
+			]
+		},
+        "assigned.add": {
+			"nav_links": [
+				{ "link": "/assigned/manage.html", "html": "Show All Assigned", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "assigned.edit": {
+			"nav_links": [
+				{ "link": "/assigned/manage.html", "html": "Show All Assigned", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "assigned.manage": {
+			"nav_links": [
+				{ "link": "/assigned/add.html", "html": "Add Assigned Asset details", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "asset.manage": {
+			"nav_links": [
+				{ "link": "/asset/add.html", "html": "Add  Asset details", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "asset.add": {
+			"nav_links": [
+				{ "link": "/asset/manage.html", "html": "Show all assets", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		},
+        "asset.edit": {
+			"nav_links": [
+				{ "link": "/asset/manage.html", "html": "Show all assets", "permission": {"allowedUserTypes": ["admin"]} }
+			]
+		}
+    }
+}

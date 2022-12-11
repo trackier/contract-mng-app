@@ -190,12 +190,8 @@ class Purchasereq extends Controller
 		$activities = ArrayMethods::arrayMaps($activities, '_id');
 		
 		if (isset($groupBy)) {
-			// var_dump($purchasereq);
-			// die();
 			$purchasereq = \Models\Purchasereq::groupBy($purchasereq, $groupBy, isset($fieldsArr) ? $fieldsArr : [] );
 		}
-		// var_dump($purchasereq);
-		// die();
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
 		$view->set("start", $this->request->get('start'));
@@ -206,7 +202,7 @@ class Purchasereq extends Controller
 		$view->set("approvers", $approvers??[]);
 		$view->set("query", $uiQuery ?? []);
 		$view->set("groupBy", $groupBy??[]);
-		$view->set("fields", $fieldsArr??[]);
+		$view->set("fields", $fieldsArr??['requester_id', 'approver1_id', 'department', 'activity_id', 'pr_id']);
 		$view->set("ifgroupBy", isset($groupBy));
 	}
 

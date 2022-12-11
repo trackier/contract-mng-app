@@ -183,6 +183,51 @@ namespace Shared {
             parent::__destruct();
         }
 
+        protected function getBreadcrumbs() {
+			$key = APP_PATH . "BREADCRUMBS"; // /var/www/qa_evnBREADCRUMBS /var/www/webappBREADCRUMBS
+			$json = Utils::getCache($key);
+			if (is_null($json)) {
+				$filePath = APP_PATH . "/breadcrumbs.json";
+				$json = json_decode(file_get_contents($filePath), true);
+				Utils::setCache($key, $json, 60);
+			}
+			return $json;
+		}
+
+		protected function setBreadcrumbs($seo) {
+			$breadcrumbs = $this->getBreadcrumbs();
+			$router = Registry::get('router');
+			$controller = Registry::get('controller');
+			if (!$this->layoutView) {
+				return;
+			}
+           $fallbackBrc = [['title' => $seo ? $seo->getTitle() : 'Dashboard', 'active' => true]];
+			$this->layoutView->set("breadcrumbs", $fallbackBrc);
+           
+			
+			if ($router && $controller) {
+				$key = sprintf('%s.%s', strtolower(get_class($controller)), $router->action);
+				$bdc = $breadcrumbs['pages'][$key]['breadcrumbs'] ?? $fallbackBrc;
+				$navLinks = $breadcrumbs['pages'][$key]['nav_links'] ?? [];
+				$showOption = false;
+				foreach ($navLinks as $nv) {
+					$allowedUserTypes = $nv['permission']['allowedUserTypes'] ?? [];
+					if ($allowedUserTypes && !in_array($this->user->role, $allowedUserTypes)) {
+						continue;
+					}
+                    $showOption = true;
+					break;
+				}
+				$this->layoutView->set("breadcrumbs", $bdc);
+                $this->layoutView->set('_navLinks', $navLinks);
+				
+			}
+			if ($this->actionView) {
+				$this->layoutView->set('brcMacroMap', array_merge([
+					'{title}' => $seo ? $seo->getTitle() : 'Dashboard'
+				], $this->actionView->get('_brcMacroMap', [])));
+			}
+        }
         /**
          * Checks whether the user is set and then assign it to both the layout and action views.
          */
@@ -190,6 +235,14 @@ namespace Shared {
             /* if the user and view(s) are defined, 
              * assign the user session to the view(s)
              */
+            $view = $this->layoutView;
+			$seo = $view->get('seo');
+			if ($view && !$seo) {
+				$seo = \Framework\Registry::get("seo");
+				$view->set('seo', $seo);
+			}
+            $this->setBreadcrumbs($seo);
+           // die();
             if ($this->user) {
                 if ($this->actionView) {
                     $key = "user";

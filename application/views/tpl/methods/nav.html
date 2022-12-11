@@ -1,0 +1,6 @@
+{macro printBrcHtml($html, $brcMacroMap)}
+	{foreach $v in $brcMacroMap}
+		{script $html = str_replace($v_i, $v, $html)}
+	{/foreach}
+	{script return $html}
+{/macro}
