@@ -14,7 +14,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Select Asset</label>
 							<div class="col-sm-9 col-md-6">
-								<select name="data[asset_id]" value="{echo $assigned->asset_id}" class="form-control selectpicker user-select">
+								<select name="data[asset_id]" value="{echo $assigned->asset_id}" class="form-control user-select">
 									{foreach $a in $assets}
 									<option value="{echo $a->_id}">({echo $a->name}) {echo $a->asset_type}</option>
 									{/foreach}
@@ -24,7 +24,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Select employee</label>
 							<div class="col-sm-9 col-md-6">
-								<select name="data[emp_id]" value="{echo $assigned->emp_id}" class="form-control selectpicker user-select">
+								<select name="data[emp_id]" value="{echo $assigned->emp_id}" class="form-control user-select" disabled>
 									{foreach $e in $employees}
 									<option value="{echo $e->_id}">{echo $e->name}</option>
 									{/foreach}

@@ -12,6 +12,12 @@
 							</div>
 						</div>
 						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">Serial Number</label>
+							<div class="col-sm-9 col-md-6">
+								<input type="text" name="data[serialnum]" class="form-control" required="" placeholder="Enter Serial Number">
+							</div>
+						</div>
+						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Purchase Date</label>
 							<div class="col-sm-9 col-md-6">
 								<input class="form-control" name="data[pur_date]" value="" type="date" placeholder="Select date" required="">
@@ -29,16 +35,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Status</label>
-							<div class="col-sm-9 col-md-6">
-								<select name="data[status]" class="form-control" required="" placeholder="Choose a asset status">
-									<option value="assigned">Assigned</option>
-									<option value="available">Available</option>
-									<option value="discarded">Discarded</option>
-								</select>
-							</div>
-						</div>
+						
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Select vendor</label>
 							<div class="col-sm-9 col-md-6">
@@ -56,6 +53,26 @@
 								<span class="help-block text-danger">{echo Shared\Markup::errors($errors, "description")}</span>
 							</div>
 						</div>
+						<div>
+							<p>Select files to upload:
+								<input type="file" class="upload__input" name="files[]" multiple><br><br>
+							</p>
+							
+							{foreach $doc in  $files }
+							<table >
+								<td style="padding-right: 20px;width:300px">
+									{echo $doc->filename}
+								</td>
+								<td style="padding-right: 20px;">
+									<a   data-toggle="modal" data-target="#fileDelModal"  data-id='{echo $contractDetails->id}' data-fileid='{echo $doc->fileId}' class="open-fileDelModal btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+								</td>
+								<td>
+									<a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+								</td>
+							</table>
+							{/foreach}
+						</div>
+					
 						<div class="form-group">
 							<button type="submit" class="btn btn-rounded btn-primary"><i class="fa fa-check"></i> Submit</button>
 						</div>

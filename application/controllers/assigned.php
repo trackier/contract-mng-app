@@ -14,7 +14,7 @@ class Assigned extends Shared\Controller {
 	public function add(){
 		$this->seo(["title" => "Add Assigned Details"]); 
         $view = $this->getActionView();
-        $query = ['user_id' => $this->user->_id];
+        $query = ['status' => 'available'];
         $employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
         $assets = \Models\Asset::selectAll($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
@@ -26,6 +26,14 @@ class Assigned extends Shared\Controller {
 				$data = array_merge($data, ['user_id' => $this->user->_id]);
 				$assigned = new \Models\Assigned($data);
 				$assigned->save();
+				$asset = \Models\Asset::first(["id" => $assigned->asset_id]);
+				//add asset History
+				$asset->status = 'assigned';
+				$assetHistory = [];
+				$assetHistory = $asset->history;
+				$assetHistory[$assigned->emp_id] = ["user_id" => $assigned->emp_id, "assign_date" => Framework\TimeZone::printDate($assigned->assign_date), "handover_date" => Framework\TimeZone::printDate($assigned->handover_date)];
+				$asset->history = $assetHistory;
+				$asset->save();
 				\Shared\Utils::flashMsg(['type' => 'success', 'text' => 'Assigned Added successfully']);
 				$this->redirect('/assigned/manage');
 				
@@ -48,7 +56,6 @@ class Assigned extends Shared\Controller {
 		$this->seo(["title" => "Manage Assigned"]); 
 		$view = $this->getActionView();
 		$query = [];
-       // $query = ['user_id' => $this->user->_id];
 		$uiQuery = $this->request->get("query", []);
 		if ($uiQuery) {
 			foreach (['asset_id', 'emp_id'] as $key) {
@@ -72,7 +79,6 @@ class Assigned extends Shared\Controller {
             $assets = \Models\Asset::selectAll(['_id' => ['$in' => $assetIds]], ['_id', 'name', 'asset_type'], ['maxTimeMS' => 5000]);
         }
         $total = $count = \Models\Assigned::count($query);
-	
 		$view->set([
 			'assigneds' => $assigneds ?? [],
             'assets' => $assets ?? [],
@@ -114,9 +120,8 @@ class Assigned extends Shared\Controller {
 		if (!$id) {
 			$this->_404();
 		}
-        $query = ['user_id' => $this->user->_id];
-        $employees = \Models\Employee::cacheAllv2([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-        $assets = \Models\Asset::cacheAllv2($query, [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $employees = User::cacheAllv2([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assets = \Models\Asset::cacheAllv2([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		$assigned = \Models\Assigned::findById($id);
 		if (!$assigned) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Assigned found!']);
@@ -130,6 +135,20 @@ class Assigned extends Shared\Controller {
 					}
 				}
 				$assigned->save();
+				$asset = \Models\Asset::first(["id" => $assigned->asset_id]);
+				$handoverDate = $assigned->handover_date;
+				if (strtotime(Framework\TimeZone::printDate($handoverDate)) > time()) {
+					$asset->status = 'assigned';
+				} else {
+					$asset->status = 'available';
+				}
+				$assetHistory = [];
+				$assetHistory = $asset->history;
+				$assetHistory[$assigned->emp_id] = ["user_id" => $assigned->emp_id, "assign_date" => Framework\TimeZone::printDate($assigned->assign_date), "handover_date" => Framework\TimeZone::printDate($assigned->handover_date)];
+				$asset->history = $assetHistory;
+				$asset->save();
+				//if (date_diff() $assigned->handover_date)
+				
 				$view->set('message', ['type' => 'success', 'text' => 'Assigned Edited successfully']);
 				
 			}

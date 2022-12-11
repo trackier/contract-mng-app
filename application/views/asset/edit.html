@@ -10,67 +10,132 @@
 						</div>
 						{echo Shared\Markup::message($message ?? null)}
 					</div>
-				
 				</div>
-				<form method="post" action="" enctype="multipart/form-data">
-					<div class="card card-body m-b-20">
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Asset Name</label>
-							<div class="col-sm-9 col-md-6">
-								<input type="text" name="data[name]" value="{echo $asset->name}" class="form-control"  placeholder="Enter asset name">
+				<div class="row">
+					<div class="col-8">
+						<form method="post" action="" enctype="multipart/form-data">
+							<div class="card card-body">
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Asset Name</label>
+									<div class="col-sm-9 col-md-6">
+										<input type="text" name="data[name]" value="{echo $asset->name}" class="form-control"  placeholder="Enter asset name">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Serial Number</label>
+									<div class="col-sm-9 col-md-6">
+										<input type="text" name="data[serialnum]" value="{echo $asset->serialnum}" class="form-control"  placeholder="Serial Number">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Purchase Date</label>
+									<div class="col-sm-9 col-md-6">
+										<input class="form-control" value="{echo $asset->pur_date->format('Y-m-d')}" name="data[pur_date]" type="date" placeholder="Select date" >
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Asset type</label>
+									<div class="col-sm-9 col-md-6">
+										<select name="data[asset_type]" class="form-control"  value="{echo $asset->asset_type}"placeholder="Choose a asset type">
+											<option value="car">Car</option>
+											<option value="laptop">Laptop</option>
+											<option value="phone">Phone</option>
+											<option value="ipad">Ipad</option>
+											<option value="accessories">Accessories</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Status</label>
+									<div class="col-sm-9 col-md-6">
+										<select name="data[status]" class="form-control" value="{echo $asset->status}" placeholder="Choose a asset status">
+											<option value="assigned">Assigned</option>
+											<option value="available">Available</option>
+											<option value="discarded">Discarded</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Select vendor</label>
+									<div class="col-sm-9 col-md-6">
+										<select name="data[ven_id]"  value="{echo $asset->ven_id}" class="form-control selectpicker user-select" >
+											{foreach $v in $vendors}
+											<option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">Description</label>
+									<div class="col-sm-9 col-md-6">
+										<textarea class="form-control summernote" name="data[description]" value="{echo $asset->description}" rows="4">{echo $meta['description']}</textarea>
+										<span class="help-block text-danger">{echo Shared\Markup::errors($errors, "description")}</span>
+									</div>
+								</div>
+								<p>Select files to upload:
+									<input type="file" class="upload__input" name="files[]" multiple><br><br>
+								</p>
+								
+								{foreach $doc in  $files }
+								<table >
+									<td style="padding-right: 20px;width:300px">
+										{echo $doc->filename}
+									</td>
+									<td style="padding-right: 20px;">
+										<a   data-toggle="modal" data-target="#fileDelModal"  data-id='{echo $asset->id}' data-fileid='{echo $doc->fileId}' class="open-fileDelModal btn btn-xs btn-outline-warning">Delete <i class="fa fa-trash"></i></a>
+									</td>
+									<td>
+										<a  href="/contract/downloadFile/{$doc->fileId}" class="btn btn-xs btn-outline-warning">Download <i class="fa fa-download"></i></a>
+									</td>
+								</table>
+								
+							</br>
+								{/foreach}
+								<div class="form-group">
+									<button type="submit" class="btn btn-rounded btn-primary"><i class="fa fa-check"></i> Save</button>
+								</div>
 							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Purchase Date</label>
-							<div class="col-sm-9 col-md-6">
-								<input class="form-control" value="{echo $asset->pur_date->format('Y-m-d')}" name="data[pur_date]" type="date" placeholder="Select date" >
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Asset type</label>
-							<div class="col-sm-9 col-md-6">
-								<select name="data[asset_type]" class="form-control"  value="{echo $asset->asset_type}"placeholder="Choose a asset type">
-									<option value="car">Car</option>
-									<option value="laptop">Laptop</option>
-									<option value="phone">Phone</option>
-									<option value="ipad">Ipad</option>
-									<option value="accessories">Accessories</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Status</label>
-							<div class="col-sm-9 col-md-6">
-								<select name="data[status]" class="form-control" value="{echo $asset->status}" placeholder="Choose a asset status">
-									<option value="assigned">Assigned</option>
-									<option value="available">Available</option>
-									<option value="discarded">Discarded</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Select vendor</label>
-							<div class="col-sm-9 col-md-6">
-								<select name="data[ven_id]"  value="{echo $asset->ven_id}" class="form-control selectpicker user-select" >
-									{foreach $v in $vendors}
-									<option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
-									{/foreach}
-								</select>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">Description</label>
-							<div class="col-sm-9 col-md-6">
-								<textarea class="form-control summernote" name="data[description]" value="{echo $asset->description}" rows="4">{echo $meta['description']}</textarea>
-								<span class="help-block text-danger">{echo Shared\Markup::errors($errors, "description")}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<button type="submit" class="btn btn-rounded btn-primary"><i class="fa fa-check"></i> Save</button>
-						</div>
+						</form>
 					</div>
-				</form>
+					<div class="col-4">
+						<div style="background-color:rgb(238 243 255);padding:10px">
+							{foreach $obj in $asset->history}
+								{echo $users[$obj['user_id']]->name . ' was assigned asset on ' . $obj['assign_date'] . ' and handed over on ' . $obj['handover_date']  } <br><br>
+							{/foreach}
+						</div>
+
+					</div>
+
+				</div>
+			
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="fileDelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Remove file?</h5>
+			<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">×</span>
+			</button>
+		</div>
+		<div class="modal-body">Do you want to remove file? Once removed file will be deleted from system in a week  </div>
+		<div class="modal-footer">
+			<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+			<a class="btn btn-primary" id="fileId">Remove</a>
+		</div>
+	</div>
+</div>
+</div>
+
+<script type="text/javascript">
+	$('.open-fileDelModal').on('click', function () {
+		var assetId = $(this).data('id');
+		var fileId = $(this).data('fileid');
+		$("#fileId").attr('href','/asset/deleteFile/'+fileId+'/'+assetId);
+	})
+</script>

@@ -18,7 +18,8 @@ class Asset extends Shared\Controller {
 	public function add(){
 		$this->seo(["title" => "Add Asset Details"]); 
 		$view = $this->getActionView();
-        $vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$files = [];
+        $vendors = \Models\vendor::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -26,7 +27,12 @@ class Asset extends Shared\Controller {
 					throw new Exception("wrong asset type selected");
 				}
 				$data = array_merge($data, ['user_id' => $this->user->_id]);
+				if (isset($_FILES['files'])) {
+					$files = $this->fileUpload($_FILES);
+				}
 				$asset = new Models\Asset($data);
+				$asset->status = 'available';
+				$asset->docInserted = $files;
 				$asset->save();
 				\Shared\Utils::flashMsg(['type' => 'success', 'text' => 'Asset Added successfully']);
 				$this->redirect('/asset/manage');
@@ -39,6 +45,38 @@ class Asset extends Shared\Controller {
 			'vendors' => $vendors ?? []
 		]);
 	}
+
+	/**
+	 * [PRIVATE] This function will upload files to uploads location.
+	 * @param $files
+	 * @author Bhumika <bhumika@trackier.com>
+	 * @return $filesUploaded
+	 */
+	private function fileUpload($files) {
+		$upload_dir = APP_PATH.'/public/uploads'.DIRECTORY_SEPARATOR;
+		$filesUploaded = [];
+		if(!empty(array_filter($files['files']['name']))) {
+			foreach ($files['files']['tmp_name'] as $key => $value) {
+				$file_tmpname = $files['files']['tmp_name'][$key];
+				$uniqueId =  uniqid();
+				$file_name = $uniqueId.'.'. pathinfo($files['files']['name'][$key], PATHINFO_EXTENSION);
+				$file_size = $files['files']['size'][$key];
+				$file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+				$filepath = $upload_dir.$file_name;
+				if (move_uploaded_file($file_tmpname, $filepath)) {
+					$contractfiles = new ContractFile([
+						'filename' => $files['files']['name'][$key],
+						'status' => 'Active',
+						'fileId' => $uniqueId
+					]);
+					$contractfiles->save();
+					$filesUploaded[] = $uniqueId ;
+				}
+			}
+		}
+		return $filesUploaded;
+	}
+
 
 	/**
 	 * @before _secure
@@ -107,10 +145,19 @@ class Asset extends Shared\Controller {
 			$this->_404();
 		}
 		$asset = Models\Asset::findById($id);
-		$vendors = Models\vendor::cacheAllv2(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$users = User::cacheAllv2([], [], ['maxTimeMS' => 5000]);
+		$users = ArrayMethods::arrayMaps($users, '_id');
+		$vendors = Models\vendor::cacheAllv2([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		if (!$asset) {
 			return $view->set('message', ['type' => 'error', 'text' => 'No Asset found!']);
 		}
+		if ($asset->docInserted) {
+            $filesUploaded = ContractFile::selectAll(['fileId'=>['$in' => $asset->docInserted]], ['filename','fileId'], ['maxTimeMS' => 5000 ]);
+            foreach ($asset->docInserted as $doc) {
+                $files[] = $doc;
+            }
+            $view->set("files", $filesUploaded);
+        }
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -119,6 +166,13 @@ class Asset extends Shared\Controller {
 						$asset->$value = $data[$value];
 					}
 				}
+				if (isset($_FILES['files'])) {
+					$f =  $this->fileUpload($_FILES);
+					if(count($f)> 0) {
+						$files[] = $f[0];
+					}
+				}
+				$asset->docInserted = $files;
 				$asset->save();
 				$view->set('message', ['type' => 'success', 'text' => 'Asset Edited successfully']);
 				
@@ -128,7 +182,36 @@ class Asset extends Shared\Controller {
 		}
         $view->set([
             'asset' => $asset ?? [],
-			'vendors' => $vendors ?? []
+			'vendors' => $vendors ?? [],
+			'users' => $users ?? []
 		]);
+	}
+
+	/**
+	 * [PUBLIC] This function will schedule file deletion after 3 days  based on file Id and contract Id provided  .
+	 * @param $id
+	 * @param $contractId
+	 * @author Bhumika <bhumika@trackier.com>
+	 * @before _secure
+	 */
+	public function deleteFile($id, $assetId) {
+		$query['id'] = $assetId;
+		$assetDetails = \Models\Asset::first($query, [], ['maxTimeMS' => 5000 ]);
+		$fileDetails = ContractFile::first(['fileId' => $id], [], ['maxTimeMS' => 5000 ]);
+		
+		$fileDetails->status = 'Deleted';
+		$fileDetails->dueDelDate = date("Y/m/d", strtotime('+3 days'));
+		$fileDetails->save();
+		$docs = $assetDetails->docInserted;
+		$newDocs = [];
+		foreach ($docs as $doc) {
+			if ($doc!=$id) {
+				$newDocs[] = $doc;
+			}
+		}
+		$assetDetails->docInserted = $newDocs  ;
+		$assetDetails->save();
+		$subject = 'File Deletion';
+		header("Location: /asset/edit/".$assetId);
 	}
 }

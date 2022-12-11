@@ -73,4 +73,25 @@ class Asset extends \Shared\Model {
 	 * @value assigned, available, discarded 
 	 */
 	protected $_status;
+
+	 /**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 */
+	protected $_serialnum;
+
+	/**
+    * @column
+    * @readwrite
+   	* @type array
+    */
+    protected $_docInserted;
+
+	/**
+    * @column
+    * @readwrite
+   	* @type array
+    */
+    protected $_history;
 }
