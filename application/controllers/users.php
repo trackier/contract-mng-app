@@ -155,7 +155,7 @@ class Users extends Controller
 		$phone = $this->request->jsonKey('phone');
 		$department = $this->request->jsonKey('department');
 		if (!$fname || !$zoho_id || !$email || ! $department) {
-			var_dump(["success"=>true, "msg" => "One of Name, Department or zoho_id missing"]);
+			var_dump(["success"=>true, "msg" => "One of Name, Department, Email or zoho_id missing"]);
 			die();
 		}
 		$depId= null;
