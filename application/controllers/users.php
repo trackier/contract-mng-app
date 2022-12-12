@@ -142,12 +142,22 @@ class Users extends Controller
 		header( "Location: $authUrl" );
 	}
 
+	/**
+	 * THIS API is called through Zoho and updates user
+	 */
 	public function addUser() {
-		$name = $this->request->jsonKey('name');
+		$fname = $this->request->jsonKey('first_name');
+		$lname = $this->request->jsonKey('last_name');
+		$zoho_id = $this->request->jsonKey('zoho_id');
 		$emp_id = $this->request->jsonKey('emp_id');
 		$email = $this->request->jsonKey('email');
+		$status = $this->request->jsonKey('status');
 		$phone = $this->request->jsonKey('phone');
 		$department = $this->request->jsonKey('department');
+		if (!$fname || !$zoho_id || !$email || ! $department) {
+			var_dump(["success"=>true, "msg" => "One of Name, Department or zoho_id missing"]);
+			die();
+		}
 		$depId= null;
 		$user = User::first(["email" => $email]);
 		$departmentfetch = \Models\department::first(["name" => $department], ["_id", "name"], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
@@ -159,10 +169,12 @@ class Users extends Controller
 		} else { 
 			$depId = $departmentfetch->_id;
 		}
-		$dataUser = ["name" => $name, "emp_id" => $emp_id, "email" => $email, "phone" => $phone, "department" => $depId, "role" => "user","password" => "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3" ] ;
+		$dataUser = ["name" => $fname.' '.$lname, "emp_id" => $emp_id,"zoho_id" =>$zoho_id, "status" => $status,  "email" => $email, "phone" => $phone, "department" => $depId, "role" => "user","password" => "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3" ] ;
 		if (isset($user)) {
-			$user->name = $name;
+			$user->name =  $fname.' '.$lname;
 			$user->emp_id = $emp_id;
+			$user->zoho_id = $zoho_id;
+			$user->status = $status;
 			$user->phone = $phone;
 			$user->department = $depId;
 			$user->save();
@@ -225,15 +237,11 @@ class Users extends Controller
 	 */
 	public function profile() {
 		$department = \Models\Department::first(['_id' => $this->user->department]);
-		//$department_id = $user->de
 		if (!$department) {
 			$this->_404();
 		}
 		$this->seo(["title" => "Profile"]); 
 		$view = $this->getActionView();
 		$view->set('department', $department);
-		// var_dump($department ?? []);
-		// die();
-
 	}
 }

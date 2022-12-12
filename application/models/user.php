@@ -27,9 +27,27 @@ class User extends Shared\Model
 	 * @readwrite
 	 * @type text
 	 *
+	 * 
+	 */
+	protected $_status;
+
+	/**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 *
 	 * @label Employee Id
 	 */
 	protected $_emp_id;
+
+	/**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 *
+	 * @label ZOHO Id
+	 */
+	protected $_zoho_id;
 
 	/**
 	 * @column
