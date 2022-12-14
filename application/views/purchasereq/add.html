@@ -3,7 +3,6 @@
 	<div class="container-fluid" >
 		<div class="row" style="margin-bottom: 10px;">
 			<div class="col-10">
-				
 				{echo Shared\Markup::message($message ?? null)}
 			</div>
 			
@@ -13,7 +12,7 @@
 				<div class="card">
 					<div class="card-body" style = "width: 100%;">
 						<form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
-							<input  class="btn btn-primary add-row" style="width: 250px"  value="Add Purchase Request Items" />
+							<input   type="button" class="btn btn-primary add-row" value="+" style="width:50px" />
 							<div  style="margin-top: 20px;margin-bottom: 20px;">
 								<table  name="data[details]" id="table">
 									<thead >
@@ -23,12 +22,13 @@
 											<th style="font-weight: 400;">Currency</th>
 											<th style="font-weight: 400;">Estimate rate</th>
 											<th style="font-weight: 400;">Category</th>
+											<th style="font-weight: 400;"></th>
 										
 										</tr>
 									</thead>
 									<tbody>
-										<tr  id="tbl">
-											<td><input class="form-control" id="name" type="text"   /></td>
+										<tr id="tbl">
+											<td><input class="form-control" id="name" type="text"/></td>
 											<td><input class="form-control"  id="quantity" type="number" /></td> 
 											<td>
 												<select  class="form-control"  id="currency">
@@ -42,6 +42,7 @@
 												<option value="{echo $category}">{echo $category}</option>
 												{/foreach}
 											</select></td>   
+											<td><input type="button" id="remove" class="btn btn-primary remove-row"  value="-" style="width:50px"/></td>
 										</tr>
 									</tbody>
 								
@@ -147,10 +148,12 @@ $('.open-fileDelModal').on('click', function () {
 
 $('.add-row').on('click', function(e){
 	
-	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length + 1;
+	var filterCount = Math.floor(Math.random()*90000) + 10000;
 		var ele = $("#tbl").clone();
 		ele.css('display', 'a');
 		ele.css('visibility', 'visible'); 
+		ele.attr('name',filterCount)
+
 		var ele2 = $("#table");
 		ele2.css('visibility', 'visible'); 
 		ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
@@ -161,22 +164,35 @@ $('.add-row').on('click', function(e){
 		$("#table").append(ele);
 
 });
+
+// function removeItems() {
+// 	console.log('here')
+// 	var totRows = document.getElementById("table").querySelectorAll("tbody tr").length;
+// 	$(this).closest("tr").remove();
+// }
+$(document).on('click', '.remove-row', function() {
+	var totRows = document.getElementById("table").querySelectorAll("tbody tr").length;
+	if (totRows > 1) {
+		console.log('here')
+		$(this).closest("tr").remove();
+	}
+});
+
+
 $(document).ready(()=>{
-	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length;
+	var filterCount = Math.floor(Math.random()*90000) + 10000;
 	var ele = $("#tbl");
-	
 	ele.css('visibility', 'visible'); 
+	ele.attr('name',filterCount)
 	var ele2 = $("#table");
 	ele2.css('visibility', 'visible'); 
+	
 	ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
 	ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
 	ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
 	ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
 	ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
-
-	
 	$("#table").append(ele);
-		
 })
 
 </script>

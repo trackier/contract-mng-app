@@ -3,6 +3,26 @@
 
 <div class="content">
 	<div class="container-fluid">
+        <div class="card shadow" style="margin-bottom: 20px;">
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold text-primary"> Search </h6>
+			</div>
+				<form class="card-body" method="get">
+					<div class="form-row">
+						<div class="form-group col-sm-4">Select Type</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-4">
+							<select  onchange="this.form.submit()" class="form-control" name="query[type]" value="{echo $query['type'] ?? ''}">
+									<option value="customer">Customer</option>
+									<option value="vendor">Vendor</option>
+									<option value="partner">Partner</option>
+							</select>
+						</div>
+						
+					</div>
+				</form>
+		</div>
 		<div class="row">
 			<div class="col-10">
 				

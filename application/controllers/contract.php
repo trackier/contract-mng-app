@@ -40,6 +40,8 @@ class Contract extends Controller
 		if ($this->user->role == 'user') {
 			$query['users'] = ['$in' => [$this->user->_id]];
 		}
+		$uiQuery = $this->request->get("query", []);
+		$query['type'] = $uiQuery['type'] ?? 'vendor';
 		$contracts = Contracttbl::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		$assets = \Models\Asset::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
 		$vendors = \Models\vendor::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
@@ -47,6 +49,7 @@ class Contract extends Controller
 		$assigneds = \Models\Assigned::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
 		$total = Contracttbl::count($query) ?? 0;
 		$view->set("contracts", $contracts)->set('limit', $limit)
+			->set('query', $uiQuery)
 			->set('page', $page)
 			->set('total', $total)
 			->set('search', $this->request->get('search', ''))

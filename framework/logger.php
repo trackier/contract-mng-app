@@ -71,7 +71,6 @@ namespace Framework {
 
             Events::fire("framework.logger.initialize.after", array($this->type, $this->options));
             $loggerBackend = new \Monolog\Logger($this->type);
-
             switch ($this->type) {
                 case static::LOGGER_TYPE_SENTRY:
                     \Sentry\init(['dsn' => $this->options[$this->env], 'traces_sample_rate' => 0.2]);

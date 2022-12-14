@@ -211,7 +211,10 @@ class Purchasereq extends Controller
 	 * @before _secure
 	 * @author Bhumika <bhumika@trackier.com>
 	 */
-	public function dashboard() {	
+	public function dashboard() {
+		$groupByOptions = ['department', 'status', 'requester_id', 'activity_id'];
+		$view = $this-> getActionView();
+		$view->set("optionsGroupBy", $groupByOptions);
 		$this->seo(["title" => "Dashboard"]); 
 	}
 	/**
@@ -241,7 +244,7 @@ class Purchasereq extends Controller
 				$total = [];
 				foreach ($data['items'] as $value) {
 					if (!($value['erate'] && $value['quantity'])) {
-						$view->set('message', 'Check rate and quantity entered in items');
+						$view->set('message', ['type' => 'error', 'text' => 'Check rate and quantity entered in items']);
 						return;
 					}
 					if (!isset($total[$value['currency']])) {

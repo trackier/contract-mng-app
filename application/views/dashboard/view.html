@@ -54,46 +54,25 @@
         </div>
 		
         <div class="row">
-
-            <!-- Contracts (Monthly) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                     Contracts (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{echo $monthlyTotal}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-file-contract fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
+                        <h4 class="text-xs font-weight-bold text-success text-uppercase mb-1"><i class="fas fa-file-contract fa-2x text-gray-300"></i></i> &nbsp;Contracts</h4>
+                        <div class="widget-chart text-center">
+                            <ul class="list-inline m-t-15">
+                                <li>
+                                    <h5 class="text-muted font-16">Monthly</h5>
+                                    <h4 class="mb-0 counter">{echo $monthlyTotal} </h4>
+                                </li>
+                                <li>
+                                    <h5 class="text-muted font-16">Overall</h5>
+                                    <h4 class="mb-0 counter">{echo $total}</h4>
+                                </li>
+                            </ul>
+                        </div> 
                     </div>
                 </div>
             </div>
-
-            <!-- Contracts Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                     Contracts</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">{echo $total}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-file-signature fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-        <div class="row">
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
@@ -159,24 +138,43 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 mb-4">
-
-            <!-- Project Card Example -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Contracts Added Today</h6>
-                </div>
-                <div class="card-body">
-                    {foreach $contract in $contractLines}
-                        <h4 class="small font-weight-bold">{echo $contract} </h4>
-                    {/foreach}
-                    {if count($contractLines) == 0}
-                        <h4 class="small font-weight-bold">No New Contracts Added today</h4>
-                    {/if}
-                    
-                </div>
-            </div>
-         </div>
+       
          <br>
    </div>
 </div>
+
+<style>
+    .card-box {
+        padding: 20px;
+        /* border: 1px solid rgba(54,64,74,0.08); */
+        /* -webkit-border-radius: 5px; */
+        border-radius: 5px;
+        -moz-border-radius: 5px;
+        background-clip: padding-box;
+        /* margin-bottom: 20px; */
+        background-color: #ffffff;
+}
+.widget-chart ul li {
+  width: 31.5%;
+  display: inline-block;
+  padding: 0px;
+}
+.sub-text, .text-muted, .vn-help {
+    font-style: italic;
+    font-size: 16px ;
+    color: #98a6ad!important;
+}
+.dash-heading {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+.header-title {
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 16px;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+</style>
