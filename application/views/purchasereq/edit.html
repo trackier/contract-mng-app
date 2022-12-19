@@ -19,7 +19,8 @@
 				<div class="card">
 					<div class="card-body" style = "width: 100%;">
 						<form class="form-horizontal m-t-20"  method="post" enctype="multipart/form-data">
-							<input  class="button add-row" value="Add another line" />
+							<input   type="button" class="btn btn-primary add-row" value="+" style="width:50px" />
+							
 							<table id="table"  name="data[details]" >
 								<thead>
 									<tr>
@@ -28,6 +29,7 @@
 										<th>Currency</th>
 										<th>Estimate rate</th>
 										<th>Category</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -39,14 +41,16 @@
 												{include layouts/opts/currency.html}
 											</select>
 										</td>  
-										<td><input class="form-control"   id="erate" type="number"/></td>   
+										<td><input class="form-control"   id="erate" type="number"/></td>  
 										<td><select class="form-control"  id="category"   required="">
-												
-											<option value="stationary">Stationary</option>
-											<option value="travel">Travel</option>
-											<option value="parassettner">Asset</option>
-										
-										</select></td>   
+											{foreach $category in $categories}
+											<option value="{echo $category}">{echo $category}</option>
+											{/foreach}
+										</select></td>  
+										<td>
+											<input type="button" id="remove" class="btn btn-primary remove-row"  value="-" style="width:50px"/></td>
+										</td>  
+									  
 									
 									</tr>
                                     {foreach $item in $purchasereq->items}
@@ -66,7 +70,7 @@
 											{/foreach}
 											
 										</select></td>   
-									
+										<td><input type="button" id="remove" class="btn btn-primary remove-row"  value="-" style="width:50px"/></td>
 									</tr>
                                     {/foreach}
 								</tbody>
@@ -90,6 +94,12 @@
 										<label>Expected Date <span class="required"></span></label>
 										<input class="form-control" type="date" name="data[expectedDate]"  value="{echo \Framework\TimeZone::printDateFormatted(@$purchasereq->expectedDate)}" required="" placeholder="Expected Date">
 									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-12">
+									<label>Name <span class="required"></span></label>
+									<input class="form-control" type="text" name="data[prname]"  value="{echo @$purchasereq->prname}" required="">
 								</div>
 							</div>
 							<div class="form-group">
@@ -169,17 +179,30 @@ $('.open-fileDelModal').on('click', function () {
 })
 
 $('.add-row').on('click', function(e){
-	
-	var filterCount = document.getElementById("table").querySelectorAll("tbody tr").length;
-		var ele = $("#tbl").clone();
-		ele.css('visibility', 'visible'); 
-		ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
-		ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
-		ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
-		ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
-		ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
-		$("#table").append(ele);
+	var filterCount = Math.floor(Math.random()*90000) + 10000;
+	var ele = $("#tbl").clone();
+	ele.css('display', 'a');
+	ele.css('visibility', 'visible'); 
+	ele.attr('name',filterCount)
 
+	var ele2 = $("#table");
+	ele2.css('visibility', 'visible'); 
+	ele.find('#name').attr('name','data[items]['+filterCount+'][name]')
+	ele.find('#quantity').attr('name','data[items]['+filterCount+'][quantity]')
+	ele.find('#erate').attr('name','data[items]['+filterCount+'][erate]')
+	ele.find('#category').attr('name','data[items]['+filterCount+'][category]')
+	ele.find('#currency').attr('name','data[items]['+filterCount+'][currency]')
+	$("#table").append(ele);
+
+
+});
+
+$(document).on('click', '.remove-row', function() {
+	var totRows = document.getElementById("table").querySelectorAll("tbody tr").length;
+	if (totRows > 1) {
+		console.log('here')
+		$(this).closest("tr").remove();
+	}
 });
 
 </script>

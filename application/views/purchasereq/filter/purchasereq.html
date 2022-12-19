@@ -85,19 +85,29 @@
         <div>Report Options</div>
         <hr>
         <div class="row" style="margin-left:0">
-            <input type="checkbox" name="query[field][department]" style="margin-right:10px;margin-left:20px;" {if $query[field][department] == 'on'} checked="" {/if} >Department<br>
-            <input type="checkbox" name="query[field][status]" style="margin-right:10px;margin-left:20px;" {if $query[field][status] == 'on'} checked="" {/if} >Status<br>
-            <input type="checkbox" name="query[field][requester_id]" style="margin-right:10px;margin-left:20px;" {if $query[field][requester_id] == 'on'} checked="" {/if} >Requester<br>
-            <input type="checkbox" name="query[field][activity_id]" style="margin-right:10px;margin-left:20px;" {if $query[field][activity_id] == 'on'} checked="" {/if} >Activity<br>
-            <input type="checkbox" name="query[field][amount]" style="margin-right:10px;margin-left:20px;" {if $query[field][amount] == 'on'} checked="" {/if} >Amount<br>
-            <input type="checkbox" name="query[field][count]" style="margin-right:10px;margin-left:20px;" {if $query[field][count] == 'on'} checked="" {/if} >Count<br>
-            <input type="checkbox" name="query[field][created]" style="margin-right:10px;margin-left:20px;" {if $query[field][created] == 'on'} checked="" {/if} >Submitted On<br>
-            <input type="checkbox" name="query[field][approver1_id]" style="margin-right:10px;margin-left:20px;" {if $query[field][approver1_id] == 'on'} checked="" {/if} > Approver <br>
-            <input type="checkbox" name="query[field][pr_id]" style="margin-right:10px;margin-left:20px;" {if $query[field][pr_id] == 'on'} checked="" {/if} >PR Id<br>
+            <div class="col-4 flex">
+                <input type="checkbox" name="query[field][department]" style="margin-right:10px;" {if $query[field][department] == 'on'} checked="" {/if} >Department<br>
+                <input type="checkbox" name="query[field][status]" style="margin-right:10px" {if $query[field][status] == 'on'} checked="" {/if} >Status<br>
+                <input type="checkbox" name="query[field][requester_id]" style="margin-right:10px" {if $query[field][requester_id] == 'on'} checked="" {/if} >Requester<br>
+                <input type="checkbox" name="query[field][prname]" style="margin-right:10px;" {if $query[field][prname] == 'on'} checked="" {/if} >Name<br>
 
-          
-    
+            </div>
+            <div class="col-4">
+                <input type="checkbox" name="query[field][activity_id]" style="margin-right:10px" {if $query[field][activity_id] == 'on'} checked="" {/if} >Activity<br>
+                <input type="checkbox" name="query[field][amount]" style="margin-right:10px" {if $query[field][amount] == 'on'} checked="" {/if} >Amount<br>
+                <input type="checkbox" name="query[field][count]" style="margin-right:10px" {if $query[field][count] == 'on'} checked="" {/if} >Count<br>
+            </div>
+            <div class="col-4">
+                <input type="checkbox" name="query[field][created]" style="margin-right:10px;" {if $query[field][created] == 'on'} checked="" {/if} >Submitted<br>
+                <input type="checkbox" name="query[field][approver1_id]" style="margin-right:10px;" {if $query[field][approver1_id] == 'on'} checked="" {/if} >Approver <br>
+                <input type="checkbox" name="query[field][pr_id]" style="margin-right:10px;" {if $query[field][pr_id] == 'on'} checked="" {/if} >PR Id<br>
+        
+            </div>
+            
         </div>
+       
+       
+       
        
 
         <div class="form-row" style="margin-top:10px">

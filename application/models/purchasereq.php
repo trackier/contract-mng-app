@@ -107,6 +107,14 @@ class Purchasereq extends \Shared\Model
 	 */
 	protected $_amount;
 
+	/**
+    * @column
+    * @readwrite
+   	* @type text
+	* @validate required
+    */
+    protected $_prname;
+
     /**
     * @column
     * @readwrite

@@ -26,6 +26,7 @@
                                      <div class="col-7" style="align-content: flex-end;">
                                         
                                         <span style="font-weight: 500;"> {echo $purchaseReqDetails->pr_id}</span> <br>
+                                        <span style="font-weight: 500;"> {echo $purchaseReqDetails->prname}</span> <br>
                                         <span style="text-transform: uppercase;"  class="badge {if $purchaseReqDetails->status=='approved'||$purchaseReqDetails->status=='processed'}badge-success{/if}{if $purchaseReqDetails->status=='pending'}badge-info{/if}{if $purchaseReqDetails->status=='rejected'||$purchaseReqDetails->status=='rejected by department'}badge-danger{/if}"> {echo $purchaseReqDetails->status}</span>
                                     
                                      </div>

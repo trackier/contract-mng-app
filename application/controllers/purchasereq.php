@@ -264,6 +264,7 @@ class Purchasereq extends Controller
 			}
             $purchasereq = new \Models\purchasereq();
             $purchasereq->notes = $data['notes'];
+			$purchasereq->prname = $data['prname'];
             $purchasereq->items = $data['items'];
 			$purchasereq->expectedDate = $data['expectedDate'];
 			$purchasereq->activity_id = $data['activity_id'];
@@ -337,6 +338,7 @@ class Purchasereq extends Controller
 			$purchasereq->amount = $total;
 			$purchasereq->docInserted = $files;
             $purchasereq->requester_id = $this->user->_id;
+			$purchasereq->prname = $data['prname'];
             $purchasereq->denialReason = "";
             $purchasereq->status = "pending";
 			$purchasereq->activity_id = $data['activity_id']??null;
