@@ -35,15 +35,15 @@ class Dashboard extends Controller
         $total = Contracttbl::count($query) ?? 0;
         $totalMonthly = Contracttbl::count($queryMonthly) ?? 0;
         $employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-        $assets = \Models\Asset::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-        $assigned = \Models\Assigned::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assetsAssigned = \Models\Asset::selectAll(['status' => 'assigned'], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+        $assetsAvailable = \Models\Asset::selectAll(['status' => 'available'], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
         $vendors = \Models\Vendor::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 
         $view->set('employees', $employees);
-        $view->set('assigned', $assigned);
         $view->set('vendors', $vendors);
 
-        $view->set('assets', $assets);
+        $view->set('assetsAvailable', $assetsAvailable);
+        $view->set('assetsAssigned', $assetsAssigned);
         $view->set('monthlyTotal', $totalMonthly);
         $view->set('total', $total);
         $view->set('contractLines', $contractsTodayLines);

@@ -79,7 +79,14 @@
                         <h4 class="text-xs font-weight-bold text-success text-uppercase mb-1"><i class="fa fa-address-card fa-2x text-gray-300"></i></i> &nbsp;Assets</h4>
                         <div class="widget-chart text-center">
                             <ul class="list-inline m-t-15">
-                                <h4 class="mb-0 counter">{echo  count($assets)}</h4>
+                                <li>
+                                    <h5 class="text-muted font-16">Available</h5>
+                                    <h4 class="mb-0 counter">{echo count($assetsAvailable)} </h4>
+                                </li>
+                                <li>
+                                    <h5 class="text-muted font-16">Assigned</h5>
+                                    <h4 class="mb-0 counter">{echo count($assetsAssigned)}</h4>
+                                </li>
                             </ul>
                         </div> 
                     </div>
@@ -91,31 +98,27 @@
                         <h4 class="text-xs font-weight-bold text-success text-uppercase mb-1"><i class="fa fa-address-book fa-2x text-gray-300"></i></i> &nbsp;Employees</h4>
                         <div class="widget-chart text-center">
                             <ul class="list-inline m-t-15">
-                                <h4 class="mb-0 counter">{echo  count($employees)}</h4>
+                                <li>
+                                    <h5 class="text-muted font-16">Total</h5>
+                                    <h4 class="mb-0 counter">{echo  count($employees)}</h4>
+                                </li>
+                               
                             </ul>
                         </div> 
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <h4 class="text-xs font-weight-bold text-success text-uppercase mb-1"><i class="fa fa-book fa-2x text-gray-300"></i></i> &nbsp;Assigned</h4>
-                        <div class="widget-chart text-center">
-                            <ul class="list-inline m-t-15">
-                                <h4 class="mb-0 counter">{echo  count($assigned)}</h4>
-                            </ul>
-                        </div> 
-                    </div>
-                </div>
-            </div>
+           
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <h4 class="text-xs font-weight-bold text-success text-uppercase mb-1"><i class="fa fa-users fa-2x text-gray-300"></i></i> &nbsp;Vendors</h4>
                         <div class="widget-chart text-center">
                             <ul class="list-inline m-t-15">
-                                <h4 class="mb-0 counter">{echo  count($vendors)}</h4>
+                                <li>
+                                    <h5 class="text-muted font-16">Total</h5>
+                                    <h4 class="mb-0 counter">{echo  count($vendors)}</h4>
+                                </li>
                             </ul>
                         </div> 
                     </div>
