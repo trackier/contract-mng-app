@@ -71,4 +71,14 @@ class Employee extends \Shared\Model {
 	 */
 	protected $_role;
 
+	/**
+	 * @column
+	 * @readwrite
+	 * @type text
+	 *
+	 * @label gchatwebhook
+	 */
+	protected $_gchatwebhook;
+	
+
 }

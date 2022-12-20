@@ -116,7 +116,7 @@ class Employee extends Shared\Controller {
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
-				foreach(['name', 'emp_id', 'email', 'phone', 'department'] as $value) {
+				foreach(['name', 'emp_id', 'email', 'phone', 'department', 'gchatwebhook'] as $value) {
 					if (isset($data[$value])) {
 						$employee->$value = $data[$value];
 					}
