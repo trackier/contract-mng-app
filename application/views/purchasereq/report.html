@@ -32,8 +32,11 @@
                     </div>
                 </form>
                 <div class="card-body">
+                    <!-- <button  onclick="$('.buttons-csv').click()"><i class="fa fa-file mr-1"></i> CSV</button> -->
+                    <!-- <button class="dropdown-item" id="ExportReporttoExcel"><i class="fa fa-file mr-1"></i> CSV</button> -->
+
                     <div class="table-responsive">
-                        <table class="table table-bordered display" id="" style="width:100%" width="100%" cellspacing="0">
+                        <table class="table table-bordered display nowrap" id="reports"  style="width:100%" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     {foreach $field in $fields}
@@ -229,10 +232,24 @@ aria-hidden="true">
 
 </div>
 
+<link href="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js" rel="stylesheet" type="text/css" />
+<link href="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" rel="stylesheet" type="text/css" />
+
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+
+
 <script type="text/javascript">
 
 $(document).ready(function () {
-    $('table.display').DataTable();
+    $('#reports').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    });
+  
+    
     var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
     var end = '$end' ? moment('$end') : moment();
    

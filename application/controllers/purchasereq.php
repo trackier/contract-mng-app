@@ -202,17 +202,7 @@ class Purchasereq extends Controller
 		$view->set("ifgroupBy", isset($groupBy));
 	}
 
-	/**
-	 * [PUBLIC] This function will set Purchasereq related data to the view.
-	 * @before _secure
-	 * @author Bhumika <bhumika@trackier.com>
-	 */
-	public function dashboard() {
-		$groupByOptions = ['department', 'status', 'requester_id', 'activity_id'];
-		$view = $this-> getActionView();
-		$view->set("optionsGroupBy", $groupByOptions);
-		$this->seo(["title" => "Dashboard"]); 
-	}
+
 	/**
 	 * [PUBLIC] This function will Add/Edit Purchasereq .
 	 * @param $id

@@ -1,8 +1,8 @@
 <?php
 
 use Shared\Controller as Controller;
-use Framework\{Registry, TimeZone};
 use Shared\Services\Db;
+use Framework\{Registry, TimeZone, ArrayMethods};
 
 use Framework\RequestMethods as RequestMethods;
 class Dashboard extends Controller
@@ -47,6 +47,58 @@ class Dashboard extends Controller
         $view->set('monthlyTotal', $totalMonthly);
         $view->set('total', $total);
         $view->set('contractLines', $contractsTodayLines);
+    
+        $groupByOptions = ['department', 'status', 'requester_id', 'activity_id'];
+        $uiQuery = $this->request->get('query', []);
+        $view->set("optionsGroupBy", $groupByOptions);
+        $this->seo(["title" => "Dashboard"]); 
+        $view->set("query", $uiQuery ?? []);
+        $label = [];
+        $data = [];
+        $dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+        $query['created'] = Db::dateQuery($dq['start'], $dq['end']);
+        $purchasereq = \Models\Purchasereq::selectAll($query, [$uiQuery['option'] ?? 'amount', $uiQuery['groupby'] ?? 'department'], ['maxTimeMS' => 5000 ]);
+        $purchasereq = \Models\Purchasereq::groupBy($purchasereq, [$uiQuery['groupby'] ?? 'department'], [$uiQuery['groupby'] ?? 'department', $uiQuery['option'] ?? 'amount'] );
+        foreach ($purchasereq as $key => $value) {
+            $label[] = $key ?? ' not set';
+            
+            if (isset($uiQuery['option']) && $uiQuery['option'] == 'count') {
+                $data[] = $value['count'];
+
+            } else {
+                $amount = \Models\purchasereq::getAmountAll(['amount' => $value['amount']]);
+                $data[] = $amount;
+            }
+        } 
+        $label2 = [];
+        if (isset($uiQuery['groupby'])) {
+            switch ($uiQuery['groupby']) {
+                case 'department':
+                    $department = \Models\Department::selectAll(['_id' => ['$in' => $label]], [], ['maxTimeMS' => 5000 ]);
+                    $label2 = ArrayMethods::arrayKeys($department, 'name');
+                    break;
+                case 'requester_id':
+                    $users = User::selectAll(['_id' => ['$in' => $label]], [], ['maxTimeMS' => 5000 ]);
+                    $label2 = ArrayMethods::arrayKeys($users, 'name');
+                    break;
+                case 'activity_id':
+                    $activity = \Models\Activity::selectAll(['_id' => ['$in' => $label]], [], ['maxTimeMS' => 5000 ]);
+                    $label2 = ArrayMethods::arrayKeys($activity, 'name');
+                    break;
+                case 'status':
+                    $label2 = $label;
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+        }
+        $view->set("data", $data)->set("label", $label2);
+        $view->set("start", $this->request->get('start'));
+        $view->set("end", $this->request->get('end'));
+        $view->set("chart", isset($uiQuery['chart']) ? $uiQuery['chart'] : 'pie');
+    
 	
     }
 }
