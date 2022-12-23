@@ -248,11 +248,6 @@ $(document).ready(function () {
             }
         } ]
     });
-    
-    // table.buttons().container()
-    // .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
-  
-    
     var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
     var end = '$end' ? moment('$end') : moment();
    
@@ -280,13 +275,11 @@ $(document).ready(function () {
 
     cb(start, end);
     
-});
+    });
     $('.open-denyrequest').on('click', function () {
         console.log($(this).data('id'))
          var objId = $(this).data('id');
-         
-        $("#formId").attr('action', '/purchasereq/deny1/'+objId);
-      //  $("#id").attr('href','/purchasereq/manage');
+         $("#formId").attr('action', '/purchasereq/deny1/'+objId);
     })
 </script>
 
