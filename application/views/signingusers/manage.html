@@ -14,7 +14,7 @@
         <div class="card shadow mb-4">
              <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Full Name</th>
@@ -44,20 +44,9 @@
         </div>
 	</div>
 </div>
-{include layouts/opts/datatables.html}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
 <script type="text/javascript">
-var options = {
-	"aaSorting": [[0, 'desc']],
-	"scrollX": true
-};
-options.buttons = buttons.buttons
-options.dom = buttons.dom;
-var settings = $.extend( {}, buttons, options );
-var pageTable;
 
-$(document).ready(function() {
-	$("img.lazy").lazyload();
-	pageTable = $('.datatable').DataTable(options);
+$(document).ready(function () {
+    $('table.display').DataTable();
 });
 </script>
