@@ -232,22 +232,25 @@ aria-hidden="true">
 
 </div>
 
-<link href="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js" rel="stylesheet" type="text/css" />
-<link href="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" rel="stylesheet" type="text/css" />
-
-<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
-
 
 <script type="text/javascript">
 
 $(document).ready(function () {
-    $('#reports').DataTable({
+    var table = $('#reports').DataTable({
         dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        "pageLength": 20 ,
+        buttons: [ {
+            extend: 'excelHtml5',
+            customize: function( xlsx ) {
+                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+ 
+                $('row c[r^="C"]', sheet).attr( 's', '2' );
+            }
+        } ]
     });
+    
+    // table.buttons().container()
+    // .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
   
     
     var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
