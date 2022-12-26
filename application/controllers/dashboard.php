@@ -97,6 +97,7 @@ class Dashboard extends Controller
         $view->set("data", $data)->set("label", $label2);
         $view->set("start", $this->request->get('start'));
         $view->set("end", $this->request->get('end'));
+        $view->set("query", $this->request->get('query'));
         $view->set("chart", isset($uiQuery['chart']) ? $uiQuery['chart'] : 'pie');
     
 	
