@@ -1,0 +1,120 @@
+
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+        <div class="container-fluid">
+            <div >
+                <div class="card" >
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3" style="background-color: #e1e9ff;">
+                     
+                        <form  method="get" class="row datesubmit1">
+                            <div class="col-3">
+                                <div>Group By</div>
+                                <div class="form-group">
+                                   
+                                    <select onchange="this.form.submit()" class="form-control" name="query[groupby]" value="{echo $query[groupby]}">
+                                        {foreach $obj in $optionsGroupBy }
+                                            <option value="{echo $obj}">{echo $obj}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div>Options</div>
+                                <div class="form-group">
+                                   <select onchange="this.form.submit()" class="form-control" name="query[option]" value="{echo $query[option]}">
+                                        <option value="amount">Amount</option>
+                                        <option value="count">Count</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div>Date Range</div>
+                                <div id="reportrange1" class="form-group daterangeinput">
+     
+                                         <div id="daterange" data-max-days="180" class="form-control">
+                                             <i class="fa fa-calendar"></i>&nbsp;
+                                         <span></span> <i class="fa fa-caret-down"></i>
+                                         </div>
+                                         <input type="hidden" onchange="this.form.submit()" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+                                         <input type="hidden" onchange="this.form.submit()" name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+                                 </div>
+                            </div>
+                            <div class="col-2">
+                                <div>Chart Type</div>
+                                <select  onchange="this.form.submit()"  class="form-control" name="query[chart]" value="{echo $query[chart]}">
+                                    <option value="bar">Bar</option>
+                                    <option value="pie">Pie</option>
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <div></div>
+                                <button class="btn btn-rounded btn-primary" style="margin-top:25px" type="submit">Submit</button>
+                            </div>
+                          
+                         
+                           
+                        </form>
+                        
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            {if $chart == 'pie'} <canvas id="myPieChart"></canvas> {/if}
+                            {if $chart == 'bar'} <canvas id="myBarChart"></canvas> {/if}
+                        </div>
+                    </div>
+                </div>
+            </div><br>
+    
+
+        </div>
+    </div>
+ </div>
+{script $labels = $label}
+{script $datas = $data}
+
+
+<script type="text/javascript">
+    var label = '{echo json_encode($labels)}';
+    var data = '{echo json_encode($datas)}';
+    var chart = '{echo $chart}';
+    console.log(chart)
+    $(document).ready(function () {
+        var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
+        var end = '$end' ? moment('$end') : moment();
+        $('table.display').DataTable();
+        function cb(start, end) {
+            $('#start').attr('value', start.format('YYYY-MM-DD'));
+            $('#end').attr('value', end.format('YYYY-MM-DD'));
+            $('#reportrange1 span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+        }
+
+        $('#reportrange1').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+        cb(start, end);
+       if (chart == 'pie') {
+        charts.myPieChart(label, data);
+       } 
+       if (chart == 'bar') {
+        charts.myBarChart(label, data);
+       }
+       // charts.myPieChart(label, data);
+        
+    });
+   
+    
+    
+    </script>

@@ -103,10 +103,13 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
+		$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['approved', 'rejected', 'processed', 'rejected by department', 'pending']];
 		}
 		$query['requester_id'] = $this->user->_id;
+		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
 		$Purchasereq1 = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
         $users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 
@@ -115,6 +118,8 @@ class Purchasereq extends Controller
 		$view->set("purchasereq", $Purchasereq1);
 		$view->set("query", $uiQuery);
         $view->set("users", $users);
+		$view->set("start", $this->request->get('start'));
+		$view->set("end", $this->request->get('end'));
 	
 	}
 
@@ -127,7 +132,7 @@ class Purchasereq extends Controller
 		$this->seo(["title" => "Report"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
-		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+		
 		$view = $this-> getActionView();
 		
 		$query['live'] = $this->request->get('live', 0);
@@ -163,6 +168,7 @@ class Purchasereq extends Controller
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
 		}
+		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
 		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
 		
 		if ($this->user->role == 'admin') {
