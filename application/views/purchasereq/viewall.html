@@ -24,7 +24,7 @@
 					</div>
 					<div class="col-4">
 						<div class="form-row">
-							<div class="form-group">Select Status</div>
+							<div class="form-group">Created Date</div>
 						</div>
 						<div class="form-row">
 							<div id="viewrange" class="form-group  float-right daterangeinput">
@@ -68,6 +68,7 @@
 									<tr>
 										<th>PR Id</th>
 										<th>Expected Date</th>
+										<th>Created Date</th>
 										<th>Status</th>
 										<th>Approver</th>
 										<th>Amount</th>
@@ -81,6 +82,7 @@
 											
 											<td>$obj->pr_id</td>
 											<td>{echo Framework\TimeZone::printDate($obj->expectedDate)}</td>
+											<td>{echo Framework\TimeZone::printDate($obj->created)}</td>
 											<td>{echo $obj->status}</td>
 											<td>{echo $user2->name}</td>
 											<td> {script $total =  \Models\purchasereq::getAmountSingle($obj);}

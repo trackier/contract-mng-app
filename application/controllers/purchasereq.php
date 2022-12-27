@@ -103,7 +103,10 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
-		$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
+		if (isset($uiQuery['pr_id'])) {
+			$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
+		}
+	
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['approved', 'rejected', 'processed', 'rejected by department', 'pending']];
 		}
