@@ -4,22 +4,55 @@
 			<div class="card-header py-3">
 				<h6 class="m-0 font-weight-bold text-primary"> Search </h6>
 			</div>
-				<form class="card-body" method="get">
-					<div class="form-row">
-						<div class="form-group col-sm-4">Select Status</div>
-					</div>
-					<div class="form-row">
-						<div class="form-group col-sm-4">
-							<select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
-                                <option value="">All</option>
-                                <option value="pending">Awaiting Approval</option>
-                                <option value="approved">Approved</option>
-                                <option value="rejected by department">Rejected</option>
-								</select>
-							</div>
-						
-					</div>
-				</form>
+            <form class="card-body datesubmit row" method="get">
+                <div class="col-3">
+                    <div class="form-row">
+                        <div class="form-group">Select Status</div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <select  onchange="this.form.submit()" class="form-control" name="query[status]" value="{echo $query['status'] ?? ''}">
+                                    <option value="">All</option>
+                                    <option value="pending">Awaiting Approval</option>
+                                    <option value="approved">Approved by Department</option>
+                                    <option value="rejected by department">Rejected by department</option>
+                                </select>
+                            </div>
+                        
+                    </div>
+                </div>
+               
+                <div class="col-3">
+                    <div class="form-row">
+                        <div class="form-group">Created Date</div>
+                    </div>
+                    <div class="form-row">
+                        <div id="viewrangeFinance" class="form-group  float-right daterangeinput">
+                            <div id="daterange" data-max-days="180" class="form-control" >
+                                <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                            <input type="hidden" name="start" id="start" value="{echo Framework\TimeZone::format(['date' => $start, 'format' => 'Y-m-d'])}">
+                            <input type="hidden" name="end" id="end" value="{echo Framework\TimeZone::format(['date' => $end, 'format' => 'Y-m-d'])}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-2">
+                    <div class="form-row">
+                        <div class="form-group">PR-ID</div>
+                    </div>
+                    <div class="form-row">
+                        <div id="viewrange" class="form-group">
+                            <input type="text" name="query[pr_id]" class="form-control" value="{echo $query['pr_id'] ?? ''}">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-1">
+                    <button  class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light" style="margin-top:40px" type="submit">Apply</button>
+                </div>
+            </form>
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
@@ -126,15 +159,33 @@ aria-hidden="true">
 
 </div>
 <script type="text/javascript">
-
-$(document).ready(function () {
-    $('table.display').DataTable();
-});
     $('.open-denyrequest').on('click', function () {
-        console.log($(this).data('id'))
          var objId = $(this).data('id');
-         
-        $("#formId").attr('action', '/purchasereq/deny1/'+objId);
-      //  $("#id").attr('href','/purchasereq/manage');
+         $("#formId").attr('action', '/purchasereq/deny1/'+objId);
     })
+
+    $(document).ready(function () {
+        $('table.display').DataTable();
+        var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
+        var end = '$end' ? moment('$end') : moment();function cb(start, end) {
+            $('#start').attr('value', start.format('YYYY-MM-DD'));
+            $('#end').attr('value', end.format('YYYY-MM-DD'));
+            $('#viewrangeFinance span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+        }
+        $('#viewrangeFinance').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+        cb(start, end);
+    });
+ 
+    
     </script>

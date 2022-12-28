@@ -2,7 +2,8 @@
 
 namespace Models;
 use Shared\Services\Db;
-use Framework\{Security};
+use Framework\{Security, ArrayMethods};
+
 
 class Department extends \Shared\Model {
 
@@ -47,5 +48,8 @@ class Department extends \Shared\Model {
 	 * @validate required
 	 */
 	protected $_user_id;
+	public $_count;
+
+
 
 }

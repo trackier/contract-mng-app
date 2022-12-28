@@ -57,7 +57,14 @@ class Dashboard extends Controller
         $data = [];
         $dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
         $query['created'] = Db::dateQuery($dq['start'], $dq['end']);
-        $purchasereq = \Models\Purchasereq::selectAll($query, [$uiQuery['option'] ?? 'amount', $uiQuery['groupby'] ?? 'department'], ['maxTimeMS' => 5000 ]);
+        $ifDeptHead = User::isDepartmentHead($this->user->id, $this->user->department);
+		if ($ifDeptHead && !($this->user->role == 'admin')) {
+			$query['department'] = $this->user->department;
+		}
+        $purchasereq = [];
+		if ($this->user->role == 'admin' || $ifDeptHead) {
+            $purchasereq = \Models\Purchasereq::selectAll($query, [$uiQuery['option'] ?? 'amount', $uiQuery['groupby'] ?? 'department'], ['maxTimeMS' => 5000 ]);
+		}
         $purchasereq = \Models\Purchasereq::groupBy($purchasereq, [$uiQuery['groupby'] ?? 'department'], [$uiQuery['groupby'] ?? 'department', $uiQuery['option'] ?? 'amount'] );
         foreach ($purchasereq as $key => $value) {
             $label[] = $key ?? ' not set';
@@ -98,6 +105,7 @@ class Dashboard extends Controller
         $view->set("start", $this->request->get('start'));
         $view->set("end", $this->request->get('end'));
         $view->set("query", $this->request->get('query'));
+        $view->set("ifDeptHead", $ifDeptHead);
         $view->set("chart", isset($uiQuery['chart']) ? $uiQuery['chart'] : 'pie');
     
 	

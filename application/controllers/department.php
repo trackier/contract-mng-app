@@ -46,12 +46,15 @@ class  Department extends Shared\Controller {
 		$query = [];
 		$searchKeyType = strtolower($this->request->get('type'));
 		$searchValue = $this->request->get('search');
-		
-
-        $departments = \Models\Department::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$deptCount = [];
+		$departments = \Models\Department::selectAll($query, [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		foreach ($departments as $key => $value) {
+			$deptCount[$value->name] = User::count(['department' => $value->id], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		}
 		$count = \Models\Department::count($query);
         $view->set([
 			'departments' => $departments ?? [],
+			'deptCount' => $deptCount ?? [],
 			'search' => $this->request->get('search', ''),
 			'type' => $this->request->get('type', '')
 		]);

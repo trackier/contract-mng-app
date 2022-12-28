@@ -118,7 +118,12 @@ class User extends Shared\Model
 		}
 		return $isDepHead;
 	}
-
+	public static function getDepartmentHeads() {
+		$departments = \Models\Department::selectAll([], [],[]);
+		$approvers = ArrayMethods::arrayKeys($departments, 'team_lead_id');
+		$users = User::selectAll(['_id' => ['$in' => $approvers]], [], []);
+		return $users;
+	}
 	public static function isFinanceHead($id = null) {
 		$depInfo = \Models\Department::first(["name" => "Finance"], [],[]);
 		$isDepHead = false;
@@ -139,8 +144,6 @@ class User extends Shared\Model
 	}
 
 	public static function sendGoogleChatNotification($data, $webhookurl){
-		
-
 		$dataHtml = [
 			"cards" => [
 				[

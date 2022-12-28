@@ -18,8 +18,9 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-										<th>Description</th>
-										<th>Email</th>
+										
+										<th>Employee Count</th>
+										<th>Action</th>
 										
 									</tr>
 								</thead>
@@ -27,7 +28,8 @@
 									{foreach $obj in $departments}
 									<tr data-id='{echo $obj->_id}'>
 										<td>{echo $obj->name}</td>
-										<td>{echo $obj->description}</td>
+									
+										<td>{echo $deptCount[$obj->name]}</td>
 										
 										
 										<td> 

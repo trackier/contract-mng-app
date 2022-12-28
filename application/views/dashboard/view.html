@@ -125,6 +125,10 @@
                 </div>
             </div>
         </div>
+        {script $isDepHead = User::isDepartmentHead($user->_id, $user->department)}
+        {script $show = $user->role == 'admin' ? true : false}
+			
+		{if $show || $isDepHead}
         <div class="card" >
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Purchase Request Data</h6>
@@ -190,6 +194,7 @@
                 </div>
             </div>
         </div>
+        {/if}
        
          <br>
    </div>

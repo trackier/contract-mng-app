@@ -46,6 +46,15 @@ class Purchasereq extends Controller
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected by department']];
 		}
+		if ($this->request->get('start')) {
+			$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+			$query['created'] = Db::dateQuery($dq['start'], $dq['end']);;
+		}
+		
+		if (isset($uiQuery['pr_id'])) {
+			$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
+		}
+
 		$query['department'] = $this->user->department;
 
 		$isDepHead = User::isDepartmentHead($this->user->_id, $this->user->department);
@@ -75,9 +84,26 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
+		if (isset($uiQuery['approver'])) {
+			$query['approver1_id'] = $uiQuery['approver'] ;
+		}
+		
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'processed']];
 		}
+		
+		if ($this->request->get('start')) {
+			$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+			$query['created'] = Db::dateQuery($dq['start'], $dq['end']);;
+		}
+		
+		if (isset($uiQuery['pr_id'])) {
+			$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
+		}
+		$deptHeads = User::getDepartmentHeads();
+		//get all approvers and fetch from 
+
+	
 		$isFinHead = User::isFinanceHead($this->user->_id);
 		if ($isFinHead) {
 			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
@@ -85,7 +111,10 @@ class Purchasereq extends Controller
 		
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$view->set("purchasereq", $purchasereq??[]);
+		$view->set("deptHeads", $deptHeads ??[]);
 		$view->set("query", $uiQuery ?? []);
+		$view->set("start", $this->request->get('start'));
+		$view->set("end", $this->request->get('end'));
 	
 	}
 
@@ -103,16 +132,17 @@ class Purchasereq extends Controller
 		$query = [];
 		$uiQuery = $this->request->get("query", []);
 		$query['status'] = $uiQuery['status'] ?? [];
-		if (isset($uiQuery['pr_id'])) {
-			$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
-		}
-	
+
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['approved', 'rejected', 'processed', 'rejected by department', 'pending']];
 		}
 		$query['requester_id'] = $this->user->_id;
 		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
 		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
+		if (isset($uiQuery['pr_id'])) {
+			$query['pr_id'] =  Db::convertType($uiQuery['pr_id'], 'regex');
+		}
+	
 		$Purchasereq1 = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
         $users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 
@@ -167,6 +197,10 @@ class Purchasereq extends Controller
 			}
 			
 		}
+		$ifDeptHead = User::isDepartmentHead($this->user->id, $this->user->department);
+		if ($ifDeptHead && !($this->user->role == 'admin')) {
+			$query['department'] = $this->user->department;
+		}
 		
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
@@ -174,7 +208,7 @@ class Purchasereq extends Controller
 		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
 		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
 		
-		if ($this->user->role == 'admin') {
+		if ($this->user->role == 'admin' || $ifDeptHead) {
 			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		}
 		
