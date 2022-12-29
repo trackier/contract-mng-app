@@ -42,6 +42,12 @@ class Contract extends Controller
 		}
 		$uiQuery = $this->request->get("query", []);
 		$query['type'] = $uiQuery['type'] ?? 'vendor';
+		if (isset($uiQuery['company']) && $uiQuery['company']!= null) {
+			$query['company'] = $uiQuery['company'];
+		}
+		
+		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
+		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
 		$contracts = Contracttbl::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		$assets = \Models\Asset::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
 		$vendors = \Models\vendor::selectAll([], ['_id', 'type', 'status'], ['maxTimeMS' => 5000]);
@@ -56,7 +62,9 @@ class Contract extends Controller
 			->set('Assets', $assets ?? [])
 			->set('Employees', $employees ?? [])
 			->set('Assigneds', $assigneds ?? [])
-			->set('vendors', $vendors ?? []);
+			->set('vendors', $vendors ?? [])
+			->set("start", $this->request->get('start'))
+			->set("end", $this->request->get('end'));
 	
 	}
 
