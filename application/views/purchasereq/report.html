@@ -236,11 +236,12 @@ aria-hidden="true">
 <script type="text/javascript">
 
 $(document).ready(function () {
+    
     var table = $('#reports').DataTable({
         dom: 'Bfrtip',
         "pageLength": 20 ,
         buttons: [ {
-            extend: 'excelHtml5',
+            extend: 'excelHtml5',  className: 'btn btn-primary',
             customize: function( xlsx ) {
                 var sheet = xlsx.xl.worksheets['sheet1.xml'];
  
