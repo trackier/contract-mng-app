@@ -197,17 +197,17 @@ class Purchasereq extends Controller
 			}
 			
 		}
-		$ifDeptHead = User::isDepartmentHead($this->user->id, $this->user->department);
-		if ($ifDeptHead && !($this->user->role == 'admin')) {
-			$query['department'] = $this->user->department;
-		}
+	
 		
 		if (!$uiQuery || ( $uiQuery && $uiQuery['status'] == '')) {
 			$query['status'] = ['$in' => ['pending', 'approved', 'rejected', 'rejected by department', 'processed']];
 		}
 		$dq = ['start' => $this->request->get('start'), 'end' => $this->request->get('end')];
 		$query['created'] = Db::dateQuery($dq['start'], $dq['end']);
-		
+		$ifDeptHead = User::isDepartmentHead($this->user->id, $this->user->department);
+		if ($ifDeptHead && !($this->user->role == 'admin')) {
+			$query['department'] = $this->user->department;
+		}
 		if ($this->user->role == 'admin' || $ifDeptHead) {
 			$purchasereq = \Models\Purchasereq::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		}
@@ -292,7 +292,6 @@ class Purchasereq extends Controller
 				$files = $this->fileUpload($_FILES);
 			}
             $purchasereq = new \Models\purchasereq();
-            $purchasereq->notes = $data['notes'];
 			$purchasereq->prname = $data['prname'];
             $purchasereq->items = $data['items'];
 			$purchasereq->expectedDate = $data['expectedDate'];
@@ -349,7 +348,6 @@ class Purchasereq extends Controller
 				}
 			}
 			$data = $this->request->post('data', []);
-            $purchasereq->notes = $data['notes'];
             $purchasereq->items = $data['items'];
 			$total = [];
 			foreach ($data['items'] as $value) {
