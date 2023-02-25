@@ -16,6 +16,7 @@ class Employee extends Shared\Controller {
 		$this->seo(["title" => "Add Employee Details"]); 
 		$view = $this->getActionView();
 		$departments = \Models\Department::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
+		$employees = User::selectAll([], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
@@ -31,6 +32,7 @@ class Employee extends Shared\Controller {
 			\Shared\Utils::flashMsg(['type' => 'error', 'text' => $e->getMessage()]);
 		}
 		$view->set([
+			'users' => $employees ?? [],
 			'departments' => $departments ?? [],
 		]);
 	}
@@ -106,6 +108,7 @@ class Employee extends Shared\Controller {
 	public function edit($id = null) {
 		$this->seo(["title" => "Update Employee Details"]); 
 		$view = $this->getActionView();
+		$users = User::selectAll([], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 		if (!$id) {
 			$this->_404();
 		}
@@ -116,7 +119,7 @@ class Employee extends Shared\Controller {
 		try {
 			if ($this->request->isPost()) {
 				$data = $this->request->post('data', []);
-				foreach(['name', 'emp_id', 'email', 'phone', 'department', 'gchatwebhook'] as $value) {
+				foreach(['name', 'emp_id', 'email', 'phone', 'department', 'gchatwebhook', 'rm_id'] as $value) {
 					if (isset($data[$value])) {
 						$employee->$value = $data[$value];
 					}
@@ -131,6 +134,7 @@ class Employee extends Shared\Controller {
 		$departments = \Models\Department::selectAll([], [], ['maxTimeMS' => 5000, 'limit' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
 
 		$view->set('employee', $employee);
+		$view->set('users', $users);
 		$view->set('departments', $departments);
 	}
 }

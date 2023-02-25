@@ -44,6 +44,13 @@ class User extends Shared\Model
 	/**
 	 * @column
 	 * @readwrite
+	 * @type mongoid
+	 */
+	protected $_rm_id;
+
+	/**
+	 * @column
+	 * @readwrite
 	 * @type text
 	 *
 	 * @label ZOHO Id

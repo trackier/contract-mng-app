@@ -29,6 +29,18 @@
 								<input class="form-control" value="{echo $employee->gchatwebhook}" name="data[gchatwebhook]">
 							</div>
 						</div>
+
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">RM</label>
+							<div class="col-sm-9 col-md-6">
+								<select class="form-control"  name="data[rm_id]" value="{echo $employee->rm_id}"  required="">
+									{foreach $user in $users}
+									<option value="{echo $user->_id}">{echo $user->name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label">Email</label>
 							<div class="col-sm-9 col-md-6">
