@@ -141,7 +141,7 @@
                         <div>Group By</div>
                         <div class="form-group">
                            
-                            <select onchange="this.form.submit()" class="form-control" name="query[groupby]" value="{echo $query[groupby]}">
+                            <select onchange="this.form.submit()" class="form-control" name="query[groupby]" value="{echo $query[groupby] ?? department}">
                                 {foreach $obj in $optionsGroupBy }
                                     <option value="{echo $obj}">{echo $obj}</option>
                                 {/foreach}
@@ -151,7 +151,7 @@
                     <div class="col-3">
                         <div>Options</div>
                         <div class="form-group">
-                           <select onchange="this.form.submit()" class="form-control" name="query[option]" value="{echo $query[option]}">
+                           <select onchange="this.form.submit()" class="form-control" name="query[option]" value="{echo $query[option] ?? amount}">
                                 <option value="amount">Amount</option>
                                 <option value="count">Count</option>
                             </select>

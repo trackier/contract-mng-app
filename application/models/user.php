@@ -113,7 +113,7 @@ class User extends Shared\Model
 	public static function isDepartmentHead($id = null, $depId) {
 		$depInfo = \Models\Department::first(["_id" => $depId], [],[]);
 		$isDepHead = false;
-		if ($depInfo->team_lead_id == $id) {
+		if (isset($depInfo->team_lead_id) && $depInfo->team_lead_id == $id) {
 			$isDepHead = true;
 		}
 		return $isDepHead;

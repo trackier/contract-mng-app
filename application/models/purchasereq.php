@@ -186,7 +186,7 @@ class Purchasereq extends \Shared\Model
 			}
 		}
 		foreach ($amount as $key => $amt) {
-			$amountStr = $amountStr . $key .' '.  $amt . ' | ';
+			$amountStr = $amountStr . 'INR' .' '.  $amt . ' | ';
 		}
 		return $amountStr; 
 	}

@@ -28,9 +28,9 @@ class Users extends Controller
 				$view->set("password_error", "Password not provided");
 				$error = true;
 			}
-			if (!$error)
-            { 	$pass = sha1($password);
-				$user = User::first(array( "email=?" =>$email, "password=?" =>$pass,));
+			if (!$error) {
+				$pass = sha1($password);
+				$user = User::first(["email" => $email, "password" => $pass]);
 				if (!empty($user))
                 {	$this->setUser($user);
 					$session = Registry::get("session");
@@ -66,9 +66,9 @@ class Users extends Controller
 				$view->set("password_error", "Password not provided");
 				$error = true;
 			}
-			if (!$error)
-            { 	$pass = sha1($password);
-				$user = User::first(array( "email=?" =>$email, "password=?" =>$pass,));
+			if (!$error) {
+				$pass = sha1($password);
+				$user = User::first(["email" => $email, "password" => $pass]);
 				if (!empty($user))
                 {	$this->setUser($user);
 					$session = Registry::get("session");
