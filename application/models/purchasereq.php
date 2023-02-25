@@ -175,7 +175,7 @@ class Purchasereq extends \Shared\Model
 	}
 
 	public static function getAmountSingle($amountArr) {
-		$amountArr = $amountArr->_amount;
+		$amountArr = isset($amountArr->_amount) ? $amountArr->_amount : $amountArr->amount;
 		$amount;
 		$amountStr = '';
 		foreach ($amountArr as $key => $amt) {

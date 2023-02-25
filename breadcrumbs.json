@@ -5,6 +5,16 @@
 				{ "link": "/purchasereq/add.html", "html": "Add Purchase Request", "permission": {"resource": "automation", "level": "VIEW", "allowedUserTypes": ["admin", "user"]} }
 			]
 		},
+		"purchaseorder.manage": {
+			"nav_links": [
+				{ "link": "/purchaseorder/add.html", "html": "Add Purchase Request", "permission": {"allowedUserTypes": ["admin", "user"]} }
+			]
+		},
+		"purchaseorder.add": {
+			"nav_links": [
+				{ "link": "/purchaseorder/manage.html", "html": "Add Purchase Request", "permission": {"allowedUserTypes": ["admin", "user"]} }
+			]
+		},
        
         "purchasereq.view": {
 			"nav_links": [

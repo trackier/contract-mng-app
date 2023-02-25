@@ -1,0 +1,94 @@
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-12" style="margin-bottom: 10px;">
+				<div class="col-10">
+					<div class="page-title-box">
+					
+					</div>
+					{echo Shared\Markup::message($message ?? null)}
+				</div>
+				{if $purchaseOrder}
+				<div class="card shadow mb-4">
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<thead>
+									<tr>
+										<th>PO ID</th>
+										<th>Name</th>
+										<th>Start Date</th>
+										<th>End Date</th>
+										<th>Vendor</th>
+										<th>Invoice Mode</th>
+										<th>Description</th>
+										<th>Amount</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{foreach $obj in $purchaseOrder}
+										<tr data-id='{echo $obj->_id}'>
+											<td>{echo $obj->_id}</td>
+											<td>{echo $obj->name}</td>
+											<td>{echo \Framework\TimeZone::printDateFormatted($obj->startDate)}</td>
+											<td>{echo \Framework\TimeZone::printDateFormatted($obj->endDate)}</td>
+											<td>
+												{if $obj->vendor_id}
+													{script $v = $vendors[$obj->vendor_id]}
+													{if $v}
+														({echo $v->name}) {echo $v->company_name}
+													{/if}
+												{/if}
+											</td>
+											<td>{echo $obj->invoice_mood}</td>
+											<td>{echo $obj->description}</td>
+											<td> {script $total =  \Models\purchasereq::getAmountSingle($obj)}
+												<div class="detail">{$total}</div></td>
+											<td>
+												<a class="btn btn-outline-primary"  href="/purchaseorder/add/{echo $obj->_id}" padding="10px"><i class="fa fa-pencil-square-o" style="margin-right:5px" ></i>Edit</a>
+												<a class="btn btn-outline-danger"  href="/purchaseorder/delete/{echo $obj->_id}" padding="10px"><i class="fa fa-trash" ></i>Delete</a>
+												{/if}
+											</td>
+										</tr>
+									{/foreach}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				{/if} {else}
+				<div class="card-body">
+					<p class="card-text">No requests found</p>
+				</div>
+				{/else}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script  type="text/javascript">
+	$(document).ready(function () {
+		var start = '$start' ? moment('$start') : moment().subtract(29, 'days');
+		var end = '$end' ? moment('$end') : moment();function cb(start, end) {
+			$('#start').attr('value', start.format('YYYY-MM-DD'));
+			$('#end').attr('value', end.format('YYYY-MM-DD'));
+			$('#viewrange span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+		}
+		$('#viewrange').daterangepicker({
+			startDate: start,
+			endDate: end,
+			ranges: {
+				'Today': [moment(), moment()],
+				'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+				'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+				'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+				'This Month': [moment().startOf('month'), moment().endOf('month')],
+				'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+			}
+		}, cb);
+		cb(start, end);
+
+	});
+
+</script>
