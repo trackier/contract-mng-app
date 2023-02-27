@@ -9,22 +9,35 @@ class Purchaseorder extends Controller {
 	/**
 	 * @before _secure
 	 */
-	public function manage() {	
-		
+	public function manage() {
 		$this->seo(["title" => "Manage Purchase Order"]); 
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
+		if ($uiQuery) {
+			foreach (['_id', 'invoice_mood', 'vendor_id', 'name'] as $key) {
+				if (isset($uiQuery[$key]) && $uiQuery[$key]) {
+					if ($key == 'name' || $key == '_id') {
+						$query[$key] = Db::convertType($uiQuery[$key],$key == 'name' ? 'regex' : 'id');
+					} else {
+						$query[$key] = $uiQuery[$key];
+					}
+				}
+			}
+		}
 		if ($this->user->role == 'admin') {
 			$vendors = \Models\vendor::selectAll([], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-			$purchaseOrder = \Models\purchaseorder::selectAll([], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+			$purchaseOrder = \Models\purchaseorder::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		} else {
 			$vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-			$purchaseOrder = \Models\purchaseorder::selectAll(['user_id' => $this->user->_id], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+			$purchaseOrder = \Models\purchaseorder::selectAll(['user_id' => $this->user->_id,...$query], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		}
 
 		$view->set("vendors", $vendors); 
-		$view->set("purchaseOrder", $purchaseOrder);       
+		$view->set("purchaseOrder", $purchaseOrder);      
+		$view->set("query" , $uiQuery); 
 	
 	}
 
