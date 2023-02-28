@@ -8,49 +8,6 @@
 					</div>
 					{echo Shared\Markup::message($message ?? null)}
 				</div>
-				<div class="card shadow mb-4">
-					<div class="card-header py-3">
-						<h6 class="m-0 font-weight-bold text-primary">Purchase Order Search </h6>
-					</div>
-					<form class="card-body" method="get">
-						<div class="form-row">
-							<div class="form-group col-sm-2">PO ID</div>
-							<div class="form-group col-sm-2">Name</div>
-							<div class="form-group col-sm-2">Invoice Mode</div>
-							<div class="form-group col-sm-2">Vendor</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-sm-2">
-								<input type="text" name="query[_id]" class="form-control" value="{echo $query['_id']}" placeholder = "Search PO ID">
-							</div>
-
-							<div class="form-group col-sm-2">
-									<input type="text" name="query[name]" class="form-control" value="{echo $query['name']}" placeholder = "Name">
-							</div>
-							<div class="form-group col-sm-2">
-								<select class="form-control" name="query[invoice_mood]" value="{echo $query['invoice_mood']}">
-									<option value="">All</option>
-									<option value="annually">Annually</option>
-									<option value="monthly">Monthly</option>
-									<option value="onDemand">On Demand</option>
-								</select>
-							</div>
-							<div class="form-group col-sm-2">
-								<select class="form-control" name="query[vendor_id]" value="{echo $query['vendor_id']}">
-									<option value="">All</option>
-									{foreach $v in $vendors}
-									<option value="{echo $v->_id}">({echo $v->name}) {echo $v->company_name}</option>
-									{/foreach}
-								</select>
-							</div>
-							<div class="col-sm-4">
-								<button type="submit" class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light">
-								<i class="fa fa-search"></i> Submit
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
 				{if $purchaseOrder}
 				<div class="card shadow mb-4">
 					<div class="card-body">
