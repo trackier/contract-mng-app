@@ -1,4 +1,4 @@
-<?php
+ <?php
 use Shared\Controller as Controller;
 use Framework\{Registry, TimeZone, ArrayMethods};
 use Shared\Services\Db;
