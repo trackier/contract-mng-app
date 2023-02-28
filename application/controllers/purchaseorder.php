@@ -32,7 +32,8 @@ class Purchaseorder extends Controller {
 			$purchaseOrder = \Models\purchaseorder::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		} else {
 			$vendors = \Models\vendor::selectAll(['user_id' => $this->user->_id], [], ['maxTimeMS' => 5000, 'direction' => 'desc', 'order' => ['created' => -1]]);
-			$purchaseOrder = \Models\purchaseorder::selectAll(['user_id' => $this->user->_id,...$query], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+			$query['user_id'] = $this->user->_id;
+			$purchaseOrder = \Models\purchaseorder::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		}
 
 		$view->set("vendors", $vendors); 
