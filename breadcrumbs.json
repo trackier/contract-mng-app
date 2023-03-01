@@ -7,7 +7,7 @@
 		},
 		"purchaseorder.manage": {
 			"nav_links": [
-				{ "link": "/purchaseorder/add.html", "html": "Add Purchase Request", "permission": {"allowedUserTypes": ["admin", "user"]} }
+				{ "link": "/purchaseorder/add.html", "html": "Add Purchase Order", "permission": {"allowedUserTypes": ["admin", "user"]} }
 			]
 		},
 		"purchaseorder.add": {
