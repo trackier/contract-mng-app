@@ -8,6 +8,40 @@
 					</div>
 					
 				</div>
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Activity Search </h6>
+					</div>
+					<form class="card-body" method="get">
+						<div class="form-row">
+							<div class="form-group col-sm-2">Activity ID</div>
+							<div class="form-group col-sm-2">Name</div>
+							<div class="form-group col-sm-4">Team Members</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-sm-2">
+								<input type="text" name="query[act_id]" class="form-control" value="{echo $query['act_id']}" placeholder = "Search Activity ID">
+							</div>
+
+							<div class="form-group col-sm-2">
+									<input type="text" name="query[name]" class="form-control" value="{echo $query['name']}" placeholder = "Name">
+							</div>
+							<div class="form-group col-sm-4">
+								<select class="form-control selectpicker selectVal" name="query[teamMembers][]" data-value='{echo json_encode($query[teamMembers])}' multiple="" data-placeholder="Team Members">
+									<option value="">All</option>
+									{foreach $k in $users}
+									<option value="{echo $k_i}">{echo $k}</option>
+									{/foreach}
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<button type="submit" class="btn btn-rounded  btn-primary btn-custom w-md waves-effect waves-light">
+								<i class="fa fa-search"></i> Submit
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
 				{if $activity}
 				<div class="card shadow mb-4">
 					<div class="card-body">
