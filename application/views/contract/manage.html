@@ -22,7 +22,7 @@
                     </div>
                 </div>
             
-                <div class="col-3">
+                <div class="col-4">
                     <div class="form-row">
                         <div class="form-group">Created Date</div>
                     </div>
@@ -67,38 +67,11 @@
          <div class="card shadow mb-4">
              <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Contract Name</th>
-									<th>Company</th>
-									<th>Type</th>
-                                    <th>Created Date</th>
-									<th>Start Date</th>
-									<th>End Date</th>
-                                    {if $show}<th>Action</th>{/if}
+                                <th>No Data Available</th>   
                             </tr>
                         </thead>
-                       <tbody>
-                            {foreach $cont in $contracts}
-                                <tr>
-                                    
-                                    <td >{echo $cont->cname}</td>
-                                    <td>{echo $cont->company}</td>
-                                    <td>{echo $cont->type}</td>
-                                    <td>{echo Framework\TimeZone::printDate($cont->created)}</td>
-                                    <td>{echo Framework\TimeZone::printDate($cont->startDate)}</td>
-                                    <td>{echo Framework\TimeZone::printDate($cont->endDate)}</td>
-                                    {if $show}
-                                    <td>
-                                        <a href="/contract/addContract/{echo $cont->_id}" class="btn btn-xs btn-outline-primary">Edit <i class="fa fa-pencil" style="margin-inline:5px"></i></a>
-                                        <a data-toggle="modal" data-target="#contractDelModal"  data-id='{echo $cont->_id}' id="contractDel" class="btn btn-xs btn-outline-danger open-contractDelModal">Delete <i class="fa fa-trash"></i></a>
-                                    </td>
-                                    {/if}
-                                    
-                                </tr>
-                            {/foreach}
-                        </tbody>
                     </table>
                 </div>
             </div>
