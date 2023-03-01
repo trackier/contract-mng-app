@@ -18,8 +18,21 @@ class Activity extends Controller
 		$page = $this->request->get('page', 1);
 		$limit = $this->request->get('limit', 50);
 		$view = $this-> getActionView();
+		$query = [];
+		$uiQuery = $this->request->get("query", []);
 		
-		$activity = \Models\Activity::selectAll([], [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
+		if ($uiQuery) {
+			foreach (['act_id', 'name', 'teamMembers'] as $key) {
+				if (isset($uiQuery[$key]) && $uiQuery[$key]) {
+					if ($key == 'name' || $key == 'act_id') {
+						$query[$key] = Db::convertType($uiQuery[$key],'regex');
+					} else {
+						$query[$key] = $uiQuery[$key];
+					}
+				}
+			}
+		}
+		$activity = \Models\Activity::selectAll($query, [], [ 'order'=> 'created', 'direction' => 'desc', 'limit' => $limit, 'page' => $page, 'maxTimeMS' => 5000 ]);
 		
 		$users = User::selectAll([], [], ['maxTimeMS' => 5000 ]);
 		$userMap = [];
@@ -28,6 +41,7 @@ class Activity extends Controller
 		}
 		$view->set("activity", $activity);
 		$view->set("users", $userMap);
+		$view->set("query", $uiQuery);
        
 	
 	}
